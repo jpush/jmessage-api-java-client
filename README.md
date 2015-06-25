@@ -8,7 +8,7 @@
 
 这是 JPush REST API 的 Java 版本封装开发包，是由极光推送官方提供的，一般支持最新的 API 功能。
 
-对应的 REST API 文档：<http://docs.jpush.cn/display/dev/REST+API>
+对应的 REST API 文档：尚未对外开放
 
 本开发包 Javadoc：[API Docs](http://jpush.github.io/jmessage-api-java-client/apidocs/)
 
@@ -37,6 +37,8 @@
 * [jpush-client](https://github.com/jpush/jpush-api-java-client)
 
 > 其中 slf4j 可以与 logback, log4j, commons-logging 等日志框架一起工作，可根据你的需要配置使用。
+
+> jpush-client的jar包下载。[请点击](https://github.com/jpush/jpush-api-java-client/releases)
 
 如果使用 Maven 构建项目，则需要在你的项目 pom.xml 里增加：
 
