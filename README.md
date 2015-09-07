@@ -56,7 +56,7 @@
 <dependency>
 	<groupId>cn.jpush.api</groupId>
 	<artifactId>jpush-client</artifactId>
-	<version>3.2.5</version>
+	<version>3.2.6</version>
 </dependency>
 <!-- For log4j -->
 <dependency>
