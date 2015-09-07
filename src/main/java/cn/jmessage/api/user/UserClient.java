@@ -2,17 +2,15 @@ package cn.jmessage.api.user;
 
 
 import cn.jmessage.api.common.BaseClient;
-import cn.jmessage.api.common.ServiceConstant;
+import cn.jmessage.api.common.JMessageConfig;
 import cn.jmessage.api.common.model.RegisterPayload;
 import cn.jmessage.api.common.model.UserPayload;
-
 import cn.jpush.api.common.connection.HttpProxy;
 import cn.jpush.api.common.resp.APIConnectionException;
 import cn.jpush.api.common.resp.APIRequestException;
 import cn.jpush.api.common.resp.ResponseWrapper;
 import cn.jpush.api.utils.Preconditions;
 import cn.jpush.api.utils.StringUtils;
-
 import com.google.gson.JsonObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,16 +19,43 @@ public class UserClient extends BaseClient {
 
     private static final Logger LOG = LoggerFactory.getLogger(UserClient.class);
 
+    private String userPath;
+    private String adminPath;
+
+    /**
+     * Create a User Client with default parameters.
+     *
+     * @param appkey The key of one application on JPush.
+     * @param masterSecret API access secret of the appKey.
+     */
     public UserClient(String appkey, String masterSecret) {
-        super(appkey, masterSecret);
+        this(appkey, masterSecret, null, JMessageConfig.getInstance());
     }
 
-    public UserClient(String appkey, String masterSecret, int maxRetryTimes) {
-        super(appkey, masterSecret, maxRetryTimes);
+    /**
+     * Create a User Client with a proxy.
+     *
+     * @param appkey The key of one application on JPush.
+     * @param masterSecret API access secret of the appKey.
+     * @param proxy The proxy, if there is no proxy, should be null.
+     */
+    public UserClient(String appkey, String masterSecret, HttpProxy proxy) {
+        this(appkey, masterSecret, proxy, JMessageConfig.getInstance());
     }
 
-    public UserClient(String appkey, String masterSecret, int maxRetryTimes, HttpProxy proxy) {
-        super(appkey, masterSecret, maxRetryTimes, proxy);
+    /**
+     * Create a User Client with custom config.
+     * If you are using JMessage privacy cloud or custom parameters, maybe this constructor is what you needed.
+     *
+     * @param appkey The key of one application on JPush.
+     * @param masterSecret API access secret of the appKey.
+     * @param proxy The proxy, if there is no proxy, should be null.
+     * @param config The client configuration. Can use JMessageConfig.getInstance() as default.
+     */
+    public UserClient(String appkey, String masterSecret, HttpProxy proxy, JMessageConfig config) {
+        super(appkey, masterSecret, proxy, config);
+        userPath = (String) config.get(JMessageConfig.USER_PATH);
+        adminPath = (String) config.get(JMessageConfig.ADMIN_PATH);
     }
 
     public ResponseWrapper registerUsers(RegisterPayload payload)
@@ -39,7 +64,7 @@ public class UserClient extends BaseClient {
 
         Preconditions.checkArgument(!(null == payload), "payload should not be null");
 
-        return _httpClient.sendPost(_baseUrl + ServiceConstant.USER_PATH, payload.toString());
+        return _httpClient.sendPost(_baseUrl + userPath, payload.toString());
     }
 
     public ResponseWrapper registerAdmins(RegisterPayload payload)
@@ -48,7 +73,7 @@ public class UserClient extends BaseClient {
 
         Preconditions.checkArgument( !(null == payload), "payload should not be null");
 
-        return _httpClient.sendPost(_baseUrl + ServiceConstant.ADMIN_PATH, payload.toString());
+        return _httpClient.sendPost(_baseUrl + adminPath, payload.toString());
 
     }
 
@@ -58,7 +83,7 @@ public class UserClient extends BaseClient {
 
         Preconditions.checkArgument( !StringUtils.isTrimedEmpty(username), "username should not be empty");
 
-        return _httpClient.sendGet(_baseUrl + ServiceConstant.USER_PATH + "/" + username);
+        return _httpClient.sendGet(_baseUrl + userPath + "/" + username);
     }
 
     public ResponseWrapper updatePassword( String username, String password )
@@ -74,7 +99,7 @@ public class UserClient extends BaseClient {
         JsonObject jsonObj = new JsonObject();
         jsonObj.addProperty("new_password", password);
 
-        return _httpClient.sendPut(_baseUrl + ServiceConstant.USER_PATH + "/" + username + "/password",
+        return _httpClient.sendPut(_baseUrl + userPath + "/" + username + "/password",
                 jsonObj.toString());
 
     }
@@ -85,7 +110,7 @@ public class UserClient extends BaseClient {
         Preconditions.checkArgument( !StringUtils.isTrimedEmpty(username), "username should not be empty");
         Preconditions.checkArgument( !(null == payload), "payload should not be null");
 
-        return _httpClient.sendPut(_baseUrl + ServiceConstant.USER_PATH + "/" + username, payload.toString());
+        return _httpClient.sendPut(_baseUrl + userPath + "/" + username, payload.toString());
     }
 
     public ResponseWrapper getUserList( int start, int count )
@@ -95,7 +120,7 @@ public class UserClient extends BaseClient {
         Preconditions.checkPositionIndex(start, count);
         Preconditions.checkArgument(count <= 500, "count must not more than 500.");
 
-        return _httpClient.sendGet(_baseUrl + ServiceConstant.USER_PATH + "?start=" + start + "&count=" + count);
+        return _httpClient.sendGet(_baseUrl + userPath + "?start=" + start + "&count=" + count);
 
     }
 
@@ -104,7 +129,7 @@ public class UserClient extends BaseClient {
     {
         Preconditions.checkArgument( !StringUtils.isTrimedEmpty(username), "username should not be empty");
 
-        return _httpClient.sendGet(_baseUrl + ServiceConstant.USER_PATH + "/" + username + "/groups");
+        return _httpClient.sendGet(_baseUrl + userPath + "/" + username + "/groups");
 
     }
 
@@ -113,6 +138,6 @@ public class UserClient extends BaseClient {
     {
         Preconditions.checkArgument( !StringUtils.isTrimedEmpty(username), "username should not be empty");
 
-        return _httpClient.sendDelete(_baseUrl + ServiceConstant.USER_PATH + "/" + username);
+        return _httpClient.sendDelete(_baseUrl + userPath + "/" + username);
     }
 }

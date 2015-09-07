@@ -1,5 +1,6 @@
 package cn.jmessage.api;
 
+import cn.jmessage.api.common.JMessageConfig;
 import cn.jmessage.api.user.UserClient;
 import cn.jmessage.api.group.GroupClient;
 import cn.jmessage.api.common.model.GroupPayload;
@@ -15,23 +16,65 @@ import cn.jpush.api.common.resp.APIRequestException;
 public class JMessageClient {
 
     private final UserClient _userClient;
-
     private final GroupClient _groupClient;
 
-
+    /**
+     * Create a JMessage Client.
+     *
+     * @param appkey The KEY of one application on JPush.
+     * @param masterSecret API access secret of the appKey.
+     */
     public JMessageClient(String appkey, String masterSecret) {
-        _userClient = new UserClient(appkey, masterSecret);
-        _groupClient = new GroupClient(appkey, masterSecret);
+        this(appkey, masterSecret, null, JMessageConfig.getInstance());
     }
 
+    /**
+     * Create a JMessage Client with custom maxRetryTimes.
+     *
+     * @param appkey The KEY of one application on JPush.
+     * @param masterSecret API access secret of the appKey.
+     * @param maxRetryTimes The max retry times.
+     */
     public JMessageClient(String appkey, String masterSecret, int maxRetryTimes) {
-        _userClient = new UserClient(appkey, masterSecret, maxRetryTimes);
-        _groupClient = new GroupClient(appkey, masterSecret, maxRetryTimes);
+        this(appkey, masterSecret, null, JMessageConfig.getInstance().setMaxRetryTimes(maxRetryTimes));
     }
 
-    public JMessageClient(String appkey, String masterSecret, int maxRetryTimes, HttpProxy proxy) {
-        _userClient = new UserClient(appkey, masterSecret, maxRetryTimes, proxy);
-        _groupClient = new GroupClient(appkey, masterSecret, maxRetryTimes, proxy);
+    /**
+     * Create a JMessage Client with a proxy.
+     *
+     * @param appkey The KEY of one application on JPush.
+     * @param masterSecret API access secret of the appKey.
+     * @param proxy The proxy, if there is no proxy, should be null.
+     */
+    public JMessageClient(String appkey, String masterSecret, HttpProxy proxy) {
+        this(appkey, masterSecret, proxy, JMessageConfig.getInstance());
+    }
+
+    /**
+     * Create a JMessage Client with a custom hostname.
+     * If you are using JPush/JMessage privacy cloud, maybe this constructor is what you needed.
+     *
+     * @param appkey The KEY of one application on JPush.
+     * @param masterSecret API access secret of the appKey.
+     * @param hostname The custom hostname.
+     */
+    public JMessageClient(String appkey, String masterSecret, String hostname) {
+        this(appkey, masterSecret, null, JMessageConfig.getInstance().setApiHostName(hostname));
+    }
+
+
+    /**
+     * Create a JMessage Client by custom Client configuration.
+     * If you are using custom parameters, maybe this constructor is what you needed.
+     *
+     * @param appkey The KEY of one application on JPush.
+     * @param masterSecret API access secret of the appKey.
+     * @param proxy The proxy, if there is no proxy, should be null.
+     * @param config The client configuration. Can use JMessageConfig.getInstance() as default.
+     */
+    public JMessageClient(String appkey, String masterSecret, HttpProxy proxy, JMessageConfig config) {
+        _userClient = new UserClient(appkey, masterSecret, proxy, config);
+        _groupClient = new GroupClient(appkey, masterSecret, proxy, config);
     }
 
     public String registerUsers(RegisterInfo[] users)

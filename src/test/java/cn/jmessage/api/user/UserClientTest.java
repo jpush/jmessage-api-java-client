@@ -106,7 +106,7 @@ public class UserClientTest extends BaseTest {
             LOG.error("Error response from JPush server. Should review and fix it. ", e);
             LOG.info("HTTP Status: " + e.getStatus());
             LOG.info("Error Message: " + e.getMessage());
-            assertTrue(e.getMessage().contains("exit"));
+            assertEquals(899001, e.getErrorCode());
         }
     }
 
