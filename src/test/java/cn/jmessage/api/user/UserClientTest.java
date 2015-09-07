@@ -188,10 +188,8 @@ public class UserClientTest extends BaseTest {
     @Test
     public void testGetUserInfo() {
         try {
-
-            ResponseWrapper res = userClient.getUserInfo(JUNIT_USER);
-            assertEquals(200, res.responseCode);
-            assertTrue(res.responseContent.contains(JUNIT_USER));
+            UserInfoResult res = userClient.getUserInfo(JUNIT_USER);
+            assertEquals(JUNIT_USER, res.getUsername());
         } catch (APIConnectionException e) {
             LOG.error("Connection error. Should retry later. ", e);
             assertTrue(false);
@@ -416,18 +414,13 @@ public class UserClientTest extends BaseTest {
     @Test
     public void testGetUserList() {
         try {
-
-            ResponseWrapper res = userClient.getUserList(0, 5);
-            assertEquals(200, res.responseCode);
-
+            UserListResult res = userClient.getUserList(0, 5);
             try {
-                JsonObject obj = parser.parse(res.responseContent).getAsJsonObject();
-                assertEquals(5, obj.get("count").getAsInt());
+                assertEquals(Integer.valueOf(5), res.getCount());
             } catch (Exception e) {
                 LOG.error("parse response content error.", e);
                 assertTrue(false);
             }
-
         } catch (APIConnectionException e) {
             LOG.error("Connection error. Should retry later. ", e);
             assertTrue(false);

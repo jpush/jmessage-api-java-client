@@ -11,7 +11,9 @@ import cn.jpush.api.common.resp.APIRequestException;
 import cn.jpush.api.common.resp.ResponseWrapper;
 import cn.jpush.api.utils.Preconditions;
 import cn.jpush.api.utils.StringUtils;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -77,13 +79,14 @@ public class UserClient extends BaseClient {
 
     }
 
-    public ResponseWrapper getUserInfo( String username )
+    public UserInfoResult getUserInfo( String username )
             throws APIConnectionException, APIRequestException
     {
 
         Preconditions.checkArgument( !StringUtils.isTrimedEmpty(username), "username should not be empty");
 
-        return _httpClient.sendGet(_baseUrl + userPath + "/" + username);
+        ResponseWrapper response = _httpClient.sendGet(_baseUrl + userPath + "/" + username);
+        return UserInfoResult.fromResponse(response, UserInfoResult.class);
     }
 
     public ResponseWrapper updatePassword( String username, String password )
@@ -113,14 +116,14 @@ public class UserClient extends BaseClient {
         return _httpClient.sendPut(_baseUrl + userPath + "/" + username, payload.toString());
     }
 
-    public ResponseWrapper getUserList( int start, int count )
+    public UserListResult getUserList( int start, int count )
             throws APIConnectionException, APIRequestException
     {
 
         Preconditions.checkPositionIndex(start, count);
         Preconditions.checkArgument(count <= 500, "count must not more than 500.");
-
-        return _httpClient.sendGet(_baseUrl + userPath + "?start=" + start + "&count=" + count);
+        ResponseWrapper response = _httpClient.sendGet(_baseUrl + userPath + "?start=" + start + "&count=" + count);
+        return UserListResult.fromResponse(response, UserListResult.class);
 
     }
 
@@ -130,7 +133,6 @@ public class UserClient extends BaseClient {
         Preconditions.checkArgument( !StringUtils.isTrimedEmpty(username), "username should not be empty");
 
         return _httpClient.sendGet(_baseUrl + userPath + "/" + username + "/groups");
-
     }
 
     public ResponseWrapper deleteUser( String username )
@@ -139,5 +141,40 @@ public class UserClient extends BaseClient {
         Preconditions.checkArgument( !StringUtils.isTrimedEmpty(username), "username should not be empty");
 
         return _httpClient.sendDelete(_baseUrl + userPath + "/" + username);
+    }
+
+    public ResponseWrapper addBlackList( String username, String... users )
+            throws APIConnectionException, APIRequestException
+    {
+        Preconditions.checkArgument( !StringUtils.isTrimedEmpty(username), "username should not be empty");
+        Preconditions.checkArgument( null != users && users.length > 0, "black list should not be empty");
+
+        JsonArray array = new JsonArray();
+        for (String user : users) {
+            array.add(new JsonPrimitive(user));
+        }
+        return _httpClient.sendPut(_baseUrl + userPath + "/" + username + "/blacklist", array.toString());
+    }
+
+    public ResponseWrapper removeBlackList( String username, String... users)
+            throws APIConnectionException, APIRequestException
+    {
+        Preconditions.checkArgument( !StringUtils.isTrimedEmpty(username), "username should not be empty");
+        Preconditions.checkArgument( null != users && users.length > 0, "black list should not be empty");
+
+        JsonArray array = new JsonArray();
+        for (String user : users) {
+            array.add(new JsonPrimitive(user));
+        }
+
+        return _httpClient.sendDelete(_baseUrl + userPath + "/" + username + "/blacklist", array.toString());
+    }
+
+    public ResponseWrapper getBlackList( String username)
+            throws APIConnectionException, APIRequestException
+    {
+        Preconditions.checkArgument( !StringUtils.isTrimedEmpty(username), "username should not be empty");
+
+        return _httpClient.sendGet( _baseUrl + userPath + "/" + username + "/blacklist");
     }
 }

@@ -100,7 +100,7 @@ public class JMessageClient {
     public String getUserInfo(String username)
             throws APIConnectionException, APIRequestException
     {
-        return _userClient.getUserInfo(username).responseContent;
+        return _userClient.getUserInfo(username).toString();
     }
 
     public void updateUserPassword(String username, String password)
@@ -129,13 +129,13 @@ public class JMessageClient {
     public String getUserList(int start, int count)
             throws APIConnectionException, APIRequestException
     {
-        return _userClient.getUserList(start, count).responseContent;
+        return _userClient.getUserList(start, count).toString();
     }
 
     public String getGroupListByUser(String username)
             throws APIConnectionException, APIRequestException
     {
-        return _userClient.getGroupList(username).responseContent;
+        return _userClient.getGroupList(username).toString();
     }
 
     public void deleteUser(String username)
