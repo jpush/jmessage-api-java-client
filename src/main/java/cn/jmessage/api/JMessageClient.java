@@ -1,13 +1,10 @@
 package cn.jmessage.api;
 
 import cn.jmessage.api.common.JMessageConfig;
+import cn.jmessage.api.common.model.*;
+import cn.jmessage.api.message.MessageClient;
 import cn.jmessage.api.user.UserClient;
 import cn.jmessage.api.group.GroupClient;
-import cn.jmessage.api.common.model.GroupPayload;
-import cn.jmessage.api.common.model.Members;
-import cn.jmessage.api.common.model.RegisterPayload;
-import cn.jmessage.api.common.model.RegisterInfo;
-import cn.jmessage.api.common.model.UserPayload;
 
 import cn.jpush.api.common.connection.HttpProxy;
 import cn.jpush.api.common.resp.APIConnectionException;
@@ -17,6 +14,7 @@ public class JMessageClient {
 
     private final UserClient _userClient;
     private final GroupClient _groupClient;
+    private final MessageClient _messageClient;
 
     /**
      * Create a JMessage Client.
@@ -75,6 +73,7 @@ public class JMessageClient {
     public JMessageClient(String appkey, String masterSecret, HttpProxy proxy, JMessageConfig config) {
         _userClient = new UserClient(appkey, masterSecret, proxy, config);
         _groupClient = new GroupClient(appkey, masterSecret, proxy, config);
+        _messageClient = new MessageClient(appkey, masterSecret, proxy, config);
     }
 
     public String registerUsers(RegisterInfo[] users)
@@ -204,4 +203,18 @@ public class JMessageClient {
         _groupClient.updateGroupInfo(gid, groupName, groupDesc);
     }
 
+    public void sendMessage(Integer version, String targetType, String targetId,
+                            String fromType, String fromId, String messageType, MessageBody messageBody)
+            throws APIConnectionException, APIRequestException {
+        MessagePayload payload = MessagePayload.newBuilder()
+                .setVersion(version)
+                .setTargetType(targetType)
+                .setTargetId(targetId)
+                .setFromType(fromType)
+                .setFromId(fromId)
+                .setMessageType(messageType)
+                .setMessageBody(messageBody)
+                .build();
+        _messageClient.sendMessage(payload);
+    }
 }
