@@ -38,9 +38,8 @@ public class GroupClientTest extends BaseTest {
     @Test
     public void testGetGroupInfo() {
         try {
-            ResponseWrapper res = groupClient.getGroupInfo(JUNIT_GID);
-
-            assertEquals(200, res.responseCode);
+            GroupInfoResult res = groupClient.getGroupInfo(JUNIT_GID);
+            assertEquals(Long.valueOf(JUNIT_GID), res.getGid());
 
         } catch (APIConnectionException e) {
             LOG.error("Connection error. Should retry later. ", e);
@@ -66,16 +65,11 @@ public class GroupClientTest extends BaseTest {
         }
     }
 
-    /**
-     * Method: getGroupMembers(long gid)
-     */
     @Test
     public void testGetGroupMembers() {
         try {
-            ResponseWrapper res = groupClient.getGroupMembers(JUNIT_GID);
-
-            assertEquals(200, res.responseCode);
-
+            MemberListResult res = groupClient.getGroupMembers(JUNIT_GID);
+            assertTrue(res.isResultOK());
         } catch (APIConnectionException e) {
             LOG.error("Connection error. Should retry later. ", e);
             assertTrue(false);
@@ -106,19 +100,8 @@ public class GroupClientTest extends BaseTest {
     @Test
     public void testGetGroupListByAppkey() {
         try {
-            ResponseWrapper res = groupClient.getGroupListByAppkey(0, 2);
-
-            assertEquals(200, res.responseCode);
-
-            try {
-                JsonObject obj = parser.parse(res.responseContent).getAsJsonObject();
-                int count = obj.get("count").getAsInt();
-                assertEquals(2, count);
-            } catch (Exception e) {
-                LOG.error("parse response content error.", e);
-                assertTrue(false);
-            }
-
+            GroupListResult res = groupClient.getGroupListByAppkey(0, 2);
+            assertEquals(Integer.valueOf(2), res.getCount());
         } catch (APIConnectionException e) {
             LOG.error("Connection error. Should retry later. ", e);
             assertTrue(false);
@@ -183,19 +166,17 @@ public class GroupClientTest extends BaseTest {
 
             JsonObject obj = new JsonObject();
             obj.addProperty("owner_username", JUNIT_USER);
-            obj.addProperty("group_name", "junit_test_group");
-            obj.addProperty("group_desc", "for junit test");
+            obj.addProperty("name", "junit_test_group");
+            obj.addProperty("desc", "for junit test");
 
             assertEquals(obj, payload.toJSON());
 
-            ResponseWrapper res = groupClient.createGroup(payload);
-            assertEquals(201, res.responseCode);
+            CreateGroupResult res = groupClient.createGroup(payload);
+
+            assertEquals("junit_test_group", res.getName());
 
             try {
-                JsonObject resObj = parser.parse(res.responseContent).getAsJsonObject();
-                long gid = resObj.get("gid").getAsLong();
-
-                ResponseWrapper res1 = groupClient.deleteGroup(gid);
+                ResponseWrapper res1 = groupClient.deleteGroup(res.getGid());
                 assertEquals(204, res1.responseCode);
             } catch (Exception e) {
                 LOG.error("parse response content error.", e);

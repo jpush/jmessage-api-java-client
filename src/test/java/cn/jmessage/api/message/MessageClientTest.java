@@ -5,9 +5,7 @@ import cn.jmessage.api.common.model.MessageBody;
 import cn.jmessage.api.common.model.MessagePayload;
 import cn.jpush.api.common.resp.APIConnectionException;
 import cn.jpush.api.common.resp.APIRequestException;
-import cn.jpush.api.common.resp.ResponseWrapper;
 import com.google.gson.JsonObject;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -66,8 +64,9 @@ public class MessageClientTest extends BaseTest {
         assertEquals(messObj, payload.toJSON());
 
         try {
-            ResponseWrapper res = messageClient.sendMessage(payload);
-            assertEquals(201, res.responseCode);
+            SendMessageResult res = messageClient.sendMessage(payload);
+            assertTrue(res.isResultOK());
+            System.out.println(res.getMsg_id());
         } catch (APIConnectionException e) {
             LOG.error("Connection error. Should retry later. ", e);
             assertTrue(false);

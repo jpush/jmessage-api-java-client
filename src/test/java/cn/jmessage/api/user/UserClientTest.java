@@ -8,7 +8,6 @@ import cn.jmessage.api.common.model.UserPayload;
 import cn.jpush.api.common.resp.APIConnectionException;
 import cn.jpush.api.common.resp.APIRequestException;
 import cn.jpush.api.common.resp.ResponseWrapper;
-
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import org.junit.Assert;
@@ -129,7 +128,6 @@ public class UserClientTest extends BaseTest {
     @Test
     public void testRegisterAdmins() {
         try {
-            List<RegisterInfo> users = new ArrayList<RegisterInfo>();
             RegisterInfo user = RegisterInfo.newBuilder()
                     .setUsername("junit_test_admin")
                     .setPassword("junit_test_pass")
@@ -138,23 +136,9 @@ public class UserClientTest extends BaseTest {
             JsonObject obj = new JsonObject();
             obj.addProperty("username", "junit_test_admin");
             obj.addProperty("password", "junit_test_pass");
-
             Assert.assertEquals("", obj, user.toJSON());
-
-            users.add(user);
-            RegisterInfo[] regUsers = new RegisterInfo[users.size()];
-
-            RegisterPayload payload = RegisterPayload.newBuilder()
-                    .addUsers(users.toArray(regUsers)).build();
-
-            JsonArray arr = new JsonArray();
-            arr.add(obj);
-
-            Assert.assertEquals("", arr, payload.toJSON());
-
-            ResponseWrapper res = userClient.registerAdmins(payload);
+            ResponseWrapper res = userClient.registerAdmins(user);
             assertEquals(201, res.responseCode);
-
             userClient.deleteUser("junit_test_admin");
 
         } catch (APIConnectionException e) {
@@ -477,10 +461,8 @@ public class UserClientTest extends BaseTest {
     @Test
     public void testGetGroupList() {
         try {
-
-            ResponseWrapper res = userClient.getGroupList(JUNIT_USER);
-            assertEquals(200, res.responseCode);
-
+            UserGroupsResult res = userClient.getGroupList(JUNIT_USER);
+            assertTrue(res.isResultOK());
         } catch (APIConnectionException e) {
             LOG.error("Connection error. Should retry later. ", e);
             assertTrue(false);
