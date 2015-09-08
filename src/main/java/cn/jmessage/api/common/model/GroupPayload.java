@@ -11,9 +11,9 @@ import com.google.gson.JsonObject;
 public class GroupPayload implements IModel {
 
     public static final String OWNER = "owner_username";
-    public static final String GROUP_NAME = "group_name";
+    public static final String GROUP_NAME = "name";
     public static final String MEMBERS = "members_username";
-    public static final String DESC = "group_desc";
+    public static final String DESC = "desc";
 
     private static Gson gson = new Gson();
 

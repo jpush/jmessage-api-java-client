@@ -3,6 +3,7 @@ package cn.jmessage.api.user;
 
 import cn.jmessage.api.common.BaseClient;
 import cn.jmessage.api.common.JMessageConfig;
+import cn.jmessage.api.common.model.RegisterInfo;
 import cn.jmessage.api.common.model.RegisterPayload;
 import cn.jmessage.api.common.model.UserPayload;
 import cn.jpush.api.common.connection.HttpProxy;
@@ -69,7 +70,7 @@ public class UserClient extends BaseClient {
         return _httpClient.sendPost(_baseUrl + userPath, payload.toString());
     }
 
-    public ResponseWrapper registerAdmins(RegisterPayload payload)
+    public ResponseWrapper registerAdmins(RegisterInfo payload)
             throws APIConnectionException, APIRequestException
     {
 
@@ -127,12 +128,14 @@ public class UserClient extends BaseClient {
 
     }
 
-    public ResponseWrapper getGroupList( String username )
+    public UserGroupsResult getGroupList( String username )
             throws APIConnectionException, APIRequestException
     {
         Preconditions.checkArgument( !StringUtils.isTrimedEmpty(username), "username should not be empty");
 
-        return _httpClient.sendGet(_baseUrl + userPath + "/" + username + "/groups");
+        ResponseWrapper response = _httpClient.sendGet(_baseUrl + userPath + "/" + username + "/groups");
+
+        return UserGroupsResult.fromResponse(response);
     }
 
     public ResponseWrapper deleteUser( String username )

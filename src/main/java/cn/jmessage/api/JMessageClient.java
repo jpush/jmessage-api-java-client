@@ -2,10 +2,13 @@ package cn.jmessage.api;
 
 import cn.jmessage.api.common.JMessageConfig;
 import cn.jmessage.api.common.model.*;
+import cn.jmessage.api.group.*;
 import cn.jmessage.api.message.MessageClient;
 import cn.jmessage.api.user.UserClient;
-import cn.jmessage.api.group.GroupClient;
 
+import cn.jmessage.api.user.UserGroupsResult;
+import cn.jmessage.api.user.UserInfoResult;
+import cn.jmessage.api.user.UserListResult;
 import cn.jpush.api.common.connection.HttpProxy;
 import cn.jpush.api.common.resp.APIConnectionException;
 import cn.jpush.api.common.resp.APIRequestException;
@@ -86,20 +89,21 @@ public class JMessageClient {
         return _userClient.registerUsers(payload).responseContent;
     }
 
-    public String registerAdmins(RegisterInfo[] admins)
+    public String registerAdmins(String username, String password)
             throws APIConnectionException, APIRequestException
     {
-        RegisterPayload payload = RegisterPayload.newBuilder()
-                .addUsers(admins)
+        RegisterInfo payload = RegisterInfo.newBuilder()
+                .setUsername(username)
+                .setPassword(password)
                 .build();
 
         return _userClient.registerAdmins(payload).responseContent;
     }
 
-    public String getUserInfo(String username)
+    public UserInfoResult getUserInfo(String username)
             throws APIConnectionException, APIRequestException
     {
-        return _userClient.getUserInfo(username).toString();
+        return _userClient.getUserInfo(username);
     }
 
     public void updateUserPassword(String username, String password)
@@ -125,16 +129,16 @@ public class JMessageClient {
         _userClient.updateUserInfo(username, payload);
     }
 
-    public String getUserList(int start, int count)
+    public UserListResult getUserList(int start, int count)
             throws APIConnectionException, APIRequestException
     {
-        return _userClient.getUserList(start, count).toString();
+        return _userClient.getUserList(start, count);
     }
 
-    public String getGroupListByUser(String username)
+    public UserGroupsResult getGroupListByUser(String username)
             throws APIConnectionException, APIRequestException
     {
-        return _userClient.getGroupList(username).toString();
+        return _userClient.getGroupList(username);
     }
 
     public void deleteUser(String username)
@@ -144,25 +148,25 @@ public class JMessageClient {
     }
 
 
-    public String getGroupInfo(long gid)
+    public GroupInfoResult getGroupInfo(long gid)
             throws APIConnectionException, APIRequestException
     {
-        return _groupClient.getGroupInfo(gid).responseContent;
+        return _groupClient.getGroupInfo(gid);
     }
 
-    public String getGroupMembers(long gid)
+    public MemberListResult getGroupMembers(long gid)
             throws APIConnectionException, APIRequestException
     {
-        return _groupClient.getGroupMembers(gid).responseContent;
+        return _groupClient.getGroupMembers(gid);
     }
 
-    public String getGroupListByAppkey(int start, int count)
+    public GroupListResult getGroupListByAppkey(int start, int count)
             throws APIConnectionException, APIRequestException
     {
-        return _groupClient.getGroupListByAppkey(start, count).responseContent;
+        return _groupClient.getGroupListByAppkey(start, count);
     }
 
-    public String createGroup(String owner, String gname, String desc, String... userlist)
+    public CreateGroupResult createGroup(String owner, String gname, String desc, String... userlist)
             throws APIConnectionException, APIRequestException
     {
         Members members = Members.newBuilder().addMember(userlist).build();
@@ -174,7 +178,7 @@ public class JMessageClient {
                 .setMembers(members)
                 .build();
 
-        return _groupClient.createGroup(payload).responseContent;
+        return _groupClient.createGroup(payload);
     }
 
     public void addOrRemoveMembers(long gid, String[] addList, String[] removeList)

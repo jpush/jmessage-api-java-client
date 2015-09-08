@@ -1,47 +1,28 @@
 package cn.jmessage.api.examples;
 
 import cn.jmessage.api.JMessageClient;
-import cn.jmessage.api.common.model.RegisterInfo;
+import cn.jmessage.api.group.CreateGroupResult;
+import cn.jmessage.api.group.GroupInfoResult;
+import cn.jmessage.api.group.GroupListResult;
+import cn.jmessage.api.group.MemberListResult;
 import cn.jpush.api.common.resp.APIConnectionException;
 import cn.jpush.api.common.resp.APIRequestException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.List;
+public class GroupExample {
 
-public class UserExample {
-
-    protected static final Logger LOG = LoggerFactory.getLogger(UserExample.class);
+    protected static final Logger LOG = LoggerFactory.getLogger(GroupExample.class);
 
     private static final String appkey = "242780bfdd7315dc1989fe2b";
     private static final String masterSecret = "2f5ced2bef64167950e63d13";
 
-    public static void testRegisterUsers() {
+    public static void testCreateGroup() {
         JMessageClient client = new JMessageClient(appkey, masterSecret);
-
         try {
-
-            List<RegisterInfo> users = new ArrayList<RegisterInfo>();
-
-            RegisterInfo user = RegisterInfo.newBuilder()
-                    .setUsername("test_user")
-                    .setPassword("test_pass")
-                    .build();
-
-            RegisterInfo user1 = RegisterInfo.newBuilder()
-                    .setUsername("test_user1")
-                    .setPassword("test_pass1")
-                    .build();
-
-            users.add(user);
-            users.add(user1);
-
-            RegisterInfo[] regUsers = new RegisterInfo[users.size()];
-
-            String res = client.registerUsers(users.toArray(regUsers));
-            LOG.info(res);
+            CreateGroupResult res = client.createGroup("test_user", "test_gname1", "description", "test_user");
+            LOG.info(res.getName());
         } catch (APIConnectionException e) {
             LOG.error("Connection error. Should retry later. ", e);
         } catch (APIRequestException e) {
@@ -51,12 +32,12 @@ public class UserExample {
         }
     }
 
-    public static void testGetUserInfo() {
+    public static void testGetGroupInfo() {
         JMessageClient client = new JMessageClient(appkey, masterSecret);
 
         try {
-            String res = client.getUserInfo("test_user");
-            LOG.info(res);
+            GroupInfoResult res = client.getGroupInfo(10003767);
+            LOG.info(res.getOriginalContent());
         } catch (APIConnectionException e) {
             LOG.error("Connection error. Should retry later. ", e);
         } catch (APIRequestException e) {
@@ -66,11 +47,12 @@ public class UserExample {
         }
     }
 
-    public static void testUpdatePassword() {
+    public static void testGetGroupMemberList() {
         JMessageClient client = new JMessageClient(appkey, masterSecret);
 
         try {
-            client.updateUserPassword("test_user", "test_new_pass");
+            MemberListResult res = client.getGroupMembers(10003767);
+            LOG.info(res.getOriginalContent());
         } catch (APIConnectionException e) {
             LOG.error("Connection error. Should retry later. ", e);
         } catch (APIRequestException e) {
@@ -80,11 +62,12 @@ public class UserExample {
         }
     }
 
-    public static void testUpdateUserInfo() {
+    public static void testGetGroupListByAppkey() {
         JMessageClient client = new JMessageClient(appkey, masterSecret);
 
         try {
-            client.updateUserInfo("test_user", "test_nick", "2000-01-12", "help me!", 1, "shenzhen", "nanshan", null);
+            GroupListResult res = client.getGroupListByAppkey(0, 30);
+            LOG.info(res.getOriginalContent());
         } catch (APIConnectionException e) {
             LOG.error("Connection error. Should retry later. ", e);
         } catch (APIRequestException e) {
@@ -94,12 +77,14 @@ public class UserExample {
         }
     }
 
-    public static void testGetUsers() {
+    public static void testManageGroup() {
         JMessageClient client = new JMessageClient(appkey, masterSecret);
 
         try {
-            String res = client.getUserList(0, 30);
-            LOG.info(res);
+            String[] addList = {"baobao148"};
+            String[] removeList = {"baobao148"};
+            client.addOrRemoveMembers(10003767, addList, null );
+            client.addOrRemoveMembers(10003767, null, removeList);
         } catch (APIConnectionException e) {
             LOG.error("Connection error. Should retry later. ", e);
         } catch (APIRequestException e) {
@@ -109,12 +94,11 @@ public class UserExample {
         }
     }
 
-    public static void testGetGroupsByUser() {
+    public static void testUpdateGroupInfo() {
         JMessageClient client = new JMessageClient(appkey, masterSecret);
 
         try {
-            String res = client.getGroupListByUser("test_user");
-            LOG.info(res);
+            client.updateGroupInfo(10003767, "test_gname_new", "update desc");
         } catch (APIConnectionException e) {
             LOG.error("Connection error. Should retry later. ", e);
         } catch (APIRequestException e) {
@@ -124,11 +108,11 @@ public class UserExample {
         }
     }
 
-    public static void testDeleteUser() {
+    public static void testDeleteGroup() {
         JMessageClient client = new JMessageClient(appkey, masterSecret);
 
         try {
-            client.deleteUser("test_user_119");
+            client.deleteGroup(10003765);
         } catch (APIConnectionException e) {
             LOG.error("Connection error. Should retry later. ", e);
         } catch (APIRequestException e) {
@@ -139,8 +123,6 @@ public class UserExample {
     }
 
     public static void main(String[] args) {
-        testGetGroupsByUser();
+//        testGetGroupInfo();
     }
-
 }
-

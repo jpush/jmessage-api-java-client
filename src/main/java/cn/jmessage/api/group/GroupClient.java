@@ -56,38 +56,43 @@ public class GroupClient extends BaseClient {
         this.groupPath = (String) config.get(JMessageConfig.GROUP_PATH);
     }
 
-    public ResponseWrapper getGroupInfo( long gid )
+    public GroupInfoResult getGroupInfo( long gid )
             throws APIConnectionException, APIRequestException
     {
         Preconditions.checkArgument(gid > 0, "gid should more than 0.");
 
-        return _httpClient.sendGet(_baseUrl + groupPath + "/" + gid);
+        ResponseWrapper response = _httpClient.sendGet(_baseUrl + groupPath + "/" + gid);
+
+        return GroupInfoResult.fromResponse(response, GroupInfoResult.class);
     }
 
-    public ResponseWrapper getGroupMembers( long gid )
+    public MemberListResult getGroupMembers( long gid )
             throws APIConnectionException, APIRequestException
     {
         Preconditions.checkArgument(gid > 0, "gid should more than 0.");
 
-        return _httpClient.sendGet(_baseUrl + groupPath + "/" + gid + "/members");
+        ResponseWrapper response = _httpClient.sendGet(_baseUrl + groupPath + "/" + gid + "/members");
+
+        return MemberListResult.fromResponse(response);
     }
 
-    public ResponseWrapper getGroupListByAppkey( int start, int count )
+    public GroupListResult getGroupListByAppkey( int start, int count )
             throws APIConnectionException, APIRequestException
     {
         Preconditions.checkPositionIndex(start, count);
         Preconditions.checkArgument(count <= 500, "count should not more than 500.");
 
-        return _httpClient.sendGet(_baseUrl + groupPath + "?start=" + start + "&count=" + count);
+        ResponseWrapper response = _httpClient.sendGet(_baseUrl + groupPath + "?start=" + start + "&count=" + count);
+        return GroupListResult.fromResponse(response, GroupListResult.class);
     }
 
-    public ResponseWrapper createGroup(GroupPayload payload)
+    public CreateGroupResult createGroup(GroupPayload payload)
             throws APIConnectionException, APIRequestException
     {
-
         Preconditions.checkArgument(! (null == payload), "group payload should not be null");
 
-        return _httpClient.sendPost(_baseUrl + groupPath, payload.toString());
+        ResponseWrapper response = _httpClient.sendPost(_baseUrl + groupPath, payload.toString());
+        return CreateGroupResult.fromResponse(response, CreateGroupResult.class);
     }
 
     public ResponseWrapper addOrRemoveMembers( long gid, Members add, Members remove)

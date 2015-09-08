@@ -25,11 +25,12 @@ public class MessageClient extends BaseClient {
         this.messagePath = (String) config.get(JMessageConfig.MESSAGE_PATH);
     }
 
-    public ResponseWrapper sendMessage(MessagePayload payload)
+    public SendMessageResult sendMessage(MessagePayload payload)
             throws APIConnectionException, APIRequestException {
         Preconditions.checkArgument(!(null == payload), "Message payload should not be null");
 
-        return _httpClient.sendPost(_baseUrl + messagePath, payload.toString());
+        ResponseWrapper response = _httpClient.sendPost(_baseUrl + messagePath, payload.toString());
+        return SendMessageResult.fromResponse(response, SendMessageResult.class);
     }
 
 }

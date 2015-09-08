@@ -4,6 +4,7 @@ package cn.jmessage.api.common.model;
 import cn.jpush.api.common.ServiceHelper;
 import cn.jpush.api.utils.Preconditions;
 import cn.jpush.api.utils.StringUtils;
+import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
@@ -11,6 +12,7 @@ public class RegisterInfo implements IModel {
 
     public static final String USERNAME = "username";
     public static final String PASSWORD = "password";
+    private static Gson gson = new Gson();
 
     private String username;
     private String password;
@@ -38,6 +40,11 @@ public class RegisterInfo implements IModel {
         }
 
         return json;
+    }
+
+    @Override
+    public String toString() {
+        return gson.toJson(toJSON());
     }
 
     public static class Builder{
