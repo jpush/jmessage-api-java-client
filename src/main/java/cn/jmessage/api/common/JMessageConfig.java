@@ -22,10 +22,10 @@ public class JMessageConfig extends HashMap<String, Object> {
     private JMessageConfig() {
         super(6);
         this.put(API_HOST_NAME, "https://api.im.jpush.cn");
-        this.put(ADMIN_PATH, "/admins");
-        this.put(USER_PATH, "/users");
-        this.put(GROUP_PATH, "/groups");
-        this.put(MESSAGE_PATH, "/messages");
+        this.put(ADMIN_PATH, "/v1/admins");
+        this.put(USER_PATH, "/v1/users");
+        this.put(GROUP_PATH, "/v1/groups");
+        this.put(MESSAGE_PATH, "/v1/messages");
         this.put(MAX_RETRY_TIMES, 3);
     }
 
