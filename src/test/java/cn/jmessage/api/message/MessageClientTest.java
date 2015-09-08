@@ -67,7 +67,7 @@ public class MessageClientTest extends BaseTest {
 
         try {
             ResponseWrapper res = messageClient.sendMessage(payload);
-            assertEquals(200, res.responseCode);
+            assertEquals(201, res.responseCode);
         } catch (APIConnectionException e) {
             LOG.error("Connection error. Should retry later. ", e);
             assertTrue(false);
