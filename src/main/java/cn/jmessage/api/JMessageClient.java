@@ -1,12 +1,9 @@
 package cn.jmessage.api;
 
+import cn.jmessage.api.common.model.*;
+import cn.jmessage.api.message.MessageClient;
 import cn.jmessage.api.user.UserClient;
 import cn.jmessage.api.group.GroupClient;
-import cn.jmessage.api.common.model.GroupPayload;
-import cn.jmessage.api.common.model.Members;
-import cn.jmessage.api.common.model.RegisterPayload;
-import cn.jmessage.api.common.model.RegisterInfo;
-import cn.jmessage.api.common.model.UserPayload;
 
 import cn.jpush.api.common.connection.HttpProxy;
 import cn.jpush.api.common.resp.APIConnectionException;
@@ -18,20 +15,25 @@ public class JMessageClient {
 
     private final GroupClient _groupClient;
 
+    private final MessageClient _messageClient;
 
     public JMessageClient(String appkey, String masterSecret) {
         _userClient = new UserClient(appkey, masterSecret);
         _groupClient = new GroupClient(appkey, masterSecret);
+        _messageClient = new MessageClient(appkey, masterSecret);
+
     }
 
     public JMessageClient(String appkey, String masterSecret, int maxRetryTimes) {
         _userClient = new UserClient(appkey, masterSecret, maxRetryTimes);
         _groupClient = new GroupClient(appkey, masterSecret, maxRetryTimes);
+        _messageClient = new MessageClient(appkey, masterSecret, maxRetryTimes);
     }
 
     public JMessageClient(String appkey, String masterSecret, int maxRetryTimes, HttpProxy proxy) {
         _userClient = new UserClient(appkey, masterSecret, maxRetryTimes, proxy);
         _groupClient = new GroupClient(appkey, masterSecret, maxRetryTimes, proxy);
+        _messageClient = new MessageClient(appkey, masterSecret, maxRetryTimes, proxy);
     }
 
     public String registerUsers(RegisterInfo[] users)
@@ -161,4 +163,18 @@ public class JMessageClient {
         _groupClient.updateGroupInfo(gid, groupName, groupDesc);
     }
 
+    public void sendMessage(Integer version, String targetType, String targetId,
+                            String fromType, String fromId, String messageType, MessageBody messageBody)
+            throws APIConnectionException, APIRequestException {
+        MessagePayload payload = MessagePayload.newBuilder()
+                .setVersion(version)
+                .setTargetType(targetType)
+                .setTargetId(targetId)
+                .setFromType(fromType)
+                .setFromId(fromId)
+                .setMessageType(messageType)
+                .setMessageBody(messageBody)
+                .build();
+        _messageClient.sendMessage(payload);
+    }
 }

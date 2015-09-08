@@ -12,6 +12,6 @@ public class ServiceConstant {
 
     public static final String CONTACTS_PATH = "/";
 
-    public static final String MESSAGE_PATH = "/";
+    public static final String MESSAGE_PATH = "/messages";
 
 }
