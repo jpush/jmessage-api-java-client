@@ -8,11 +8,13 @@
 
 这是 JPush REST API 的 Java 版本封装开发包，是由极光推送官方提供的，一般支持最新的 API 功能。
 
-对应的 REST API 文档：尚未对外开放
+对应的 REST API 文档：<http://docs.jpush.io/server/rest_api_im/>
 
 本开发包 Javadoc：[API Docs](http://jpush.github.io/jmessage-api-java-client/apidocs/)
 
 版本更新：[Release页面](https://github.com/jpush/jmessage-api-java-client/releases)。下载更新请到这里。
+
+> 非常欢迎各位开发者提交代码，贡献一份力量，review过有效的代码将会合入本项目。
 
 
 ## 安装
@@ -56,7 +58,7 @@
 <dependency>
 	<groupId>cn.jpush.api</groupId>
 	<artifactId>jpush-client</artifactId>
-	<version>3.2.6</version>
+	<version>3.2.7</version>
 </dependency>
 <!-- For log4j -->
 <dependency>
@@ -72,6 +74,22 @@
 ```
 
 如果不使用 Maven 构建项目，则项目 libs/ 目录下有依赖的 jar 可复制到你的项目里去。
+
+## 编译源码
+
+> 如果开发者想基于本项目做一些扩展的开发，或者想了解本项目源码，可以参考此章，否则可略过此章。
+
+### 导入本项目
+
+* 可以采用 `git clone https://github.com/jpush/jmessage-api-java-client.git jmessage-api-src` 命令下载源码
+* 如果不使用git，请到[Release页面](https://github.com/jpush/jmessage-api-java-client/releases)下载源码包并解压
+* 采用eclipse导入下载的源码工程，推荐采用maven的方式，方便依赖包的管理
+* 假如采用导入普通项目的方式，项目报错，检查Build Path，Libraries
+ * 依赖jar包都在libs目录下可以找到，没有加入的请添加到Build Path，Libraries
+ * jpush-client jar包可以[点击下载](https://github.com/jpush/jpush-api-java-client/releases)
+ * 默认采用了log4j做日志框架，开发者可根据自己需求替换logback、commons-logging等日志框架
+ * 极个别情况下，如果test目录报错，请手动添加test的依赖jar包mockwebserver-2.0.0.jar、okhttp-2.0.0.jar、okio-1.0.0.jar
+* 开发者需要注意，将本项目的编码格式设置为UTF-8
 
 ### 构建本项目
 
@@ -121,3 +139,7 @@
         }
     }
 ```
+
+## 贡献者列表
+
+* ([@tangyikai](https://github.com/tangyikai))
