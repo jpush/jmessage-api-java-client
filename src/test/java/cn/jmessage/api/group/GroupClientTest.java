@@ -2,6 +2,7 @@ package cn.jmessage.api.group;
 
 
 import cn.jmessage.api.BaseTest;
+import cn.jmessage.api.SlowTests;
 import cn.jmessage.api.common.model.GroupPayload;
 import cn.jmessage.api.common.model.Members;
 
@@ -14,12 +15,14 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+@Category(SlowTests.class)
 public class GroupClientTest extends BaseTest {
 
     private static Logger LOG = LoggerFactory.getLogger(GroupClientTest.class);
