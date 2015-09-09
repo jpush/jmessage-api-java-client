@@ -2,11 +2,11 @@
 [![Dependency Status](https://www.versioneye.com/user/projects/53eff13a13bb06f0bb000518/badge.svg?style=flat)](https://www.versioneye.com/user/projects/53eff13a13bb06f0bb000518)
 [![GitHub version](https://badge.fury.io/gh/jpush%2Fjmessage-api-java-client.svg)](http://badge.fury.io/gh/jpush%2Fjmessage-api-java-client)
 
-# JPush API Java Library
+# JMessage API Java Library
 
 ## 概述
 
-这是 JPush REST API 的 Java 版本封装开发包，是由极光推送官方提供的，一般支持最新的 API 功能。
+这是 JMessage REST API 的 Java 版本封装开发包，是由极光推送官方提供的，一般支持最新的 API 功能。
 
 对应的 REST API 文档：<http://docs.jpush.io/server/rest_api_im/>
 
@@ -142,4 +142,4 @@
 
 ## 贡献者列表
 
-* ([@tangyikai](https://github.com/tangyikai))
+* [@tangyikai](https://github.com/tangyikai)

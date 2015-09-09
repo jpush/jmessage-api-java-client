@@ -2,6 +2,7 @@ package cn.jmessage.api.user;
 
 
 import cn.jmessage.api.BaseTest;
+import cn.jmessage.api.SlowTests;
 import cn.jmessage.api.common.model.RegisterInfo;
 import cn.jmessage.api.common.model.RegisterPayload;
 import cn.jmessage.api.common.model.UserPayload;
@@ -13,6 +14,7 @@ import com.google.gson.JsonObject;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,7 +24,7 @@ import java.util.List;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-
+@Category(SlowTests.class)
 public class UserClientTest extends BaseTest {
 
 
@@ -102,7 +104,6 @@ public class UserClientTest extends BaseTest {
             LOG.error("Connection error. Should retry later. ", e);
             assertTrue(false);
         } catch (APIRequestException e) {
-            LOG.error("Error response from JPush server. Should review and fix it. ", e);
             LOG.info("HTTP Status: " + e.getStatus());
             LOG.info("Error Message: " + e.getMessage());
             assertEquals(899001, e.getErrorCode());

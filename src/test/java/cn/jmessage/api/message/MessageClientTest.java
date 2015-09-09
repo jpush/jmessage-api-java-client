@@ -1,6 +1,7 @@
 package cn.jmessage.api.message;
 
 import cn.jmessage.api.BaseTest;
+import cn.jmessage.api.SlowTests;
 import cn.jmessage.api.common.model.MessageBody;
 import cn.jmessage.api.common.model.MessagePayload;
 import cn.jpush.api.common.resp.APIConnectionException;
@@ -8,6 +9,7 @@ import cn.jpush.api.common.resp.APIRequestException;
 import com.google.gson.JsonObject;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,6 +21,7 @@ import static org.junit.Assert.assertTrue;
  * MessageClientTest
  * Created by tangyikai on 15/9/8.
  */
+@Category(SlowTests.class)
 public class MessageClientTest extends BaseTest {
 
     private static Logger LOG = LoggerFactory.getLogger(MessageClientTest.class);
