@@ -4,6 +4,7 @@ import cn.jmessage.api.common.JMessageConfig;
 import cn.jmessage.api.common.model.*;
 import cn.jmessage.api.group.*;
 import cn.jmessage.api.message.MessageClient;
+import cn.jmessage.api.message.SendMessageResult;
 import cn.jmessage.api.user.UserClient;
 
 import cn.jmessage.api.user.UserGroupsResult;
@@ -18,6 +19,7 @@ public class JMessageClient {
     private final UserClient _userClient;
     private final GroupClient _groupClient;
     private final MessageClient _messageClient;
+    private final int _sendVersion;
 
     /**
      * Create a JMessage Client.
@@ -77,6 +79,7 @@ public class JMessageClient {
         _userClient = new UserClient(appkey, masterSecret, proxy, config);
         _groupClient = new GroupClient(appkey, masterSecret, proxy, config);
         _messageClient = new MessageClient(appkey, masterSecret, proxy, config);
+        _sendVersion = (Integer) config.get(JMessageConfig.SEND_VERSION);
     }
 
     public String registerUsers(RegisterInfo[] users)
@@ -207,7 +210,7 @@ public class JMessageClient {
         _groupClient.updateGroupInfo(gid, groupName, groupDesc);
     }
 
-    public void sendMessage(Integer version, String targetType, String targetId,
+    public SendMessageResult sendMessage(Integer version, String targetType, String targetId,
                             String fromType, String fromId, String messageType, MessageBody messageBody)
             throws APIConnectionException, APIRequestException {
         MessagePayload payload = MessagePayload.newBuilder()
@@ -219,6 +222,19 @@ public class JMessageClient {
                 .setMessageType(messageType)
                 .setMessageBody(messageBody)
                 .build();
-        _messageClient.sendMessage(payload);
+        return _messageClient.sendMessage(payload);
     }
+
+    public SendMessageResult sendSingleTextByAdmin(String targetId, String fromId, MessageBody body)
+            throws APIConnectionException, APIRequestException
+    {
+        return sendMessage(_sendVersion, "single", targetId, "admin",fromId, "text", body);
+    }
+
+    public SendMessageResult sendGroupTextByAdmin(String targetId, String fromId, MessageBody body)
+            throws APIConnectionException, APIRequestException
+    {
+        return sendMessage(_sendVersion, "group", targetId, "admin",fromId, "text", body);
+    }
+
 }
