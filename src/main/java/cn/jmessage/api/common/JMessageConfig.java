@@ -19,14 +19,18 @@ public class JMessageConfig extends HashMap<String, Object> {
     public static final String MAX_RETRY_TIMES = "max.retry.times";
     public static final Object MAX_RETRY_TIMES_SCHMEA = Integer.class;
 
+    public static final String SEND_VERSION = "send.version";
+    public static final Object SEND_VERSION_SCHMEA = Integer.class;
+
     private JMessageConfig() {
-        super(6);
+        super(10);
         this.put(API_HOST_NAME, "https://api.im.jpush.cn");
         this.put(ADMIN_PATH, "/v1/admins");
         this.put(USER_PATH, "/v1/users");
         this.put(GROUP_PATH, "/v1/groups");
         this.put(MESSAGE_PATH, "/v1/messages");
         this.put(MAX_RETRY_TIMES, 3);
+        this.put(SEND_VERSION, 1);
     }
 
     public static JMessageConfig getInstance() {
