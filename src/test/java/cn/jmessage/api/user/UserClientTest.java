@@ -330,11 +330,13 @@ public class UserClientTest extends BaseTest {
         try {
 
             UserPayload payload = UserPayload.newBuilder()
+                    .setNickname("hell My name")
                     .setRegion("shenzhen")
                     .setBirthday("2015-04-01")
                     .build();
 
             JsonObject obj = new JsonObject();
+            obj.addProperty("nickname", "hell My name");
             obj.addProperty("region", "shenzhen");
             obj.addProperty("birthday", "2015-04-01" );
 

@@ -86,7 +86,7 @@ public class UserExample {
         JMessageClient client = new JMessageClient(appkey, masterSecret);
 
         try {
-            client.updateUserInfo("test_user", "test_nick", "2000-01-12", "help me!", 1, "shenzhen", "nanshan", null);
+            client.updateUserInfo("test_user", "test_nick", "2000-01-12", "help me!", 1, "shenzhen", "nanshan");
         } catch (APIConnectionException e) {
             LOG.error("Connection error. Should retry later. ", e);
         } catch (APIRequestException e) {

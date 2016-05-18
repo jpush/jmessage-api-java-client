@@ -22,7 +22,7 @@ public class BaseClient {
         ServiceHelper.checkBasic(appkey, masterSecret);
         String authCode = ServiceHelper.getBasicAuthorization(appkey, masterSecret);
         this._baseUrl = (String) config.get(JMessageConfig.API_HOST_NAME);
-        this._httpClient = new NativeHttpClient(authCode, (Integer) config.get(JMessageConfig.MAX_RETRY_TIMES), proxy);
+        this._httpClient = new NativeHttpClient(authCode, proxy, config.getClientConfig());
     }
 
 }
