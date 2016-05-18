@@ -5,9 +5,9 @@ import cn.jpush.api.common.ClientConfig;
 
 public class JMessageConfig {
 
-    private static JMessageConfig instance = new JMessageConfig();
-
     private static ClientConfig clientConfig = ClientConfig.getInstance();
+
+    private static JMessageConfig instance = new JMessageConfig();
 
     public static final String API_HOST_NAME = "im.api.host.name";
 
