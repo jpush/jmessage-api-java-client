@@ -81,9 +81,168 @@ public class UserClientTest extends BaseTest {
             assertTrue(false);
         }
     }
+    
+	@Test(expected = IllegalArgumentException.class)
+	public void testRegisterUsers_UsernameNull() {
+		List<RegisterInfo> users = new ArrayList<RegisterInfo>();
+		RegisterInfo user = RegisterInfo.newBuilder().setPassword("junit_test_pass").build();
+
+		JsonObject obj = new JsonObject();
+		obj.addProperty("password", "junit_test_pass");
+
+		Assert.assertEquals("", obj, user.toJSON());
+
+		users.add(user);
+		RegisterInfo[] regUsers = new RegisterInfo[users.size()];
+	}
+	
+	@Test(expected = IllegalArgumentException.class)
+	public void testRegisterUsers_UsernameBlank() {
+		List<RegisterInfo> users = new ArrayList<RegisterInfo>();
+		RegisterInfo user = RegisterInfo.newBuilder()
+				.setUsername(" ")
+				.setPassword("junit_test_pass").build();
+
+		JsonObject obj = new JsonObject();
+		obj.addProperty("username", " ");
+		obj.addProperty("password", "junit_test_pass");
+		Assert.assertEquals("", obj, user.toJSON());
+		users.add(user);
+		RegisterInfo[] regUsers = new RegisterInfo[users.size()];
+	}
+    
+	@Test(expected = NullPointerException.class)
+	public void testRegisterUsers_PasswordNull() {
+		List<RegisterInfo> users = new ArrayList<RegisterInfo>();
+		RegisterInfo user = RegisterInfo.newBuilder().setUsername("junit_test_user").build();
+
+		JsonObject obj = new JsonObject();
+		obj.addProperty("username", "junit_test_user");
+
+		Assert.assertEquals("", obj, user.toJSON());
+
+		users.add(user);
+		RegisterInfo[] regUsers = new RegisterInfo[users.size()];
+	}
+	
+	@Test(expected = IllegalArgumentException.class)
+	public void testRegisterUesrs_PasswordBlank() {
+		List<RegisterInfo> users = new ArrayList<RegisterInfo>();
+		RegisterInfo user = RegisterInfo.newBuilder()
+				.setUsername("junit_test_user")
+				.setPassword(" ")
+				.build();
+
+		JsonObject obj = new JsonObject();
+		obj.addProperty("username", "junit_test_user");
+		obj.addProperty("password", " ");
+		Assert.assertEquals("", obj, user.toJSON());
+		users.add(user);
+		RegisterInfo[] regUsers = new RegisterInfo[users.size()];
+	}
+	
+	/**
+	 * username too short, should not less than 4 bytes.
+	 */
+	@Test(expected = IllegalArgumentException.class)
+	public void testRegisterUsers_UsernameInvalid() {
+		List<RegisterInfo> users = new ArrayList<RegisterInfo>();
+		RegisterInfo user = RegisterInfo.newBuilder()
+				.setUsername("123")
+				.setPassword("junit_test_pass")
+				.build();
+
+		JsonObject obj = new JsonObject();
+		obj.addProperty("username", "123");
+		obj.addProperty("password", "junit_test_pass");
+		Assert.assertEquals("", obj, user.toJSON());
+
+		users.add(user);
+		RegisterInfo[] regUsers = new RegisterInfo[users.size()];
+	}
+	
+	/**
+	 * username too long, should less than 128 bytes.
+	 */
+	@Test(expected = IllegalArgumentException.class)
+	public void testRegisterUsers_UsernameInvalid1() {
+		List<RegisterInfo> users = new ArrayList<RegisterInfo>();
+		RegisterInfo user = RegisterInfo.newBuilder()
+				.setUsername(MORE_THAN_128)
+				.setPassword("junit_test_pass")
+				.build();
+
+		JsonObject obj = new JsonObject();
+		obj.addProperty("username", MORE_THAN_128);
+		obj.addProperty("password", "junit_test_pass");
+		Assert.assertEquals("", obj, user.toJSON());
+
+		users.add(user);
+		RegisterInfo[] regUsers = new RegisterInfo[users.size()];
+	}
+	
+	/**
+	 * username format error. Must start with alphabet or number.
+	 */
+	@Test(expected = IllegalArgumentException.class)
+	public void testRegisterUsers_UsernameInvalid2() {
+		List<RegisterInfo> users = new ArrayList<RegisterInfo>();
+		RegisterInfo user = RegisterInfo.newBuilder()
+				.setUsername("@test")
+				.setPassword("junit_test_pass")
+				.build();
+
+		JsonObject obj = new JsonObject();
+		obj.addProperty("username", "@test");
+		obj.addProperty("password", "junit_test_pass");
+		Assert.assertEquals("", obj, user.toJSON());
+
+		users.add(user);
+		RegisterInfo[] regUsers = new RegisterInfo[users.size()];
+	}
+	
+	/**
+	 * password too short, should not less than 4 bytes.
+	 */
+	@Test(expected = IllegalArgumentException.class)
+	public void testRegisterUsers_PasswordInvalid() {
+		List<RegisterInfo> users = new ArrayList<RegisterInfo>();
+		RegisterInfo user = RegisterInfo.newBuilder()
+				.setUsername("junit_test_user")
+				.setPassword("123")
+				.build();
+
+		JsonObject obj = new JsonObject();
+		obj.addProperty("username", "junit_test_user");
+		obj.addProperty("password", "123");
+		Assert.assertEquals("", obj, user.toJSON());
+
+		users.add(user);
+		RegisterInfo[] regUsers = new RegisterInfo[users.size()];
+	}
+	
+	/**
+	 * password too long, should less than 128 bytes.
+	 */
+	@Test(expected = IllegalArgumentException.class)
+	public void testRegisterUsers_PasswordInvalid1() {
+		List<RegisterInfo> users = new ArrayList<RegisterInfo>();
+		RegisterInfo user = RegisterInfo.newBuilder()
+				.setUsername("junit_test_user")
+				.setPassword(MORE_THAN_128)
+				.build();
+
+		JsonObject obj = new JsonObject();
+		obj.addProperty("username", "junit_test_user");
+		obj.addProperty("password", MORE_THAN_128);
+		Assert.assertEquals("", obj, user.toJSON());
+
+		users.add(user);
+		RegisterInfo[] regUsers = new RegisterInfo[users.size()];
+	}
 
     @Test
-    public void testRegisterUsers_exist() {
+    public void testRegisterUsers_Exist() {
         try {
             List<RegisterInfo> users = new ArrayList<RegisterInfo>();
             RegisterInfo user = RegisterInfo.newBuilder()
@@ -140,7 +299,8 @@ public class UserClientTest extends BaseTest {
             Assert.assertEquals("", obj, user.toJSON());
             ResponseWrapper res = userClient.registerAdmins(user);
             assertEquals(201, res.responseCode);
-            userClient.deleteUser("junit_test_admin");
+            ResponseWrapper res1 = userClient.deleteUser("junit_test_admin");
+            assertEquals(204, res1.responseCode);
 
         } catch (APIConnectionException e) {
             LOG.error("Connection error. Should retry later. ", e);

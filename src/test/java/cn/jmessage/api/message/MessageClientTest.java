@@ -81,4 +81,141 @@ public class MessageClientTest extends BaseTest {
         }
 
     }
+    
+    @Test(expected = IllegalArgumentException.class)
+    public void testSendMessage_MessageBodyNull() {
+    	MessagePayload payload = MessagePayload.newBuilder()
+                .setVersion(1)
+                .setTargetType("single")
+                .setTargetId(JUNIT_USER)
+                .setFromType("admin")
+                .setFromId("junit_admin")
+                .setMessageType("text")
+                .build();
+    }
+    
+    @Test(expected = IllegalArgumentException.class)
+    public void testSendMessage_VersionNull() {
+    	MessageBody messageBody = MessageBody.newBuilder()
+                .setText("Test api send Message")
+                .build();
+
+        JsonObject bodyObj = new JsonObject();
+        bodyObj.addProperty("text", "Test api send Message");
+
+        assertEquals(bodyObj, messageBody.toJSON());
+        
+        MessagePayload payload = MessagePayload.newBuilder()
+                .setTargetType("single")
+                .setTargetId(JUNIT_USER)
+                .setFromType("admin")
+                .setFromId("junit_admin")
+                .setMessageType("text")
+                .build();
+    }
+    
+    @Test(expected = IllegalArgumentException.class)
+    public void testSendMessage_TargetTypeNull() {
+    	MessageBody messageBody = MessageBody.newBuilder()
+                .setText("Test api send Message")
+                .build();
+
+        JsonObject bodyObj = new JsonObject();
+        bodyObj.addProperty("text", "Test api send Message");
+
+        assertEquals(bodyObj, messageBody.toJSON());
+        
+        MessagePayload payload = MessagePayload.newBuilder()
+        		.setVersion(1)
+                .setTargetId(JUNIT_USER)
+                .setFromType("admin")
+                .setFromId("junit_admin")
+                .setMessageType("text")
+                .build();
+    }
+    
+    @Test(expected = IllegalArgumentException.class)
+    public void testSendMessage_TargetIdNull() {
+    	MessageBody messageBody = MessageBody.newBuilder()
+                .setText("Test api send Message")
+                .build();
+
+        JsonObject bodyObj = new JsonObject();
+        bodyObj.addProperty("text", "Test api send Message");
+
+        assertEquals(bodyObj, messageBody.toJSON());
+
+        MessagePayload payload = MessagePayload.newBuilder()
+                .setVersion(1)
+                .setTargetType("single")
+                .setFromType("admin")
+                .setFromId("junit_admin")
+                .setMessageType("text")
+                .setMessageBody(messageBody)
+                .build();
+    }
+    
+    @Test(expected = IllegalArgumentException.class)
+    public void testSendMessage_FromTypeNull() {
+    	MessageBody messageBody = MessageBody.newBuilder()
+                .setText("Test api send Message")
+                .build();
+
+        JsonObject bodyObj = new JsonObject();
+        bodyObj.addProperty("text", "Test api send Message");
+
+        assertEquals(bodyObj, messageBody.toJSON());
+
+        MessagePayload payload = MessagePayload.newBuilder()
+                .setVersion(1)
+                .setTargetType("single")
+                .setTargetId(JUNIT_USER)
+                .setFromType("admin")
+                .setFromId("junit_admin")
+                .setMessageType("text")
+                .setMessageBody(messageBody)
+                .build();
+    }
+    
+    @Test(expected = IllegalArgumentException.class)
+    public void testSendMessage_FromIdNull() {
+    	MessageBody messageBody = MessageBody.newBuilder()
+                .setText("Test api send Message")
+                .build();
+
+        JsonObject bodyObj = new JsonObject();
+        bodyObj.addProperty("text", "Test api send Message");
+
+        assertEquals(bodyObj, messageBody.toJSON());
+
+        MessagePayload payload = MessagePayload.newBuilder()
+                .setVersion(1)
+                .setTargetType("single")
+                .setTargetId(JUNIT_USER)
+                .setFromType("admin")
+                .setMessageType("text")
+                .setMessageBody(messageBody)
+                .build();
+    }
+    
+    @Test(expected = IllegalArgumentException.class)
+    public void testSendMessage_MessageTypeNull() {
+    	MessageBody messageBody = MessageBody.newBuilder()
+                .setText("Test api send Message")
+                .build();
+
+        JsonObject bodyObj = new JsonObject();
+        bodyObj.addProperty("text", "Test api send Message");
+
+        assertEquals(bodyObj, messageBody.toJSON());
+
+        MessagePayload payload = MessagePayload.newBuilder()
+                .setVersion(1)
+                .setTargetType("single")
+                .setTargetId(JUNIT_USER)
+                .setFromType("admin")
+                .setFromId("junit_admin")
+                .setMessageBody(messageBody)
+                .build();
+    }
 }
