@@ -170,7 +170,6 @@ public class MessageClientTest extends BaseTest {
                 .setVersion(1)
                 .setTargetType("single")
                 .setTargetId(JUNIT_USER)
-                .setFromType("admin")
                 .setFromId("junit_admin")
                 .setMessageType("text")
                 .setMessageBody(messageBody)
