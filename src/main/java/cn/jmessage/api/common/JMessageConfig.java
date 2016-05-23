@@ -1,8 +1,11 @@
 package cn.jmessage.api.common;
 
-import java.util.HashMap;
+import cn.jpush.api.common.ClientConfig;
 
-public class JMessageConfig extends HashMap<String, Object> {
+
+public class JMessageConfig {
+
+    private static ClientConfig clientConfig = ClientConfig.getInstance();
 
     private static JMessageConfig instance = new JMessageConfig();
 
@@ -16,43 +19,45 @@ public class JMessageConfig extends HashMap<String, Object> {
 
     public static final String MESSAGE_PATH = "im.message.path";
 
-    public static final String MAX_RETRY_TIMES = "max.retry.times";
-    public static final Object MAX_RETRY_TIMES_SCHMEA = Integer.class;
+    public static final String MAX_RETRY_TIMES = ClientConfig.MAX_RETRY_TIMES;
 
     public static final String SEND_VERSION = "send.version";
     public static final Object SEND_VERSION_SCHMEA = Integer.class;
 
     private JMessageConfig() {
-        super(10);
-        this.put(API_HOST_NAME, "https://api.im.jpush.cn");
-        this.put(ADMIN_PATH, "/v1/admins");
-        this.put(USER_PATH, "/v1/users");
-        this.put(GROUP_PATH, "/v1/groups");
-        this.put(MESSAGE_PATH, "/v1/messages");
-        this.put(MAX_RETRY_TIMES, 3);
-        this.put(SEND_VERSION, 1);
+        clientConfig.put(API_HOST_NAME, "https://api.im.jpush.cn");
+        clientConfig.put(ADMIN_PATH, "/v1/admins");
+        clientConfig.put(USER_PATH, "/v1/users");
+        clientConfig.put(GROUP_PATH, "/v1/groups");
+        clientConfig.put(MESSAGE_PATH, "/v1/messages");
+        clientConfig.put(MAX_RETRY_TIMES, 3);
+        clientConfig.put(SEND_VERSION, 1);
     }
 
     public static JMessageConfig getInstance() {
         return instance;
     }
 
-    public JMessageConfig setApiHostName(String hostName) {
-        setApiHostName(this, hostName);
-        return this;
+    public ClientConfig getClientConfig() {
+        return clientConfig;
     }
 
-    public static void setApiHostName(JMessageConfig conf, String hostName) {
-        conf.put(API_HOST_NAME, hostName);
+    public JMessageConfig setApiHostName(String hostName) {
+        clientConfig.put(API_HOST_NAME, hostName);
+        return this;
     }
 
     public JMessageConfig setMaxRetryTimes(int maxRetryTimes) {
-        setMaxRetryTimes(this, maxRetryTimes);
+        clientConfig.setMaxRetryTimes(maxRetryTimes);
         return this;
     }
 
-    public static void setMaxRetryTimes(JMessageConfig conf, int maxRetryTimes) {
-        conf.put(MAX_RETRY_TIMES, maxRetryTimes);
+    public void put(String key, Object value) {
+        clientConfig.put(key, value);
+    }
+
+    public Object get(String key) {
+        return clientConfig.get(key);
     }
 
 }

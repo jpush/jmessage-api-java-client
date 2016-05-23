@@ -209,7 +209,50 @@ public class GroupClientTest extends BaseTest {
             LOG.info("Error Message: " + e.getMessage());
         }
     }
-
+    
+    @Test(expected = IllegalArgumentException.class)
+    public void testCreateGroup_GroupOwnerNull() {
+    	GroupPayload payload = GroupPayload.newBuilder()
+                .setName("junit_test_group")
+                .setDesc("for junit test")
+                .build();
+    }
+    
+    @Test(expected = IllegalArgumentException.class)
+    public void testCreateGroup_GroupNameNull() {
+    	GroupPayload payload = GroupPayload.newBuilder()
+                .setOwner(JUNIT_USER)
+                .setDesc("for junit test")
+                .build();
+    }
+    
+    @Test(expected = IllegalArgumentException.class)
+    public void testCreateGroup_GroupNameOverLength() {
+    	GroupPayload payload = GroupPayload.newBuilder()
+                .setOwner(JUNIT_USER)
+                .setName(MORE_THAN_64)
+                .setDesc("for junit test")
+                .build();
+    }
+    
+    @Test(expected = IllegalArgumentException.class)
+    public void testCreateGroup_GroupNameInvalid() {
+    	GroupPayload payload = GroupPayload.newBuilder()
+                .setOwner(JUNIT_USER)
+                .setName("junit \n test")
+                .setDesc("for junit test")
+                .build();
+    }
+    
+    @Test(expected = IllegalArgumentException.class)
+    public void testCreateGroup_GroupDescOverLength() {
+    	GroupPayload payload = GroupPayload.newBuilder()
+                .setOwner(JUNIT_USER)
+                .setName("junit_test_group")
+                .setDesc(MORE_THAN_250)
+                .build();
+    }
+    
     /**
      * Method: addOrRemoveMembers(long gid, Members add, Members remove)
      */
