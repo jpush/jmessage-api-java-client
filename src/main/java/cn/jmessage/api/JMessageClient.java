@@ -116,7 +116,7 @@ public class JMessageClient {
     }
 
     public void updateUserInfo(String username, String nickname, String birthday, String signature, int gender,
-                               String region, String address, String avatar)
+                               String region, String address)
             throws APIConnectionException, APIRequestException
     {
         UserPayload payload = UserPayload.newBuilder()
@@ -126,7 +126,6 @@ public class JMessageClient {
                 .setGender(gender)
                 .setRegion(region)
                 .setAddress(address)
-                .setAvatar(avatar)
                 .build();
 
         _userClient.updateUserInfo(username, payload);
