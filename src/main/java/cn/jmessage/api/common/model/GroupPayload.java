@@ -94,6 +94,8 @@ public class GroupPayload implements IModel {
 
             Preconditions.checkArgument(StringUtils.isNotEmpty(owner), "The owner must not be empty.");
             Preconditions.checkArgument(StringUtils.isNotEmpty(name), "The group name must not be empty.");
+            Preconditions.checkArgument(!StringUtils.isLineBroken(owner), 
+            		"The owner name must not contain line feed character.");
             Preconditions.checkArgument(name.getBytes().length <= 64,
                     "The length of group name must not more than 64 bytes.");
             Preconditions.checkArgument( !StringUtils.isLineBroken(name),
