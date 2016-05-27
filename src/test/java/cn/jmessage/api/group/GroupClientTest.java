@@ -245,6 +245,15 @@ public class GroupClientTest extends BaseTest {
     }
     
     @Test(expected = IllegalArgumentException.class)
+    public void testCreateGroup_GroupOwnerNameInvalid() {
+    	GroupPayload payload = GroupPayload.newBuilder()
+    			.setOwner("junit_user \n test")
+    			.setName("junit test group")
+    			.setDesc("for junit test")
+    			.build();
+    }
+    
+    @Test(expected = IllegalArgumentException.class)
     public void testCreateGroup_GroupDescOverLength() {
     	GroupPayload payload = GroupPayload.newBuilder()
                 .setOwner(JUNIT_USER)

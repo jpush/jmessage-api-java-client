@@ -65,8 +65,11 @@ public class RegisterInfo implements IModel {
 
             Preconditions.checkArgument( StringUtils.isNotEmpty(username),
                     "The username must not be empty.");
+            
+            Preconditions.checkArgument(!StringUtils.isLineBroken(username), 
+            		"username must not contain line feed character. ");
 
-            Preconditions.checkArgument(StringUtils.isNotEmpty(username),
+            Preconditions.checkArgument(StringUtils.isNotEmpty(password),
                     "The password must not be empty.");
 
             byte[] usernameByte = username.getBytes();

@@ -111,7 +111,7 @@ public class UserClientTest extends BaseTest {
 		RegisterInfo[] regUsers = new RegisterInfo[users.size()];
 	}
     
-	@Test(expected = NullPointerException.class)
+	@Test(expected = IllegalArgumentException.class)
 	public void testRegisterUsers_PasswordNull() {
 		List<RegisterInfo> users = new ArrayList<RegisterInfo>();
 		RegisterInfo user = RegisterInfo.newBuilder().setUsername("junit_test_user").build();
@@ -197,6 +197,24 @@ public class UserClientTest extends BaseTest {
 		obj.addProperty("password", "junit_test_pass");
 		Assert.assertEquals("", obj, user.toJSON());
 
+		users.add(user);
+		RegisterInfo[] regUsers = new RegisterInfo[users.size()];
+	}
+	
+	/**
+	 * username contain line feed character
+	 */
+	@Test(expected = IllegalArgumentException.class)
+	public void testRegisterUsers_UsernameInvalid3() {
+		List<RegisterInfo> users = new ArrayList<RegisterInfo>();
+		RegisterInfo user = RegisterInfo.newBuilder()
+				.setUsername("junit \n test")
+				.setPassword("junit_test_pass").build();
+
+		JsonObject obj = new JsonObject();
+		obj.addProperty("username", " ");
+		obj.addProperty("password", "junit_test_pass");
+		Assert.assertEquals("", obj, user.toJSON());
 		users.add(user);
 		RegisterInfo[] regUsers = new RegisterInfo[users.size()];
 	}
@@ -662,6 +680,19 @@ public class UserClientTest extends BaseTest {
             LOG.info("Error Message: " + e.getMessage());
         }
     }
+    
+    @Test(expected = IllegalArgumentException.class)
+    public void testGetGroupList_UsernameInvalid() {
+        try {
+            userClient.getGroupList("junit \n test");
+        } catch (APIConnectionException e) {
+            LOG.error("Connection error. Should retry later. ", e);
+        } catch (APIRequestException e) {
+            LOG.error("Error response from JPush server. Should review and fix it. ", e);
+            LOG.info("HTTP Status: " + e.getStatus());
+            LOG.info("Error Message: " + e.getMessage());
+        }
+    }
 
     /**
      * Method: deleteUser(String username)
@@ -687,6 +718,19 @@ public class UserClientTest extends BaseTest {
     public void testDeleteUser_UsernameBlank() {
         try {
             userClient.deleteUser(" ");
+        } catch (APIConnectionException e) {
+            LOG.error("Connection error. Should retry later. ", e);
+        } catch (APIRequestException e) {
+            LOG.error("Error response from JPush server. Should review and fix it. ", e);
+            LOG.info("HTTP Status: " + e.getStatus());
+            LOG.info("Error Message: " + e.getMessage());
+        }
+    }
+    
+    @Test(expected = IllegalArgumentException.class)
+    public void testDeleteUser_UsernameInvalid() {
+        try {
+            userClient.deleteUser("junit \n test");
         } catch (APIConnectionException e) {
             LOG.error("Connection error. Should retry later. ", e);
         } catch (APIRequestException e) {
