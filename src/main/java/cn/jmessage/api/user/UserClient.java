@@ -121,8 +121,9 @@ public class UserClient extends BaseClient {
             throws APIConnectionException, APIRequestException
     {
 
-        Preconditions.checkPositionIndex(start, count);
-        Preconditions.checkArgument(count <= 500, "count must not more than 500.");
+        if(start < 0 || count <= 0 || count > 500) {
+        	throw new IllegalArgumentException("negative index or count must more than 0 and less than 501");
+        }
         ResponseWrapper response = _httpClient.sendGet(_baseUrl + userPath + "?start=" + start + "&count=" + count);
         return UserListResult.fromResponse(response, UserListResult.class);
 
@@ -132,6 +133,7 @@ public class UserClient extends BaseClient {
             throws APIConnectionException, APIRequestException
     {
         Preconditions.checkArgument( !StringUtils.isTrimedEmpty(username), "username should not be empty");
+        Preconditions.checkArgument(!StringUtils.isLineBroken(username), "username must not contain line feed character. ");
 
         ResponseWrapper response = _httpClient.sendGet(_baseUrl + userPath + "/" + username + "/groups");
 
@@ -142,7 +144,8 @@ public class UserClient extends BaseClient {
             throws APIConnectionException, APIRequestException
     {
         Preconditions.checkArgument( !StringUtils.isTrimedEmpty(username), "username should not be empty");
-
+        Preconditions.checkArgument(!StringUtils.isLineBroken(username), "username must not contain line feed character. ");
+        
         return _httpClient.sendDelete(_baseUrl + userPath + "/" + username);
     }
 

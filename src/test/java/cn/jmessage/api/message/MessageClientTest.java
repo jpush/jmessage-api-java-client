@@ -156,6 +156,28 @@ public class MessageClientTest extends BaseTest {
     }
     
     @Test(expected = IllegalArgumentException.class)
+    public void testSendMessage_TargetIdInvalid(){
+    	MessageBody messageBody = MessageBody.newBuilder()
+                .setText("Test api send Message")
+                .build();
+
+        JsonObject bodyObj = new JsonObject();
+        bodyObj.addProperty("text", "Test api send Message");
+
+        assertEquals(bodyObj, messageBody.toJSON());
+
+        MessagePayload payload = MessagePayload.newBuilder()
+                .setVersion(1)
+                .setTargetType("single")
+                .setTargetId("junit \n test id")
+                .setFromType("admin")
+                .setFromId("junit_admin")
+                .setMessageType("text")
+                .setMessageBody(messageBody)
+                .build();
+    }
+    
+    @Test(expected = IllegalArgumentException.class)
     public void testSendMessage_FromTypeNull() {
     	MessageBody messageBody = MessageBody.newBuilder()
                 .setText("Test api send Message")
@@ -192,6 +214,28 @@ public class MessageClientTest extends BaseTest {
                 .setTargetType("single")
                 .setTargetId(JUNIT_USER)
                 .setFromType("admin")
+                .setMessageType("text")
+                .setMessageBody(messageBody)
+                .build();
+    }
+    
+    @Test(expected = IllegalArgumentException.class)
+    public void testSendMessage_FromIdInvalid(){
+    	MessageBody messageBody = MessageBody.newBuilder()
+                .setText("Test api send Message")
+                .build();
+
+        JsonObject bodyObj = new JsonObject();
+        bodyObj.addProperty("text", "Test api send Message");
+
+        assertEquals(bodyObj, messageBody.toJSON());
+
+        MessagePayload payload = MessagePayload.newBuilder()
+                .setVersion(1)
+                .setTargetType("single")
+                .setTargetId(JUNIT_USER)
+                .setFromType("admin")
+                .setFromId("junit \n admin")
                 .setMessageType("text")
                 .setMessageBody(messageBody)
                 .build();
