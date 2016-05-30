@@ -635,6 +635,66 @@ public class UserClientTest extends BaseTest {
             LOG.info("Error Message: " + e.getMessage());
         }
     }
+    
+    @Test
+    public void testGetAdminListByAppkey() {
+    	try {
+			UserListResult res = userClient.getAdminListByAppkey(0, 1);
+			try {
+                assertEquals(Integer.valueOf(1), res.getCount());
+            } catch (Exception e) {
+                LOG.error("parse response content error.", e);
+                assertTrue(false);
+            }
+		} catch (APIConnectionException e) {
+			LOG.error("Connection error. Should retry later. ", e);
+            assertTrue(false);
+		} catch (APIRequestException e) {
+			LOG.error("Error response from JPush server. Should review and fix it. ", e);
+            LOG.info("HTTP Status: " + e.getStatus());
+            LOG.info("Error Message: " + e.getMessage());
+            assertTrue(false);
+		}
+    }
+    
+    @Test(expected = IllegalArgumentException.class)
+    public void testGetAdminListByAppkey_StartNegative() {
+    	try {
+            userClient.getAdminListByAppkey(-1, 3);
+        } catch (APIConnectionException e) {
+            LOG.error("Connection error. Should retry later. ", e);
+        } catch (APIRequestException e) {
+            LOG.error("Error response from JPush server. Should review and fix it. ", e);
+            LOG.info("HTTP Status: " + e.getStatus());
+            LOG.info("Error Message: " + e.getMessage());
+        }
+    }
+    
+    @Test(expected = IllegalArgumentException.class)
+    public void testGetAdminListByAppkey_CountNegative() {
+        try {
+            userClient.getAdminListByAppkey(0, -1);
+        } catch (APIConnectionException e) {
+            LOG.error("Connection error. Should retry later. ", e);
+        } catch (APIRequestException e) {
+            LOG.error("Error response from JPush server. Should review and fix it. ", e);
+            LOG.info("HTTP Status: " + e.getStatus());
+            LOG.info("Error Message: " + e.getMessage());
+        }
+    }
+    
+    @Test(expected = IllegalArgumentException.class)
+    public void testGetAdminListByAppkey_CountMoreThan500() {
+        try {
+            userClient.getAdminListByAppkey(0, 501);
+        } catch (APIConnectionException e) {
+            LOG.error("Connection error. Should retry later. ", e);
+        } catch (APIRequestException e) {
+            LOG.error("Error response from JPush server. Should review and fix it. ", e);
+            LOG.info("HTTP Status: " + e.getStatus());
+            LOG.info("Error Message: " + e.getMessage());
+        }
+    }
 
     /**
      * Method: getGroupList(String username)
