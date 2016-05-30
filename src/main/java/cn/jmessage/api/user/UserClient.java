@@ -128,6 +128,17 @@ public class UserClient extends BaseClient {
         return UserListResult.fromResponse(response, UserListResult.class);
 
     }
+    
+    public UserListResult getAdminListByAppkey(int start, int count)
+    		throws APIConnectionException, APIRequestException
+    {
+    	if(start < 0 || count <= 0 || count > 500) {
+        	throw new IllegalArgumentException("negative index or count must more than 0 and less than 501");
+        }
+    	ResponseWrapper response = _httpClient.sendGet(_baseUrl + adminPath + "?start=" + start + "&count=" + count);
+    	return UserListResult.fromResponse(response, UserListResult.class);
+    
+    }
 
     public UserGroupsResult getGroupList( String username )
             throws APIConnectionException, APIRequestException

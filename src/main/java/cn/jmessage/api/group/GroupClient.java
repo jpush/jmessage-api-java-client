@@ -79,9 +79,9 @@ public class GroupClient extends BaseClient {
     public GroupListResult getGroupListByAppkey( int start, int count )
             throws APIConnectionException, APIRequestException
     {
-        Preconditions.checkPositionIndex(start, count);
-        Preconditions.checkArgument(count <= 500, "count should not more than 500.");
-
+    	if(start < 0 || count <= 0 || count > 500) {
+        	throw new IllegalArgumentException("negative index or count must more than 0 and less than 501");
+        }
         ResponseWrapper response = _httpClient.sendGet(_baseUrl + groupPath + "?start=" + start + "&count=" + count);
         return GroupListResult.fromResponse(response, GroupListResult.class);
     }

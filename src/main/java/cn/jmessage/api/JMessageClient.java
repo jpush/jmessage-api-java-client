@@ -136,6 +136,12 @@ public class JMessageClient {
     {
         return _userClient.getUserList(start, count);
     }
+    
+    public UserListResult getAdminListByAppkey(int start, int count)
+    		throws APIConnectionException, APIRequestException
+    {
+    	return _userClient.getAdminListByAppkey(start, count);
+    }
 
     public UserGroupsResult getGroupListByUser(String username)
             throws APIConnectionException, APIRequestException
