@@ -5,6 +5,7 @@ import cn.jmessage.api.group.CreateGroupResult;
 import cn.jmessage.api.group.GroupInfoResult;
 import cn.jmessage.api.group.GroupListResult;
 import cn.jmessage.api.group.MemberListResult;
+import cn.jmessage.api.user.UserGroupsResult;
 import cn.jpush.api.common.resp.APIConnectionException;
 import cn.jpush.api.common.resp.APIRequestException;
 
@@ -99,6 +100,21 @@ public class GroupExample {
 
         try {
             client.updateGroupInfo(10003767, "test_gname_new", "update desc");
+        } catch (APIConnectionException e) {
+            LOG.error("Connection error. Should retry later. ", e);
+        } catch (APIRequestException e) {
+            LOG.error("Error response from JPush server. Should review and fix it. ", e);
+            LOG.info("HTTP Status: " + e.getStatus());
+            LOG.info("Error Message: " + e.getMessage());
+        }
+    }
+    
+    public static void testGetGroupsByUser() {
+        JMessageClient client = new JMessageClient(appkey, masterSecret);
+
+        try {
+            UserGroupsResult res = client.getGroupListByUser("test_user");
+            LOG.info(res.getOriginalContent());
         } catch (APIConnectionException e) {
             LOG.error("Connection error. Should retry later. ", e);
         } catch (APIRequestException e) {
