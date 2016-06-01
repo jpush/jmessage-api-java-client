@@ -111,21 +111,6 @@ public class UserExample {
         }
     }
 
-    public static void testGetGroupsByUser() {
-        JMessageClient client = new JMessageClient(appkey, masterSecret);
-
-        try {
-            UserGroupsResult res = client.getGroupListByUser("test_user");
-            LOG.info(res.getOriginalContent());
-        } catch (APIConnectionException e) {
-            LOG.error("Connection error. Should retry later. ", e);
-        } catch (APIRequestException e) {
-            LOG.error("Error response from JPush server. Should review and fix it. ", e);
-            LOG.info("HTTP Status: " + e.getStatus());
-            LOG.info("Error Message: " + e.getMessage());
-        }
-    }
-
     public static void testDeleteUser() {
         JMessageClient client = new JMessageClient(appkey, masterSecret);
 
@@ -141,7 +126,6 @@ public class UserExample {
     }
 
     public static void main(String[] args) {
-        testGetGroupsByUser();
     }
 
 }
