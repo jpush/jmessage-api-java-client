@@ -10,6 +10,9 @@ import cn.jpush.api.common.resp.APIRequestException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -123,6 +126,20 @@ public class UserExample {
             LOG.info("HTTP Status: " + e.getStatus());
             LOG.info("Error Message: " + e.getMessage());
         }
+    }
+    
+    public void testGetAdminListByAppkey() {
+    	JMessageClient client = new JMessageClient(appkey, masterSecret);
+    	try {
+			UserListResult res = client.getAdminListByAppkey(0, 1);
+			LOG.info(res.getOriginalContent());
+		} catch (APIConnectionException e) {
+			LOG.error("Connection error. Should retry later. ", e);
+		} catch (APIRequestException e) {
+			LOG.error("Error response from JPush server. Should review and fix it. ", e);
+            LOG.info("HTTP Status: " + e.getStatus());
+            LOG.info("Error Message: " + e.getMessage());
+		}
     }
 
     public static void main(String[] args) {
