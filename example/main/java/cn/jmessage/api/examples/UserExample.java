@@ -2,7 +2,6 @@ package cn.jmessage.api.examples;
 
 import cn.jmessage.api.JMessageClient;
 import cn.jmessage.api.common.model.RegisterInfo;
-import cn.jmessage.api.user.UserGroupsResult;
 import cn.jmessage.api.user.UserInfoResult;
 import cn.jmessage.api.user.UserListResult;
 import cn.jpush.api.common.resp.APIConnectionException;
@@ -10,8 +9,6 @@ import cn.jpush.api.common.resp.APIRequestException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.List;
