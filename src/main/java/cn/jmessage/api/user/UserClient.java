@@ -85,7 +85,7 @@ public class UserClient extends BaseClient {
     {
 
         Preconditions.checkArgument( !StringUtils.isTrimedEmpty(username), "username should not be empty");
-
+        Preconditions.checkArgument(!StringUtils.isLineBroken(username), "username must not contain line feed character. ");
         ResponseWrapper response = _httpClient.sendGet(_baseUrl + userPath + "/" + username);
         return UserInfoResult.fromResponse(response, UserInfoResult.class);
     }
@@ -96,7 +96,7 @@ public class UserClient extends BaseClient {
 
         Preconditions.checkArgument( !StringUtils.isTrimedEmpty(username), "username should not be empty");
         Preconditions.checkArgument( !StringUtils.isTrimedEmpty(password), "password should not be empty");
-
+        Preconditions.checkArgument(!StringUtils.isLineBroken(username), "username must not contain line feed character. ");
         Preconditions.checkArgument( password.getBytes().length >= 4 && password.getBytes().length <=128,
                 "The length of password must between 4 and 128 bytes. Input is " + password);
 
@@ -112,6 +112,7 @@ public class UserClient extends BaseClient {
             throws APIConnectionException,APIRequestException
     {
         Preconditions.checkArgument( !StringUtils.isTrimedEmpty(username), "username should not be empty");
+        Preconditions.checkArgument(!StringUtils.isLineBroken(username), "username must not contain line feed character. ");
         Preconditions.checkArgument( !(null == payload), "payload should not be null");
 
         return _httpClient.sendPut(_baseUrl + userPath + "/" + username, payload.toString());
@@ -164,6 +165,7 @@ public class UserClient extends BaseClient {
             throws APIConnectionException, APIRequestException
     {
         Preconditions.checkArgument( !StringUtils.isTrimedEmpty(username), "username should not be empty");
+        Preconditions.checkArgument(!StringUtils.isLineBroken(username), "username must not contain line feed character. ");
         Preconditions.checkArgument( null != users && users.length > 0, "black list should not be empty");
 
         JsonArray array = new JsonArray();
@@ -178,7 +180,7 @@ public class UserClient extends BaseClient {
     {
         Preconditions.checkArgument( !StringUtils.isTrimedEmpty(username), "username should not be empty");
         Preconditions.checkArgument( null != users && users.length > 0, "black list should not be empty");
-
+        Preconditions.checkArgument(!StringUtils.isLineBroken(username), "username must not contain line feed character. ");
         JsonArray array = new JsonArray();
         for (String user : users) {
             array.add(new JsonPrimitive(user));
@@ -191,6 +193,7 @@ public class UserClient extends BaseClient {
             throws APIConnectionException, APIRequestException
     {
         Preconditions.checkArgument( !StringUtils.isTrimedEmpty(username), "username should not be empty");
+        Preconditions.checkArgument(!StringUtils.isLineBroken(username), "username must not contain line feed character. ");
 
         return _httpClient.sendGet( _baseUrl + userPath + "/" + username + "/blacklist");
     }
