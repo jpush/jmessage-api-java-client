@@ -19,6 +19,10 @@ public class GroupExample {
     private static final String appkey = "242780bfdd7315dc1989fe2b";
     private static final String masterSecret = "2f5ced2bef64167950e63d13";
 
+    public static void main(String[] args) {
+//        testGetGroupInfo();
+    }
+    
     public static void testCreateGroup() {
         JMessageClient client = new JMessageClient(appkey, masterSecret);
         try {
@@ -138,7 +142,4 @@ public class GroupExample {
         }
     }
 
-    public static void main(String[] args) {
-//        testGetGroupInfo();
-    }
 }

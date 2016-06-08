@@ -128,11 +128,9 @@ public class MessagePayload implements IModel {
         public MessagePayload build() {
             Preconditions.checkArgument(null != version, "The version must not be empty!");
             Preconditions.checkArgument(StringUtils.isNotEmpty(target_type), "The target type must not be empty!");
-            Preconditions.checkArgument(StringUtils.isNotEmpty(target_id), "The target ID must not be empty!");
-            Preconditions.checkArgument(!StringUtils.isLineBroken(target_id), "The target ID must not contain line feed character.");
+            Preconditions.checkArgument(cn.jmessage.api.utils.StringUtils.isUsernameValid(target_id), "The target ID is illegal, please check again");
             Preconditions.checkArgument(StringUtils.isNotEmpty(from_type), "The from type must not be empty!");
-            Preconditions.checkArgument(StringUtils.isNotEmpty(from_id), "The from ID must not be empty!");
-            Preconditions.checkArgument(!StringUtils.isLineBroken(from_id), "The from ID must not contain line feed character.");
+            Preconditions.checkArgument(cn.jmessage.api.utils.StringUtils.isUsernameValid(from_id), "The from ID is illegal, please check again");
             Preconditions.checkArgument(StringUtils.isNotEmpty(msg_type), "The message type must not be empty!");
             Preconditions.checkArgument(null != msg_body, "The message body must not be empty!");
 
