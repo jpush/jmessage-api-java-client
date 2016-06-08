@@ -116,7 +116,7 @@ public class GroupClientTest extends BaseTest {
         }
     }
 
-    @Test(expected = IndexOutOfBoundsException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void testGetGroupListByAppkey_StartNegative() {
         try {
             groupClient.getGroupListByAppkey(-1, 3);
