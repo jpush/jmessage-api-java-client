@@ -84,7 +84,7 @@ public class UserClient extends BaseClient {
             throws APIConnectionException, APIRequestException
     {
 
-    	Preconditions.checkArgument(StringUtils.isUsernameValid(username), "The username is illegal, please check again");
+    	StringUtils.checkUsername(username);
         ResponseWrapper response = _httpClient.sendGet(_baseUrl + userPath + "/" + username);
         return UserInfoResult.fromResponse(response, UserInfoResult.class);
     }
@@ -93,8 +93,8 @@ public class UserClient extends BaseClient {
             throws APIConnectionException, APIRequestException
     {
 
-    	Preconditions.checkArgument(StringUtils.isUsernameValid(username), "The username is illegal, please check again");
-    	Preconditions.checkArgument(StringUtils.isPasswordValid(password), "The password is illegal, please check again");
+    	StringUtils.checkUsername(username);
+    	StringUtils.checkPassword(password);
 
         JsonObject jsonObj = new JsonObject();
         jsonObj.addProperty("new_password", password);
@@ -107,7 +107,7 @@ public class UserClient extends BaseClient {
     public ResponseWrapper updateUserInfo( String username, UserPayload payload )
             throws APIConnectionException,APIRequestException
     {
-    	Preconditions.checkArgument(StringUtils.isUsernameValid(username), "The username is illegal, please check again");
+    	StringUtils.checkUsername(username);
         Preconditions.checkArgument( !(null == payload), "payload should not be null");
 
         return _httpClient.sendPut(_baseUrl + userPath + "/" + username, payload.toString());
@@ -162,8 +162,7 @@ public class UserClient extends BaseClient {
     public UserGroupsResult getGroupList( String username )
             throws APIConnectionException, APIRequestException
     {
-    	Preconditions.checkArgument(StringUtils.isUsernameValid(username), "The username is illegal, please check again");
-
+    	StringUtils.checkUsername(username);
         ResponseWrapper response = _httpClient.sendGet(_baseUrl + userPath + "/" + username + "/groups");
 
         return UserGroupsResult.fromResponse(response);
@@ -172,7 +171,7 @@ public class UserClient extends BaseClient {
     public ResponseWrapper deleteUser( String username )
             throws APIConnectionException, APIRequestException
     {
-    	Preconditions.checkArgument(StringUtils.isUsernameValid(username), "The username is illegal, please check again");
+    	StringUtils.checkUsername(username);
         return _httpClient.sendDelete(_baseUrl + userPath + "/" + username);
     }
 
@@ -187,7 +186,7 @@ public class UserClient extends BaseClient {
     public ResponseWrapper addBlackList( String username, String... users )
             throws APIConnectionException, APIRequestException
     {
-    	Preconditions.checkArgument(StringUtils.isUsernameValid(username), "The username is illegal, please check again");
+    	StringUtils.checkUsername(username);
         Preconditions.checkArgument( null != users && users.length > 0, "black list should not be empty");
 
         JsonArray array = new JsonArray();
@@ -200,7 +199,7 @@ public class UserClient extends BaseClient {
     public ResponseWrapper removeBlackList( String username, String... users)
             throws APIConnectionException, APIRequestException
     {
-    	Preconditions.checkArgument(StringUtils.isUsernameValid(username), "The username is illegal, please check again");
+    	StringUtils.checkUsername(username);
         Preconditions.checkArgument( null != users && users.length > 0, "black list should not be empty");
         JsonArray array = new JsonArray();
         for (String user : users) {
@@ -220,7 +219,7 @@ public class UserClient extends BaseClient {
     public ResponseWrapper getBlackList( String username)
             throws APIConnectionException, APIRequestException
     {
-    	Preconditions.checkArgument(StringUtils.isUsernameValid(username), "The username is illegal, please check again");
+    	StringUtils.checkUsername(username);
         return _httpClient.sendGet( _baseUrl + userPath + "/" + username + "/blacklist");
     }
 }

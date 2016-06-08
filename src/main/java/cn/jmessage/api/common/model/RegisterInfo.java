@@ -63,8 +63,8 @@ public class RegisterInfo implements IModel {
 
         public RegisterInfo build() {
 
-        	Preconditions.checkArgument(StringUtils.isUsernameValid(username), "The username is illegal, please check again");
-        	Preconditions.checkArgument(StringUtils.isPasswordValid(password), "The password is illegal, please check again");
+        	StringUtils.checkUsername(username);
+        	StringUtils.checkPassword(password);
             return new RegisterInfo(username, password);
         }
 
