@@ -597,7 +597,7 @@ public class UserClientTest extends BaseTest {
         }
     }
 
-    @Test(expected = IndexOutOfBoundsException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void testGetUserList_StartNegative() {
         try {
             userClient.getUserList(-1, 3);
