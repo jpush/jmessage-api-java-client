@@ -19,6 +19,10 @@ public class UserExample {
 
     private static final String appkey = "242780bfdd7315dc1989fe2b";
     private static final String masterSecret = "2f5ced2bef64167950e63d13";
+    
+    public static void main(String[] args) {
+    	
+    }
 
     public static void testRegisterUsers() {
         JMessageClient client = new JMessageClient(appkey, masterSecret);
@@ -137,9 +141,6 @@ public class UserExample {
             LOG.info("HTTP Status: " + e.getStatus());
             LOG.info("Error Message: " + e.getMessage());
 		}
-    }
-
-    public static void main(String[] args) {
     }
 
 }

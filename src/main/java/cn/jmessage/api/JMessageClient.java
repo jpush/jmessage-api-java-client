@@ -131,18 +131,41 @@ public class JMessageClient {
         _userClient.updateUserInfo(username, payload);
     }
 
+    /**
+     * Get user list
+     * @param start The start index of the list
+     * @param count The number that how many you want to get from list
+     * @return
+     * @throws APIConnectionException
+     * @throws APIRequestException
+     */
     public UserListResult getUserList(int start, int count)
             throws APIConnectionException, APIRequestException
     {
         return _userClient.getUserList(start, count);
     }
     
+    /**
+     * Get admins by appkey
+     * @param start The start index of the list
+     * @param count The number that how many you want to get from list
+     * @return
+     * @throws APIConnectionException
+     * @throws APIRequestException
+     */
     public UserListResult getAdminListByAppkey(int start, int count)
     		throws APIConnectionException, APIRequestException
     {
     	return _userClient.getAdminListByAppkey(start, count);
     }
 
+    /**
+     * Get all groups of a user
+     * @param username
+     * @return
+     * @throws APIConnectionException
+     * @throws APIRequestException
+     */
     public UserGroupsResult getGroupListByUser(String username)
             throws APIConnectionException, APIRequestException
     {
@@ -189,6 +212,14 @@ public class JMessageClient {
         return _groupClient.createGroup(payload);
     }
 
+    /**
+     * Add or remove members from a group
+     * @param gid The group id
+     * @param addList If this parameter is null then send remove request
+     * @param removeList If this parameter is null then send add request
+     * @throws APIConnectionException
+     * @throws APIRequestException
+     */
     public void addOrRemoveMembers(long gid, String[] addList, String[] removeList)
             throws APIConnectionException, APIRequestException
     {
@@ -215,6 +246,19 @@ public class JMessageClient {
         _groupClient.updateGroupInfo(gid, groupName, groupDesc);
     }
 
+    /**
+     * Send message
+     * @param version Current version is 1
+     * @param targetType Group or single
+     * @param targetId The message receiver 
+     * @param fromType Only support admin now
+     * @param fromId Sender
+     * @param messageType Only support text now
+     * @param messageBody A MessageBody instance
+     * @return
+     * @throws APIConnectionException
+     * @throws APIRequestException
+     */
     public SendMessageResult sendMessage(Integer version, String targetType, String targetId,
                             String fromType, String fromId, String messageType, MessageBody messageBody)
             throws APIConnectionException, APIRequestException {
@@ -230,12 +274,30 @@ public class JMessageClient {
         return _messageClient.sendMessage(payload);
     }
 
+    /**
+     * Send single text message by admin
+     * @param targetId 
+     * @param fromId
+     * @param body
+     * @return
+     * @throws APIConnectionException
+     * @throws APIRequestException
+     */
     public SendMessageResult sendSingleTextByAdmin(String targetId, String fromId, MessageBody body)
             throws APIConnectionException, APIRequestException
     {
         return sendMessage(_sendVersion, "single", targetId, "admin",fromId, "text", body);
     }
 
+    /**
+     * Send group text message by admin
+     * @param targetId
+     * @param fromId
+     * @param body
+     * @return
+     * @throws APIConnectionException
+     * @throws APIRequestException
+     */
     public SendMessageResult sendGroupTextByAdmin(String targetId, String fromId, MessageBody body)
             throws APIConnectionException, APIRequestException
     {

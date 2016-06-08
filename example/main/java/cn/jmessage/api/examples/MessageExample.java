@@ -30,4 +30,20 @@ public class MessageExample {
             LOG.info("Error Message: " + e.getMessage());
         }
     }
+    
+    public static void testSendGroupTextByAdmin() {
+    	JMessageClient client = new JMessageClient(appkey, masterSecret);
+    	
+    	try {
+    		MessageBody body = MessageBody.text("Hello World!");
+    		SendMessageResult result = client.sendGroupTextByAdmin("targetUserName", "fromUserName", body);
+    		LOG.info(String.valueOf(result.getMsg_id()));
+    	} catch (APIConnectionException e) {
+            LOG.error("Connection error. Should retry later. ", e);
+        } catch (APIRequestException e) {
+            LOG.error("Error response from JPush server. Should review and fix it. ", e);
+            LOG.info("HTTP Status: " + e.getStatus());
+            LOG.info("Error Message: " + e.getMessage());
+        }
+    }
 }

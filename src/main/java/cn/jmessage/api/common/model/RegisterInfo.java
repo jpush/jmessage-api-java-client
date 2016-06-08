@@ -1,9 +1,9 @@
 package cn.jmessage.api.common.model;
 
 
+import cn.jmessage.api.utils.StringUtils;
 import cn.jpush.api.common.ServiceHelper;
 import cn.jpush.api.utils.Preconditions;
-import cn.jpush.api.utils.StringUtils;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -63,26 +63,8 @@ public class RegisterInfo implements IModel {
 
         public RegisterInfo build() {
 
-            Preconditions.checkArgument( StringUtils.isNotEmpty(username),
-                    "The username must not be empty.");
-            
-            Preconditions.checkArgument(!StringUtils.isLineBroken(username), 
-            		"username must not contain line feed character. ");
-
-            Preconditions.checkArgument(StringUtils.isNotEmpty(password),
-                    "The password must not be empty.");
-
-            byte[] usernameByte = username.getBytes();
-            byte[] passwordByte = password.getBytes();
-            Preconditions.checkArgument( usernameByte.length >= 4 && usernameByte.length <=128,
-                    "The length of username must between 4 and 128 bytes. Input is " + username);
-            Preconditions.checkArgument( passwordByte.length >= 4 && passwordByte.length <=128,
-                    "The length of password must between 4 and 128 bytes. Input is " + password);
-
-            Preconditions.checkArgument(ServiceHelper.checkUsername(username),
-                    "The parameter username contains illegal character," +
-                            " a-zA-Z_0-9.、-,@。 is legally, and start with alphabet or number. Input is " + username);
-
+        	StringUtils.checkUsername(username);
+        	StringUtils.checkPassword(password);
             return new RegisterInfo(username, password);
         }
 
