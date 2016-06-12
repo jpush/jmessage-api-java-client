@@ -5,3 +5,4 @@ cn.jmessage.api.contacts
 cn.jmessage.api.group
 cn.jmessage.api.message
 cn.jmessage.api.user
+cn.jmessage.api.utils
