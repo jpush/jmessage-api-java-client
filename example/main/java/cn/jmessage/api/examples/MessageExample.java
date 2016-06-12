@@ -15,6 +15,20 @@ public class MessageExample {
     private static final String appkey = "242780bfdd7315dc1989fe2b";
     private static final String masterSecret = "2f5ced2bef64167950e63d13";
 
+    /**
+     * Send single text message by admin, this method will invoke sendMessage() in JMessageClient eventually, whose 
+     * parameters are as list:
+     * @param version Current version is 1
+     * @param targetType Group or single
+     * @param targetId The message receiver 
+     * @param fromType Only support admin now
+     * @param fromId Sender
+     * @param messageType Only support text now
+     * @param messageBody A MessageBody instance
+     * @return
+     * @throws APIConnectionException
+     * @throws APIRequestException
+     */
     public static void testSendSingleTextByAdmin() {
         JMessageClient client = new JMessageClient(appkey, masterSecret);
 
@@ -31,6 +45,9 @@ public class MessageExample {
         }
     }
     
+    /**
+     * Send group text message by admin
+     */
     public static void testSendGroupTextByAdmin() {
     	JMessageClient client = new JMessageClient(appkey, masterSecret);
     	

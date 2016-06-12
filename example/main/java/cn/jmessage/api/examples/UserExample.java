@@ -129,6 +129,14 @@ public class UserExample {
         }
     }
     
+    /**
+     * Get admins by appkey
+     * @param start The start index of the list
+     * @param count The number that how many you want to get from list
+     * @return
+     * @throws APIConnectionException
+     * @throws APIRequestException
+     */
     public void testGetAdminListByAppkey() {
     	JMessageClient client = new JMessageClient(appkey, masterSecret);
     	try {
