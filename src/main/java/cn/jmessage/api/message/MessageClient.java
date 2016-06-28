@@ -1,14 +1,14 @@
 package cn.jmessage.api.message;
 
 
+import cn.jiguang.commom.utils.Preconditions;
+import cn.jiguang.common.connection.HttpProxy;
+import cn.jiguang.common.resp.APIConnectionException;
+import cn.jiguang.common.resp.APIRequestException;
+import cn.jiguang.common.resp.ResponseWrapper;
 import cn.jmessage.api.common.BaseClient;
 import cn.jmessage.api.common.JMessageConfig;
 import cn.jmessage.api.common.model.MessagePayload;
-import cn.jpush.api.common.connection.HttpProxy;
-import cn.jpush.api.common.resp.APIConnectionException;
-import cn.jpush.api.common.resp.APIRequestException;
-import cn.jpush.api.common.resp.ResponseWrapper;
-import cn.jpush.api.utils.Preconditions;
 
 public class MessageClient extends BaseClient {
 

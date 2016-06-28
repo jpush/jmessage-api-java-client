@@ -1,20 +1,22 @@
 package cn.jmessage.api.message;
 
-import cn.jmessage.api.BaseTest;
-import cn.jmessage.api.SlowTests;
-import cn.jmessage.api.common.model.MessageBody;
-import cn.jmessage.api.common.model.MessagePayload;
-import cn.jpush.api.common.resp.APIConnectionException;
-import cn.jpush.api.common.resp.APIRequestException;
-import com.google.gson.JsonObject;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import com.google.gson.JsonObject;
+
+import cn.jiguang.common.resp.APIConnectionException;
+import cn.jiguang.common.resp.APIRequestException;
+import cn.jmessage.api.BaseTest;
+import cn.jmessage.api.SlowTests;
+import cn.jmessage.api.common.model.MessageBody;
+import cn.jmessage.api.common.model.MessagePayload;
 
 
 /**

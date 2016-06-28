@@ -1,10 +1,11 @@
 package cn.jmessage.api.common.model;
 
-import cn.jmessage.api.utils.StringUtils;
-import cn.jpush.api.utils.Preconditions;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+
+import cn.jiguang.commom.utils.Preconditions;
+import cn.jmessage.api.utils.StringUtils;
 
 /**
  * MessagePayload
