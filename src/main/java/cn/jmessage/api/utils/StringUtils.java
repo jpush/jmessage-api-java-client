@@ -1,6 +1,6 @@
 package cn.jmessage.api.utils;
 
-import cn.jpush.api.common.ServiceHelper;
+import cn.jiguang.commom.ServiceHelper;
 
 public class StringUtils {
 
