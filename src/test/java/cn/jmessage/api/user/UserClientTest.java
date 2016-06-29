@@ -405,7 +405,7 @@ public class UserClientTest extends BaseTest {
         }
     }
     
-    @Test
+    @Test(expected = IllegalArgumentException.class)
     public void testGetUserInfo_UsernameInvalid() {
     	try {
     		userClient.getUserInfo("&1234");
