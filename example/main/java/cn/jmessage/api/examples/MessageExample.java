@@ -1,12 +1,13 @@
 package cn.jmessage.api.examples;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import cn.jiguang.common.resp.APIConnectionException;
+import cn.jiguang.common.resp.APIRequestException;
 import cn.jmessage.api.JMessageClient;
 import cn.jmessage.api.common.model.MessageBody;
 import cn.jmessage.api.message.SendMessageResult;
-import cn.jpush.api.common.resp.APIConnectionException;
-import cn.jpush.api.common.resp.APIRequestException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class MessageExample {
 

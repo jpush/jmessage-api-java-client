@@ -1,16 +1,12 @@
 package cn.jmessage.api.user;
 
 
-import cn.jmessage.api.BaseTest;
-import cn.jmessage.api.SlowTests;
-import cn.jmessage.api.common.model.RegisterInfo;
-import cn.jmessage.api.common.model.RegisterPayload;
-import cn.jmessage.api.common.model.UserPayload;
-import cn.jpush.api.common.resp.APIConnectionException;
-import cn.jpush.api.common.resp.APIRequestException;
-import cn.jpush.api.common.resp.ResponseWrapper;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -18,11 +14,17 @@ import org.junit.experimental.categories.Category;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import cn.jiguang.common.resp.APIConnectionException;
+import cn.jiguang.common.resp.APIRequestException;
+import cn.jiguang.common.resp.ResponseWrapper;
+import cn.jmessage.api.BaseTest;
+import cn.jmessage.api.SlowTests;
+import cn.jmessage.api.common.model.RegisterInfo;
+import cn.jmessage.api.common.model.RegisterPayload;
+import cn.jmessage.api.common.model.UserPayload;
 
 @Category(SlowTests.class)
 public class UserClientTest extends BaseTest {
@@ -365,7 +367,7 @@ public class UserClientTest extends BaseTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void testGetUserInfoNull() {
+    public void testGetUserInfo_UsernameNull() {
         try {
             userClient.getUserInfo(null);
         } catch (APIConnectionException e) {
@@ -378,7 +380,7 @@ public class UserClientTest extends BaseTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void testGetUserInfoEmpty() {
+    public void testGetUserInfo_UsernameEmpty() {
         try {
             userClient.getUserInfo("");
         } catch (APIConnectionException e) {
@@ -391,10 +393,23 @@ public class UserClientTest extends BaseTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void testGetUserInfoBlank() {
+    public void testGetUserInfo_UsernameBlank() {
         try {
             userClient.getUserInfo("  ");
         } catch (APIConnectionException e) {
+            LOG.error("Connection error. Should retry later. ", e);
+        } catch (APIRequestException e) {
+            LOG.error("Error response from JPush server. Should review and fix it. ", e);
+            LOG.info("HTTP Status: " + e.getStatus());
+            LOG.info("Error Message: " + e.getMessage());
+        }
+    }
+    
+    @Test(expected = IllegalArgumentException.class)
+    public void testGetUserInfo_UsernameInvalid() {
+    	try {
+    		userClient.getUserInfo("&1234");
+    	} catch (APIConnectionException e) {
             LOG.error("Connection error. Should retry later. ", e);
         } catch (APIRequestException e) {
             LOG.error("Error response from JPush server. Should review and fix it. ", e);

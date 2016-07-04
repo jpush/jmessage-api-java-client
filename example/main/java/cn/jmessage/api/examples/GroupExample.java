@@ -1,16 +1,16 @@
 package cn.jmessage.api.examples;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import cn.jiguang.common.resp.APIConnectionException;
+import cn.jiguang.common.resp.APIRequestException;
 import cn.jmessage.api.JMessageClient;
 import cn.jmessage.api.group.CreateGroupResult;
 import cn.jmessage.api.group.GroupInfoResult;
 import cn.jmessage.api.group.GroupListResult;
 import cn.jmessage.api.group.MemberListResult;
 import cn.jmessage.api.user.UserGroupsResult;
-import cn.jpush.api.common.resp.APIConnectionException;
-import cn.jpush.api.common.resp.APIRequestException;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class GroupExample {
 
