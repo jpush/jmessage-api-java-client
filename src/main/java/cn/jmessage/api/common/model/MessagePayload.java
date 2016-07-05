@@ -1,10 +1,11 @@
 package cn.jmessage.api.common.model;
 
-import cn.jpush.api.utils.Preconditions;
-import cn.jpush.api.utils.StringUtils;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+
+import cn.jiguang.commom.utils.Preconditions;
+import cn.jmessage.api.utils.StringUtils;
 
 /**
  * MessagePayload
@@ -128,9 +129,9 @@ public class MessagePayload implements IModel {
         public MessagePayload build() {
             Preconditions.checkArgument(null != version, "The version must not be empty!");
             Preconditions.checkArgument(StringUtils.isNotEmpty(target_type), "The target type must not be empty!");
-            Preconditions.checkArgument(StringUtils.isNotEmpty(target_id), "The target ID must not be empty!");
+            StringUtils.checkUsername(target_id);
             Preconditions.checkArgument(StringUtils.isNotEmpty(from_type), "The from type must not be empty!");
-            Preconditions.checkArgument(StringUtils.isNotEmpty(from_id), "The from ID must not be empty!");
+            StringUtils.checkUsername(from_id);
             Preconditions.checkArgument(StringUtils.isNotEmpty(msg_type), "The message type must not be empty!");
             Preconditions.checkArgument(null != msg_body, "The message body must not be empty!");
 

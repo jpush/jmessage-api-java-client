@@ -1,9 +1,10 @@
 package cn.jmessage.api.common.model;
 
-import cn.jpush.api.utils.Preconditions;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
+
+import cn.jiguang.commom.utils.Preconditions;
 
 public class RegisterPayload implements IModel {
 

@@ -1,14 +1,15 @@
 package cn.jmessage.api.common.model;
 
-import cn.jpush.api.utils.Preconditions;
-import cn.jpush.api.utils.StringUtils;
+import java.util.HashMap;
+import java.util.Map;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 
-import java.util.HashMap;
-import java.util.Map;
+import cn.jiguang.commom.utils.Preconditions;
+import cn.jiguang.commom.utils.StringUtils;
 
 /**
  * MessageBody

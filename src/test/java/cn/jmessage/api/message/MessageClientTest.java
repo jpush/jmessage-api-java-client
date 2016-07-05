@@ -1,20 +1,22 @@
 package cn.jmessage.api.message;
 
-import cn.jmessage.api.BaseTest;
-import cn.jmessage.api.SlowTests;
-import cn.jmessage.api.common.model.MessageBody;
-import cn.jmessage.api.common.model.MessagePayload;
-import cn.jpush.api.common.resp.APIConnectionException;
-import cn.jpush.api.common.resp.APIRequestException;
-import com.google.gson.JsonObject;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import com.google.gson.JsonObject;
+
+import cn.jiguang.common.resp.APIConnectionException;
+import cn.jiguang.common.resp.APIRequestException;
+import cn.jmessage.api.BaseTest;
+import cn.jmessage.api.SlowTests;
+import cn.jmessage.api.common.model.MessageBody;
+import cn.jmessage.api.common.model.MessagePayload;
 
 
 /**
@@ -156,6 +158,28 @@ public class MessageClientTest extends BaseTest {
     }
     
     @Test(expected = IllegalArgumentException.class)
+    public void testSendMessage_TargetIdInvalid(){
+    	MessageBody messageBody = MessageBody.newBuilder()
+                .setText("Test api send Message")
+                .build();
+
+        JsonObject bodyObj = new JsonObject();
+        bodyObj.addProperty("text", "Test api send Message");
+
+        assertEquals(bodyObj, messageBody.toJSON());
+
+        MessagePayload payload = MessagePayload.newBuilder()
+                .setVersion(1)
+                .setTargetType("single")
+                .setTargetId("junit \n test id")
+                .setFromType("admin")
+                .setFromId("junit_admin")
+                .setMessageType("text")
+                .setMessageBody(messageBody)
+                .build();
+    }
+    
+    @Test(expected = IllegalArgumentException.class)
     public void testSendMessage_FromTypeNull() {
     	MessageBody messageBody = MessageBody.newBuilder()
                 .setText("Test api send Message")
@@ -192,6 +216,28 @@ public class MessageClientTest extends BaseTest {
                 .setTargetType("single")
                 .setTargetId(JUNIT_USER)
                 .setFromType("admin")
+                .setMessageType("text")
+                .setMessageBody(messageBody)
+                .build();
+    }
+    
+    @Test(expected = IllegalArgumentException.class)
+    public void testSendMessage_FromIdInvalid(){
+    	MessageBody messageBody = MessageBody.newBuilder()
+                .setText("Test api send Message")
+                .build();
+
+        JsonObject bodyObj = new JsonObject();
+        bodyObj.addProperty("text", "Test api send Message");
+
+        assertEquals(bodyObj, messageBody.toJSON());
+
+        MessagePayload payload = MessagePayload.newBuilder()
+                .setVersion(1)
+                .setTargetType("single")
+                .setTargetId(JUNIT_USER)
+                .setFromType("admin")
+                .setFromId("junit \n admin")
                 .setMessageType("text")
                 .setMessageBody(messageBody)
                 .build();

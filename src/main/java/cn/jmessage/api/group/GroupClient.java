@@ -1,18 +1,20 @@
 package cn.jmessage.api.group;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.google.gson.JsonObject;
+
+import cn.jiguang.commom.utils.Preconditions;
+import cn.jiguang.common.connection.HttpProxy;
+import cn.jiguang.common.resp.APIConnectionException;
+import cn.jiguang.common.resp.APIRequestException;
+import cn.jiguang.common.resp.ResponseWrapper;
 import cn.jmessage.api.common.BaseClient;
 import cn.jmessage.api.common.JMessageConfig;
 import cn.jmessage.api.common.model.GroupPayload;
 import cn.jmessage.api.common.model.Members;
-import cn.jpush.api.common.connection.HttpProxy;
-import cn.jpush.api.common.resp.APIConnectionException;
-import cn.jpush.api.common.resp.APIRequestException;
-import cn.jpush.api.common.resp.ResponseWrapper;
-import cn.jpush.api.utils.Preconditions;
-import cn.jpush.api.utils.StringUtils;
-import com.google.gson.JsonObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import cn.jmessage.api.utils.StringUtils;
 
 
 public class GroupClient extends BaseClient {
@@ -79,9 +81,9 @@ public class GroupClient extends BaseClient {
     public GroupListResult getGroupListByAppkey( int start, int count )
             throws APIConnectionException, APIRequestException
     {
-        Preconditions.checkPositionIndex(start, count);
-        Preconditions.checkArgument(count <= 500, "count should not more than 500.");
-
+    	if(start < 0 || count <= 0 || count > 500) {
+        	throw new IllegalArgumentException("negative index or count must more than 0 and less than 501");
+        }
         ResponseWrapper response = _httpClient.sendGet(_baseUrl + groupPath + "?start=" + start + "&count=" + count);
         return GroupListResult.fromResponse(response, GroupListResult.class);
     }

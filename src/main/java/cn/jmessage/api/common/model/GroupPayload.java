@@ -1,11 +1,12 @@
 package cn.jmessage.api.common.model;
 
-import cn.jpush.api.utils.Preconditions;
-import cn.jpush.api.utils.StringUtils;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+
+import cn.jiguang.commom.utils.Preconditions;
+import cn.jiguang.commom.utils.StringUtils;
 
 
 public class GroupPayload implements IModel {
@@ -94,6 +95,8 @@ public class GroupPayload implements IModel {
 
             Preconditions.checkArgument(StringUtils.isNotEmpty(owner), "The owner must not be empty.");
             Preconditions.checkArgument(StringUtils.isNotEmpty(name), "The group name must not be empty.");
+            Preconditions.checkArgument(!StringUtils.isLineBroken(owner), 
+            		"The owner name must not contain line feed character.");
             Preconditions.checkArgument(name.getBytes().length <= 64,
                     "The length of group name must not more than 64 bytes.");
             Preconditions.checkArgument( !StringUtils.isLineBroken(name),

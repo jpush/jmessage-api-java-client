@@ -1,26 +1,26 @@
 package cn.jmessage.api.group;
 
 
-import cn.jmessage.api.BaseTest;
-import cn.jmessage.api.SlowTests;
-import cn.jmessage.api.common.model.GroupPayload;
-import cn.jmessage.api.common.model.Members;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
-import cn.jpush.api.common.resp.APIConnectionException;
-import cn.jpush.api.common.resp.APIRequestException;
-import cn.jpush.api.common.resp.ResponseWrapper;
-
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonPrimitive;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
+
+import cn.jiguang.common.resp.APIConnectionException;
+import cn.jiguang.common.resp.APIRequestException;
+import cn.jiguang.common.resp.ResponseWrapper;
+import cn.jmessage.api.BaseTest;
+import cn.jmessage.api.SlowTests;
+import cn.jmessage.api.common.model.GroupPayload;
+import cn.jmessage.api.common.model.Members;
 
 @Category(SlowTests.class)
 public class GroupClientTest extends BaseTest {
@@ -116,7 +116,7 @@ public class GroupClientTest extends BaseTest {
         }
     }
 
-    @Test(expected = IndexOutOfBoundsException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void testGetGroupListByAppkey_StartNegative() {
         try {
             groupClient.getGroupListByAppkey(-1, 3);
@@ -242,6 +242,15 @@ public class GroupClientTest extends BaseTest {
                 .setName("junit \n test")
                 .setDesc("for junit test")
                 .build();
+    }
+    
+    @Test(expected = IllegalArgumentException.class)
+    public void testCreateGroup_GroupOwnerNameInvalid() {
+    	GroupPayload payload = GroupPayload.newBuilder()
+    			.setOwner("junit_user \n test")
+    			.setName("junit test group")
+    			.setDesc("for junit test")
+    			.build();
     }
     
     @Test(expected = IllegalArgumentException.class)

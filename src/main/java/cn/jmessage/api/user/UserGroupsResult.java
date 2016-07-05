@@ -1,8 +1,8 @@
 package cn.jmessage.api.user;
 
+import cn.jiguang.common.resp.BaseResult;
+import cn.jiguang.common.resp.ResponseWrapper;
 import cn.jmessage.api.group.GroupInfoResult;
-import cn.jpush.api.common.resp.BaseResult;
-import cn.jpush.api.common.resp.ResponseWrapper;
 
 public class UserGroupsResult extends BaseResult{
 

@@ -1,17 +1,17 @@
 package cn.jmessage.api.examples;
 
-import cn.jmessage.api.JMessageClient;
-import cn.jmessage.api.common.model.RegisterInfo;
-import cn.jmessage.api.user.UserGroupsResult;
-import cn.jmessage.api.user.UserInfoResult;
-import cn.jmessage.api.user.UserListResult;
-import cn.jpush.api.common.resp.APIConnectionException;
-import cn.jpush.api.common.resp.APIRequestException;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.List;
+import cn.jiguang.common.resp.APIConnectionException;
+import cn.jiguang.common.resp.APIRequestException;
+import cn.jmessage.api.JMessageClient;
+import cn.jmessage.api.common.model.RegisterInfo;
+import cn.jmessage.api.user.UserInfoResult;
+import cn.jmessage.api.user.UserListResult;
 
 public class UserExample {
 
@@ -19,6 +19,10 @@ public class UserExample {
 
     private static final String appkey = "242780bfdd7315dc1989fe2b";
     private static final String masterSecret = "2f5ced2bef64167950e63d13";
+    
+    public static void main(String[] args) {
+    	
+    }
 
     public static void testRegisterUsers() {
         JMessageClient client = new JMessageClient(appkey, masterSecret);
@@ -111,21 +115,6 @@ public class UserExample {
         }
     }
 
-    public static void testGetGroupsByUser() {
-        JMessageClient client = new JMessageClient(appkey, masterSecret);
-
-        try {
-            UserGroupsResult res = client.getGroupListByUser("test_user");
-            LOG.info(res.getOriginalContent());
-        } catch (APIConnectionException e) {
-            LOG.error("Connection error. Should retry later. ", e);
-        } catch (APIRequestException e) {
-            LOG.error("Error response from JPush server. Should review and fix it. ", e);
-            LOG.info("HTTP Status: " + e.getStatus());
-            LOG.info("Error Message: " + e.getMessage());
-        }
-    }
-
     public static void testDeleteUser() {
         JMessageClient client = new JMessageClient(appkey, masterSecret);
 
@@ -139,9 +128,27 @@ public class UserExample {
             LOG.info("Error Message: " + e.getMessage());
         }
     }
-
-    public static void main(String[] args) {
-        testGetGroupsByUser();
+    
+    /**
+     * Get admins by appkey
+     * @param start The start index of the list
+     * @param count The number that how many you want to get from list
+     * @return
+     * @throws APIConnectionException
+     * @throws APIRequestException
+     */
+    public void testGetAdminListByAppkey() {
+    	JMessageClient client = new JMessageClient(appkey, masterSecret);
+    	try {
+			UserListResult res = client.getAdminListByAppkey(0, 1);
+			LOG.info(res.getOriginalContent());
+		} catch (APIConnectionException e) {
+			LOG.error("Connection error. Should retry later. ", e);
+		} catch (APIRequestException e) {
+			LOG.error("Error response from JPush server. Should review and fix it. ", e);
+            LOG.info("HTTP Status: " + e.getStatus());
+            LOG.info("Error Message: " + e.getMessage());
+		}
     }
 
 }

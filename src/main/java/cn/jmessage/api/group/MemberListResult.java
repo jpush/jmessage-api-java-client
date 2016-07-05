@@ -1,7 +1,7 @@
 package cn.jmessage.api.group;
 
-import cn.jpush.api.common.resp.BaseResult;
-import cn.jpush.api.common.resp.ResponseWrapper;
+import cn.jiguang.common.resp.BaseResult;
+import cn.jiguang.common.resp.ResponseWrapper;
 
 public class MemberListResult extends BaseResult {
 

@@ -1,8 +1,9 @@
 package cn.jmessage.api.group;
 
-import cn.jpush.api.common.resp.BaseResult;
 import com.google.gson.JsonArray;
 import com.google.gson.annotations.Expose;
+
+import cn.jiguang.common.resp.BaseResult;
 
 public class CreateGroupResult extends BaseResult {
 

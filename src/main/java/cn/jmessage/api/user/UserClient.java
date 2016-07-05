@@ -1,22 +1,24 @@
 package cn.jmessage.api.user;
 
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
+
+import cn.jiguang.commom.utils.Preconditions;
+import cn.jiguang.common.connection.HttpProxy;
+import cn.jiguang.common.resp.APIConnectionException;
+import cn.jiguang.common.resp.APIRequestException;
+import cn.jiguang.common.resp.ResponseWrapper;
 import cn.jmessage.api.common.BaseClient;
 import cn.jmessage.api.common.JMessageConfig;
 import cn.jmessage.api.common.model.RegisterInfo;
 import cn.jmessage.api.common.model.RegisterPayload;
 import cn.jmessage.api.common.model.UserPayload;
-import cn.jpush.api.common.connection.HttpProxy;
-import cn.jpush.api.common.resp.APIConnectionException;
-import cn.jpush.api.common.resp.APIRequestException;
-import cn.jpush.api.common.resp.ResponseWrapper;
-import cn.jpush.api.utils.Preconditions;
-import cn.jpush.api.utils.StringUtils;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonPrimitive;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import cn.jmessage.api.utils.StringUtils;
 
 public class UserClient extends BaseClient {
 
@@ -84,8 +86,7 @@ public class UserClient extends BaseClient {
             throws APIConnectionException, APIRequestException
     {
 
-        Preconditions.checkArgument( !StringUtils.isTrimedEmpty(username), "username should not be empty");
-
+    	StringUtils.checkUsername(username);
         ResponseWrapper response = _httpClient.sendGet(_baseUrl + userPath + "/" + username);
         return UserInfoResult.fromResponse(response, UserInfoResult.class);
     }
@@ -94,11 +95,8 @@ public class UserClient extends BaseClient {
             throws APIConnectionException, APIRequestException
     {
 
-        Preconditions.checkArgument( !StringUtils.isTrimedEmpty(username), "username should not be empty");
-        Preconditions.checkArgument( !StringUtils.isTrimedEmpty(password), "password should not be empty");
-
-        Preconditions.checkArgument( password.getBytes().length >= 4 && password.getBytes().length <=128,
-                "The length of password must between 4 and 128 bytes. Input is " + password);
+    	StringUtils.checkUsername(username);
+    	StringUtils.checkPassword(password);
 
         JsonObject jsonObj = new JsonObject();
         jsonObj.addProperty("new_password", password);
@@ -111,28 +109,62 @@ public class UserClient extends BaseClient {
     public ResponseWrapper updateUserInfo( String username, UserPayload payload )
             throws APIConnectionException,APIRequestException
     {
-        Preconditions.checkArgument( !StringUtils.isTrimedEmpty(username), "username should not be empty");
+    	StringUtils.checkUsername(username);
         Preconditions.checkArgument( !(null == payload), "payload should not be null");
 
         return _httpClient.sendPut(_baseUrl + userPath + "/" + username, payload.toString());
     }
 
+    /**
+     * Get user list
+     * @param start The start index of the list
+     * @param count The number that how many you want to get from list
+     * @return
+     * @throws APIConnectionException
+     * @throws APIRequestException
+     */
     public UserListResult getUserList( int start, int count )
             throws APIConnectionException, APIRequestException
     {
 
-        Preconditions.checkPositionIndex(start, count);
-        Preconditions.checkArgument(count <= 500, "count must not more than 500.");
+        if(start < 0 || count <= 0 || count > 500) {
+        	throw new IllegalArgumentException("negative index or count must more than 0 and less than 501");
+        }
         ResponseWrapper response = _httpClient.sendGet(_baseUrl + userPath + "?start=" + start + "&count=" + count);
         return UserListResult.fromResponse(response, UserListResult.class);
 
     }
+    
+    /**
+     * Get admins by appkey
+     * @param start The start index of the list
+     * @param count The number that how many you want to get from list
+     * @return
+     * @throws APIConnectionException
+     * @throws APIRequestException
+     */
+    public UserListResult getAdminListByAppkey(int start, int count)
+    		throws APIConnectionException, APIRequestException
+    {
+    	if(start < 0 || count <= 0 || count > 500) {
+        	throw new IllegalArgumentException("negative index or count must more than 0 and less than 501");
+        }
+    	ResponseWrapper response = _httpClient.sendGet(_baseUrl + adminPath + "?start=" + start + "&count=" + count);
+    	return UserListResult.fromResponse(response, UserListResult.class);
+    
+    }
 
+    /**
+     * Get all groups of a user
+     * @param username
+     * @return
+     * @throws APIConnectionException
+     * @throws APIRequestException
+     */
     public UserGroupsResult getGroupList( String username )
             throws APIConnectionException, APIRequestException
     {
-        Preconditions.checkArgument( !StringUtils.isTrimedEmpty(username), "username should not be empty");
-
+    	StringUtils.checkUsername(username);
         ResponseWrapper response = _httpClient.sendGet(_baseUrl + userPath + "/" + username + "/groups");
 
         return UserGroupsResult.fromResponse(response);
@@ -141,15 +173,22 @@ public class UserClient extends BaseClient {
     public ResponseWrapper deleteUser( String username )
             throws APIConnectionException, APIRequestException
     {
-        Preconditions.checkArgument( !StringUtils.isTrimedEmpty(username), "username should not be empty");
-
+    	StringUtils.checkUsername(username);
         return _httpClient.sendDelete(_baseUrl + userPath + "/" + username);
     }
 
+    /**
+     * Add Users to black list 
+     * @param username The owner of the black list
+     * @param users The users that will add to black list
+     * @return
+     * @throws APIConnectionException
+     * @throws APIRequestException
+     */
     public ResponseWrapper addBlackList( String username, String... users )
             throws APIConnectionException, APIRequestException
     {
-        Preconditions.checkArgument( !StringUtils.isTrimedEmpty(username), "username should not be empty");
+    	StringUtils.checkUsername(username);
         Preconditions.checkArgument( null != users && users.length > 0, "black list should not be empty");
 
         JsonArray array = new JsonArray();
@@ -162,9 +201,8 @@ public class UserClient extends BaseClient {
     public ResponseWrapper removeBlackList( String username, String... users)
             throws APIConnectionException, APIRequestException
     {
-        Preconditions.checkArgument( !StringUtils.isTrimedEmpty(username), "username should not be empty");
+    	StringUtils.checkUsername(username);
         Preconditions.checkArgument( null != users && users.length > 0, "black list should not be empty");
-
         JsonArray array = new JsonArray();
         for (String user : users) {
             array.add(new JsonPrimitive(user));
@@ -173,11 +211,17 @@ public class UserClient extends BaseClient {
         return _httpClient.sendDelete(_baseUrl + userPath + "/" + username + "/blacklist", array.toString());
     }
 
+    /**
+     * Get a user's all black list
+     * @param username The owner of the black list
+     * @return
+     * @throws APIConnectionException
+     * @throws APIRequestException
+     */
     public ResponseWrapper getBlackList( String username)
             throws APIConnectionException, APIRequestException
     {
-        Preconditions.checkArgument( !StringUtils.isTrimedEmpty(username), "username should not be empty");
-
+    	StringUtils.checkUsername(username);
         return _httpClient.sendGet( _baseUrl + userPath + "/" + username + "/blacklist");
     }
 }
