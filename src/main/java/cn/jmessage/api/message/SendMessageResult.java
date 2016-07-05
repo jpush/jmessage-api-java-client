@@ -1,7 +1,8 @@
 package cn.jmessage.api.message;
 
-import cn.jpush.api.common.resp.BaseResult;
 import com.google.gson.annotations.Expose;
+
+import cn.jiguang.common.resp.BaseResult;
 
 public class SendMessageResult extends BaseResult{
 

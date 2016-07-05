@@ -1,18 +1,27 @@
 package cn.jmessage.api;
 
+import cn.jiguang.common.connection.HttpProxy;
+import cn.jiguang.common.resp.APIConnectionException;
+import cn.jiguang.common.resp.APIRequestException;
 import cn.jmessage.api.common.JMessageConfig;
-import cn.jmessage.api.common.model.*;
-import cn.jmessage.api.group.*;
+import cn.jmessage.api.common.model.GroupPayload;
+import cn.jmessage.api.common.model.Members;
+import cn.jmessage.api.common.model.MessageBody;
+import cn.jmessage.api.common.model.MessagePayload;
+import cn.jmessage.api.common.model.RegisterInfo;
+import cn.jmessage.api.common.model.RegisterPayload;
+import cn.jmessage.api.common.model.UserPayload;
+import cn.jmessage.api.group.CreateGroupResult;
+import cn.jmessage.api.group.GroupClient;
+import cn.jmessage.api.group.GroupInfoResult;
+import cn.jmessage.api.group.GroupListResult;
+import cn.jmessage.api.group.MemberListResult;
 import cn.jmessage.api.message.MessageClient;
 import cn.jmessage.api.message.SendMessageResult;
 import cn.jmessage.api.user.UserClient;
-
 import cn.jmessage.api.user.UserGroupsResult;
 import cn.jmessage.api.user.UserInfoResult;
 import cn.jmessage.api.user.UserListResult;
-import cn.jpush.api.common.connection.HttpProxy;
-import cn.jpush.api.common.resp.APIConnectionException;
-import cn.jpush.api.common.resp.APIRequestException;
 
 public class JMessageClient {
 

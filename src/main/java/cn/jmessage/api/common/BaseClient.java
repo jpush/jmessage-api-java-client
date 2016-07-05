@@ -1,8 +1,8 @@
 package cn.jmessage.api.common;
 
-import cn.jpush.api.common.ServiceHelper;
-import cn.jpush.api.common.connection.HttpProxy;
-import cn.jpush.api.common.connection.NativeHttpClient;
+import cn.jiguang.commom.ServiceHelper;
+import cn.jiguang.common.connection.HttpProxy;
+import cn.jiguang.common.connection.NativeHttpClient;
 
 public class BaseClient {
 

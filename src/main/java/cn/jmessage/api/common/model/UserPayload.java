@@ -1,11 +1,12 @@
 package cn.jmessage.api.common.model;
 
-import cn.jpush.api.common.ServiceHelper;
-import cn.jpush.api.utils.Preconditions;
-import cn.jpush.api.utils.StringUtils;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+
+import cn.jiguang.commom.ServiceHelper;
+import cn.jiguang.commom.utils.Preconditions;
+import cn.jiguang.commom.utils.StringUtils;
 
 public class UserPayload implements IModel {
 

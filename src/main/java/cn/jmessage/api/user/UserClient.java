@@ -1,22 +1,24 @@
 package cn.jmessage.api.user;
 
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
+
+import cn.jiguang.commom.utils.Preconditions;
+import cn.jiguang.common.connection.HttpProxy;
+import cn.jiguang.common.resp.APIConnectionException;
+import cn.jiguang.common.resp.APIRequestException;
+import cn.jiguang.common.resp.ResponseWrapper;
 import cn.jmessage.api.common.BaseClient;
 import cn.jmessage.api.common.JMessageConfig;
 import cn.jmessage.api.common.model.RegisterInfo;
 import cn.jmessage.api.common.model.RegisterPayload;
 import cn.jmessage.api.common.model.UserPayload;
 import cn.jmessage.api.utils.StringUtils;
-import cn.jpush.api.common.connection.HttpProxy;
-import cn.jpush.api.common.resp.APIConnectionException;
-import cn.jpush.api.common.resp.APIRequestException;
-import cn.jpush.api.common.resp.ResponseWrapper;
-import cn.jpush.api.utils.Preconditions;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonPrimitive;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class UserClient extends BaseClient {
 
