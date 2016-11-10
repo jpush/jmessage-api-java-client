@@ -18,6 +18,9 @@ import cn.jmessage.api.SlowTests;
 import cn.jmessage.api.common.model.MessageBody;
 import cn.jmessage.api.common.model.MessagePayload;
 
+import java.util.Date;
+import java.util.List;
+
 
 /**
  * MessageClientTest
@@ -28,6 +31,7 @@ public class MessageClientTest extends BaseTest {
 
     private static Logger LOG = LoggerFactory.getLogger(MessageClientTest.class);
     private MessageClient messageClient = null;
+    private static String cursor;
 
     @Before
     public void before() throws Exception {
@@ -262,5 +266,78 @@ public class MessageClientTest extends BaseTest {
                 .setFromId("junit_admin")
                 .setMessageBody(messageBody)
                 .build();
+    }
+
+    @Test
+    public void testGetMessageList() {
+        try {
+            MessageListResult result = messageClient.getMessageList(10, "2016-09-08 10:10:10", "2016-09-15 10:10:10");
+            assertTrue(result.isResultOK());
+            String cursor = result.getCursor();
+            LOG.info("Cursor: " + cursor);
+        } catch (APIConnectionException e) {
+            LOG.error("Connection error. Should retry later. ", e);
+        } catch (APIRequestException e) {
+            LOG.error("Error response from JPush server. Should review and fix it. ", e);
+            LOG.info("HTTP Status: " + e.getStatus());
+            LOG.info("Error Message: " + e.getMessage());
+        }
+    }
+
+    @Test
+    public void testGetMessageListByCursor() {
+        try {
+            MessageListResult result = messageClient.getMessageListByCursor("1B9FFFC066E6D2305BA6A746D4113667");
+            assertTrue(result.isResultOK());
+        } catch (APIConnectionException e) {
+            LOG.error("Connection error. Should retry later. ", e);
+        } catch (APIRequestException e) {
+            LOG.error("Error response from JPush server. Should review and fix it. ", e);
+            LOG.info("HTTP Status: " + e.getStatus());
+            LOG.info("Error Message: " + e.getMessage());
+        }
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testGetMessageList_invalidCount() {
+        try {
+            MessageListResult result = messageClient.getMessageList(1001, null, null);
+        } catch (APIConnectionException e) {
+            LOG.error("Connection error. Should retry later. ", e);
+        } catch (APIRequestException e) {
+            LOG.error("Error response from JPush server. Should review and fix it. ", e);
+            LOG.info("HTTP Status: " + e.getStatus());
+            LOG.info("Error Message: " + e.getMessage());
+        }
+    }
+
+    @Test
+    public void testGetUserMessageList() {
+        try {
+            MessageListResult result = messageClient.getUserMessages(JUNIT_USER, 5, "2016-09-08 10:10:10", "2016-09-15 10:10:10");
+            cursor = result.getCursor();
+            LOG.info("Cursor: " + cursor);
+            assertTrue(result.isResultOK());
+        } catch (APIConnectionException e) {
+            LOG.error("Connection error. Should retry later. ", e);
+        } catch (APIRequestException e) {
+            LOG.error("Error response from JPush server. Should review and fix it. ", e);
+            LOG.info("HTTP Status: " + e.getStatus());
+            LOG.info("Error Message: " + e.getMessage());
+        }
+    }
+
+    @Test
+    public void testGetUserMessagesByCursor() {
+        try {
+            MessageListResult result = messageClient.getUserMessagesByCursor(JUNIT_USER, "14352B2CE97B02D9");
+            assertTrue(result.isResultOK());
+        } catch (APIConnectionException e) {
+            LOG.error("Connection error. Should retry later. ", e);
+        } catch (APIRequestException e) {
+            LOG.error("Error response from JPush server. Should review and fix it. ", e);
+            LOG.info("HTTP Status: " + e.getStatus());
+            LOG.info("Error Message: " + e.getMessage());
+        }
     }
 }

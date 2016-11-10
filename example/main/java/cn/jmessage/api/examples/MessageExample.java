@@ -1,5 +1,7 @@
 package cn.jmessage.api.examples;
 
+import cn.jmessage.api.message.MessageListResult;
+import cn.jmessage.api.message.MessageResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,19 +18,13 @@ public class MessageExample {
     private static final String appkey = "242780bfdd7315dc1989fe2b";
     private static final String masterSecret = "2f5ced2bef64167950e63d13";
 
+    public static void main(String[] args) {
+        testGetMessageList();
+    }
+
     /**
      * Send single text message by admin, this method will invoke sendMessage() in JMessageClient eventually, whose 
      * parameters are as list:
-     * @param version Current version is 1
-     * @param targetType Group or single
-     * @param targetId The message receiver 
-     * @param fromType Only support admin now
-     * @param fromId Sender
-     * @param messageType Only support text now
-     * @param messageBody A MessageBody instance
-     * @return
-     * @throws APIConnectionException
-     * @throws APIRequestException
      */
     public static void testSendSingleTextByAdmin() {
         JMessageClient client = new JMessageClient(appkey, masterSecret);
@@ -57,6 +53,42 @@ public class MessageExample {
     		SendMessageResult result = client.sendGroupTextByAdmin("targetUserName", "fromUserName", body);
     		LOG.info(String.valueOf(result.getMsg_id()));
     	} catch (APIConnectionException e) {
+            LOG.error("Connection error. Should retry later. ", e);
+        } catch (APIRequestException e) {
+            LOG.error("Error response from JPush server. Should review and fix it. ", e);
+            LOG.info("HTTP Status: " + e.getStatus());
+            LOG.info("Error Message: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Get message list without cursor(first time), will return cursor, the later request will
+     * use cursor to get messages.
+     */
+    public static void testGetMessageList() {
+        JMessageClient client = new JMessageClient(appkey, masterSecret);
+        try {
+            MessageListResult result = client.getMessageList(10, "2016-09-08 10:10:10", "2016-09-15 10:10:10");
+            String cursor = result.getCursor();
+            MessageResult[] messages = result.getMessages();
+            MessageListResult secondResult = client.getMessageListByCursor(cursor);
+            MessageResult[] secondMessages = secondResult.getMessages();
+        } catch (APIConnectionException e) {
+            LOG.error("Connection error. Should retry later. ", e);
+        } catch (APIRequestException e) {
+            LOG.error("Error response from JPush server. Should review and fix it. ", e);
+            LOG.info("HTTP Status: " + e.getStatus());
+            LOG.info("Error Message: " + e.getMessage());
+        }
+    }
+
+    public static void testGetUserMessageList() {
+        JMessageClient client = new JMessageClient(appkey, masterSecret);
+        try {
+            MessageListResult result = client.getUserMessages("username", 10, "2016-09-08 10:10:10", "2016-09-15 10:10:10");
+            String cursor = result.getCursor();
+            MessageListResult secondResult = client.getUserMessagesByCursor("username", cursor);
+        } catch (APIConnectionException e) {
             LOG.error("Connection error. Should retry later. ", e);
         } catch (APIRequestException e) {
             LOG.error("Error response from JPush server. Should review and fix it. ", e);

@@ -24,6 +24,8 @@ public class BaseTest {
 
     protected static final String JUNIT_USER1 = "junit_no_delete1";
 
-    protected static final long JUNIT_GID = 10003718;
+    protected static final String JUNIT_USER2 = "junit_no_delete2";
+
+    protected static final long JUNIT_GID = 10004809;
 
 }

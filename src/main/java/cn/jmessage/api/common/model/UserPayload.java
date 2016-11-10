@@ -16,6 +16,7 @@ public class UserPayload implements IModel {
     public static final String GENDER = "gender";
     public static final String REGION = "region";
     public static final String ADDRESS = "address";
+    public static final String AVATAR = "avatar";
 
     private static Gson _gson = new Gson();
 
@@ -27,13 +28,15 @@ public class UserPayload implements IModel {
     private String address;
     private String avatar;
 
-    private UserPayload(String nickname, String birthday, String signature, int gender, String region, String address) {
+    private UserPayload(String nickname, String birthday, String signature, int gender, String region,
+                        String address, String avatar) {
         this.nickname = nickname;
         this.birthday = birthday;
         this.signature = signature;
         this.gender = gender;
         this.region = region;
         this.address = address;
+        this.avatar = avatar;
     }
 
     public static Builder newBuilder() {
@@ -68,6 +71,10 @@ public class UserPayload implements IModel {
             json.addProperty(ADDRESS, address);
         }
 
+        if (null != avatar) {
+            json.addProperty(AVATAR, avatar);
+        }
+
         return json;
     }
 
@@ -84,6 +91,7 @@ public class UserPayload implements IModel {
         private int gender = -1;
         private String region;
         private String address;
+        private String avatar;
 
         public Builder setNickname(String nickname) {
             this.nickname = nickname;
@@ -112,6 +120,11 @@ public class UserPayload implements IModel {
 
         public Builder setAddress(String address) {
             this.address = address;
+            return this;
+        }
+
+        public Builder setAvatar(String avatar) {
+            this.avatar = avatar;
             return this;
         }
 
@@ -147,7 +160,7 @@ public class UserPayload implements IModel {
                         "The length of address must not more than 250 bytes." );
             }
 
-            return new UserPayload(nickname, birthday, signature, gender, region, address);
+            return new UserPayload(nickname, birthday, signature, gender, region, address, avatar);
         }
 
     }

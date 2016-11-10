@@ -15,6 +15,7 @@ public class MemberResult extends BaseResult {
     @Expose String region;
     @Expose String address;
     @Expose Integer flag;
+    @Expose String appkey;
 
     public String getUsername() {
         return username;
@@ -50,5 +51,9 @@ public class MemberResult extends BaseResult {
 
     public Integer getFlag() {
         return flag;
+    }
+
+    public String getAppkey() {
+        return appkey;
     }
 }
