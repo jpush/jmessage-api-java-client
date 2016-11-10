@@ -2,6 +2,7 @@ package cn.jmessage.api.user;
 
 
 import cn.jmessage.api.common.model.*;
+import com.google.gson.Gson;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -135,11 +136,11 @@ public class UserClient extends BaseClient {
      * @throws APIConnectionException connect exception
      * @throws APIRequestException request exception
      */
-    public UserListResult getBlackList(String username)
+    public UserInfoResult[] getBlackList(String username)
             throws APIConnectionException, APIRequestException {
         StringUtils.checkUsername(username);
         ResponseWrapper response =  _httpClient.sendGet( _baseUrl + userPath + "/" + username + "/blacklist");
-        return UserListResult.fromResponse(response, UserListResult.class);
+        return _gson.fromJson(response.responseContent, UserInfoResult[].class);
     }
 
     /**
@@ -309,11 +310,11 @@ public class UserClient extends BaseClient {
      * @throws APIConnectionException connect exception
      * @throws APIRequestException request exception
      */
-    public UserListResult getFriendsInfo(String username)
+    public UserInfoResult[] getFriendsInfo(String username)
             throws APIConnectionException, APIRequestException {
         StringUtils.checkUsername(username);
         ResponseWrapper response = _httpClient.sendGet(_baseUrl + userPath + "/" + username + "/friends");
-        return UserListResult.fromResponse(response, UserListResult.class);
+        return _gson.fromJson(response.responseContent, UserInfoResult[].class);
     }
 
 }

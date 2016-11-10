@@ -166,7 +166,7 @@ public class JMessageClient {
      * @throws APIConnectionException connect exception
      * @throws APIRequestException request exception
      */
-    public UserListResult getBlackList(String username)
+    public UserInfoResult[] getBlackList(String username)
             throws APIConnectionException, APIRequestException {
         return _userClient.getBlackList(username);
     }
@@ -426,7 +426,7 @@ public class JMessageClient {
      * @throws APIConnectionException connect exception
      * @throws APIRequestException request exception
      */
-    public UserListResult getFriendsInfo(String username)
+    public UserInfoResult[] getFriendsInfo(String username)
             throws APIConnectionException, APIRequestException {
         return _userClient.getFriendsInfo(username);
     }

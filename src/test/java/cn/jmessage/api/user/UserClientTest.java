@@ -896,4 +896,17 @@ public class UserClientTest extends BaseTest {
         }
     }
 
+    @Test
+    public void testGetFriends() {
+        try {
+            UserInfoResult[] result = userClient.getFriendsInfo(JUNIT_USER);
+        } catch (APIConnectionException e) {
+            LOG.error("Connection error. Should retry later. ", e);
+        } catch (APIRequestException e) {
+            LOG.error("Error response from JPush server. Should review and fix it. ", e);
+            LOG.info("HTTP Status: " + e.getStatus());
+            LOG.info("Error Message: " + e.getMessage());
+        }
+    }
+
 }

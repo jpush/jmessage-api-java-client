@@ -170,8 +170,7 @@ public class UserExample {
     public void testGetBlackList() {
         JMessageClient client = new JMessageClient(appkey, masterSecret);
         try {
-            UserListResult result = client.getBlackList("username");
-            UserInfoResult[] users = result.getUsers();
+            UserInfoResult[] result = client.getBlackList("username");
         } catch (APIConnectionException e) {
             LOG.error("Connection error. Should retry later. ", e);
         } catch (APIRequestException e) {
@@ -255,6 +254,19 @@ public class UserExample {
             friendNotes.add(friendNote2);
             FriendNote[] array = new FriendNote[friendNotes.size()];
             ResponseWrapper result = client.updateFriendsNote("test_user", friendNotes.toArray(array));
+        } catch (APIConnectionException e) {
+            LOG.error("Connection error. Should retry later. ", e);
+        } catch (APIRequestException e) {
+            LOG.error("Error response from JPush server. Should review and fix it. ", e);
+            LOG.info("HTTP Status: " + e.getStatus());
+            LOG.info("Error Message: " + e.getMessage());
+        }
+    }
+
+    public void testGetFriends() {
+        JMessageClient client = new JMessageClient(appkey, masterSecret);
+        try {
+            UserInfoResult[] userInfoArray = client.getFriendsInfo("test_user");
         } catch (APIConnectionException e) {
             LOG.error("Connection error. Should retry later. ", e);
         } catch (APIRequestException e) {
