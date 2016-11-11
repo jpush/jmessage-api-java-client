@@ -1,6 +1,6 @@
 package cn.jmessage.api.common;
 
-import cn.jiguang.commom.ServiceHelper;
+import cn.jiguang.common.ServiceHelper;
 import cn.jiguang.common.connection.HttpProxy;
 import cn.jiguang.common.connection.NativeHttpClient;
 import com.google.gson.Gson;

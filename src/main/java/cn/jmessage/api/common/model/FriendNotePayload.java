@@ -1,6 +1,6 @@
 package cn.jmessage.api.common.model;
 
-import cn.jiguang.commom.utils.Preconditions;
+import cn.jiguang.common.utils.Preconditions;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;

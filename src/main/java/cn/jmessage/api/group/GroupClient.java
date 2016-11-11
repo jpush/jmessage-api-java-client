@@ -5,7 +5,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.gson.JsonObject;
 
-import cn.jiguang.commom.utils.Preconditions;
+import cn.jiguang.common.utils.Preconditions;
 import cn.jiguang.common.connection.HttpProxy;
 import cn.jiguang.common.resp.APIConnectionException;
 import cn.jiguang.common.resp.APIRequestException;

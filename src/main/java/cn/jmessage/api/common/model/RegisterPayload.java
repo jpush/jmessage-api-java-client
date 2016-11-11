@@ -4,7 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 
-import cn.jiguang.commom.utils.Preconditions;
+import cn.jiguang.common.utils.Preconditions;
 
 public class RegisterPayload implements IModel {
 

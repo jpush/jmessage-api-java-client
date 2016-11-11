@@ -1,6 +1,6 @@
 package cn.jmessage.api.common;
 
-import cn.jiguang.commom.ClientConfig;
+import cn.jiguang.common.ClientConfig;
 
 public class JMessageConfig {
 

@@ -1,7 +1,7 @@
 package cn.jmessage.api.resource;
 
-import cn.jiguang.commom.ServiceHelper;
-import cn.jiguang.commom.utils.Preconditions;
+import cn.jiguang.common.ServiceHelper;
+import cn.jiguang.common.utils.Preconditions;
 import cn.jiguang.common.connection.HttpProxy;
 import cn.jiguang.common.resp.APIConnectionException;
 import cn.jiguang.common.resp.APIRequestException;
