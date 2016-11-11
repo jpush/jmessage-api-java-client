@@ -1,5 +1,6 @@
 package cn.jmessage.api.common.model;
 
+import cn.jmessage.api.message.MessageType;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -29,11 +30,11 @@ public class MessagePayload implements IModel {
     private String target_id;
     private String from_type;
     private String from_id;
-    private String msg_type;
+    private MessageType msg_type;
     private MessageBody msg_body;
 
     public MessagePayload(Integer version, String target_type, String target_id,
-                          String from_type, String from_id, String msg_type,
+                          String from_type, String from_id, MessageType msg_type,
                           MessageBody msg_body) {
         this.version = version;
         this.target_type = target_type;
@@ -68,7 +69,7 @@ public class MessagePayload implements IModel {
             json.addProperty(FROM_ID, from_id);
         }
         if (null != msg_type) {
-            json.addProperty(MSG_TYPE, msg_type);
+            json.addProperty(MSG_TYPE, msg_type.getValue());
         }
         if (null != msg_body) {
             json.add(MSG_BODY, msg_body.toJSON());
@@ -88,7 +89,7 @@ public class MessagePayload implements IModel {
         private String target_id;
         private String from_type;
         private String from_id;
-        private String msg_type;
+        private MessageType msg_type;
         private MessageBody msg_body;
 
         public Builder setVersion(Integer version) {
@@ -116,8 +117,8 @@ public class MessagePayload implements IModel {
             return this;
         }
 
-        public Builder setMessageType(String msg_type) {
-            this.msg_type = msg_type.trim();
+        public Builder setMessageType(MessageType msg_type) {
+            this.msg_type = msg_type;
             return this;
         }
 
@@ -132,7 +133,7 @@ public class MessagePayload implements IModel {
             StringUtils.checkUsername(target_id);
             Preconditions.checkArgument(StringUtils.isNotEmpty(from_type), "The from type must not be empty!");
             StringUtils.checkUsername(from_id);
-            Preconditions.checkArgument(StringUtils.isNotEmpty(msg_type), "The message type must not be empty!");
+            Preconditions.checkArgument(msg_type != null, "The message type must not be empty!");
             Preconditions.checkArgument(null != msg_body, "The message body must not be empty!");
 
             return new MessagePayload(version, target_type, target_id, from_type, from_id, msg_type, msg_body);

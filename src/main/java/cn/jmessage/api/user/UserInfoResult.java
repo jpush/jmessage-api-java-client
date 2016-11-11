@@ -16,6 +16,7 @@ public class UserInfoResult extends BaseResult {
     @Expose String address;
     @Expose String ctime;
     @Expose String mtime;
+    @Expose String appkey;
 
     public String getUsername() {
         return username;
@@ -55,5 +56,9 @@ public class UserInfoResult extends BaseResult {
 
     public String getMtime() {
         return mtime;
+    }
+
+    public String getAppkey() {
+        return appkey;
     }
 }

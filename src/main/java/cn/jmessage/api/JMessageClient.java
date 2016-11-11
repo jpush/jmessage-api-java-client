@@ -4,6 +4,7 @@ import cn.jiguang.common.connection.HttpProxy;
 import cn.jiguang.common.resp.APIConnectionException;
 import cn.jiguang.common.resp.APIRequestException;
 import cn.jiguang.common.resp.ResponseWrapper;
+import cn.jmessage.api.CrossApp.CrossAppClient;
 import cn.jmessage.api.common.JMessageConfig;
 import cn.jmessage.api.common.model.*;
 import cn.jmessage.api.group.CreateGroupResult;
@@ -13,6 +14,7 @@ import cn.jmessage.api.group.GroupListResult;
 import cn.jmessage.api.group.MemberListResult;
 import cn.jmessage.api.message.MessageClient;
 import cn.jmessage.api.message.MessageListResult;
+import cn.jmessage.api.message.MessageType;
 import cn.jmessage.api.message.SendMessageResult;
 import cn.jmessage.api.user.*;
 
@@ -21,6 +23,7 @@ public class JMessageClient {
     private final UserClient _userClient;
     private final GroupClient _groupClient;
     private final MessageClient _messageClient;
+    private final CrossAppClient _crossAppClient;
     private final int _sendVersion;
 
     /**
@@ -81,6 +84,7 @@ public class JMessageClient {
         _userClient = new UserClient(appkey, masterSecret, proxy, config);
         _groupClient = new GroupClient(appkey, masterSecret, proxy, config);
         _messageClient = new MessageClient(appkey, masterSecret, proxy, config);
+        _crossAppClient = new CrossAppClient(appkey, masterSecret, proxy, config);
         _sendVersion = (Integer) config.get(JMessageConfig.SEND_VERSION);
     }
 
@@ -269,14 +273,14 @@ public class JMessageClient {
      * @param targetId The message receiver 
      * @param fromType Only support admin now
      * @param fromId Sender
-     * @param messageType Only support text now
-     * @param messageBody A MessageBody instance
+     * @param messageType MessageType: text, image or custom
+     * @param messageBody A MessageBodyResult instance
      * @return return msg_id
      * @throws APIConnectionException connect exception
      * @throws APIRequestException request exception
      */
     public SendMessageResult sendMessage(Integer version, String targetType, String targetId,
-                            String fromType, String fromId, String messageType, MessageBody messageBody)
+                                         String fromType, String fromId, MessageType messageType, MessageBody messageBody)
             throws APIConnectionException, APIRequestException {
         MessagePayload payload = MessagePayload.newBuilder()
                 .setVersion(version)
@@ -301,7 +305,7 @@ public class JMessageClient {
      */
     public SendMessageResult sendSingleTextByAdmin(String targetId, String fromId, MessageBody body)
             throws APIConnectionException, APIRequestException {
-        return sendMessage(_sendVersion, "single", targetId, "admin",fromId, "text", body);
+        return sendMessage(_sendVersion, "single", targetId, "admin",fromId, MessageType.TEXT, body);
     }
 
     /**
@@ -315,7 +319,7 @@ public class JMessageClient {
      */
     public SendMessageResult sendGroupTextByAdmin(String targetId, String fromId, MessageBody body)
             throws APIConnectionException, APIRequestException {
-        return sendMessage(_sendVersion, "group", targetId, "admin",fromId, "text", body);
+        return sendMessage(_sendVersion, "group", targetId, "admin",fromId, MessageType.TEXT, body);
     }
 
     /**
@@ -429,6 +433,83 @@ public class JMessageClient {
     public UserInfoResult[] getFriendsInfo(String username)
             throws APIConnectionException, APIRequestException {
         return _userClient.getFriendsInfo(username);
+    }
+
+    /**
+     * Add or remove group members from a given group id.
+     * @param gid Necessary, target group id.
+     * @param groups Necessary
+     * @return No content
+     * @throws APIConnectionException connect exception
+     * @throws APIRequestException request exception
+     */
+    public ResponseWrapper addOrRemoveCrossGroupMember(long gid, CrossGroup[] groups)
+            throws APIConnectionException, APIRequestException {
+        return _crossAppClient.addOrRemoveCrossGroupMembers(gid, groups);
+    }
+
+    /**
+     * Get members' info from cross group
+     * @param gid Necessary, target group id
+     * @return Member info array
+     * @throws APIConnectionException connect exception
+     * @throws APIRequestException request exception
+     */
+    public MemberListResult getCrossGroupMembers(long gid)
+            throws APIConnectionException, APIRequestException {
+        return _crossAppClient.getCrossGroupMembers(gid);
+    }
+
+    /**
+     * Add blacklist whose users belong to another app to a given user.
+     * @param username The owner of the blacklist
+     * @param blacklists CrossBlacklist array
+     * @return No Content
+     * @throws APIConnectionException connect exception
+     * @throws APIRequestException request exception
+     */
+    public ResponseWrapper addCrossBlacklist(String username, CrossBlacklist[] blacklists)
+            throws APIConnectionException, APIRequestException {
+        return _crossAppClient.addCrossBlacklist(username, blacklists);
+    }
+
+    /**
+     * Delete blacklist whose users belong to another app from a given user.
+     * @param username The owner of the blacklist
+     * @param blacklists CrossBlacklist array
+     * @return No content
+     * @throws APIConnectionException connect exception
+     * @throws APIRequestException request exception
+     */
+    public ResponseWrapper deleteCrossBlacklist(String username, CrossBlacklist[] blacklists)
+            throws APIConnectionException, APIRequestException {
+        return _crossAppClient.deleteCrossBlacklist(username, blacklists);
+    }
+
+    /**
+     * Get all users' info(contains appkey) of user's cross app blacklist
+     * @param username Necessary, the owner of blacklist
+     * @return UserInfo array
+     * @throws APIConnectionException connect exception
+     * @throws APIRequestException request exception
+     */
+    public UserInfoResult[] getCrossBlacklist(String username)
+            throws APIConnectionException, APIRequestException {
+        return _crossAppClient.getCrossBlacklist(username);
+    }
+
+    /**
+     * Set cross app no disturb
+     * @link https://docs.jiguang.cn/jmessage/server/rest_api_im/#api_1
+     * @param username Necessary
+     * @param array CrossNoDisturb array
+     * @return No content
+     * @throws APIConnectionException connect exception
+     * @throws APIRequestException request exception
+     */
+    public ResponseWrapper setCrossNoDisturb(String username, CrossNoDisturb[] array)
+            throws APIConnectionException, APIRequestException {
+        return _crossAppClient.setCrossNoDisturb(username, array);
     }
 
 }

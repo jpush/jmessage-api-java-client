@@ -13,7 +13,7 @@ public class MessageResult extends BaseResult {
     @Expose String from_name;
     @Expose String from_type;
     @Expose String from_platform;
-    @Expose MessageBody msg_body;
+    @Expose MessageBodyResult msg_body;
     @Expose Long create_time;
     @Expose Integer version;
     @Expose Integer msgid;
@@ -52,7 +52,7 @@ public class MessageResult extends BaseResult {
         return from_platform;
     }
 
-    public MessageBody getMsgBody() {
+    public MessageBodyResult getMsgBody() {
         return msg_body;
     }
 
