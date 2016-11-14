@@ -150,40 +150,7 @@ public class ResourceClient extends BaseClient {
                 } else {
                     if(status1 < 300 || status1 >= 400) {
                         LOG.warn("Got error response - responseCode:" + status1 + ", responseContent:" + responseContent1);
-                        switch(status1) {
-                            case 400:
-                                LOG.error("Your request params is invalid. Please check them according to error message.");
-                                wrapper.setErrorObject();
-                                break;
-                            case 401:
-                                LOG.error("Authentication failed! Please check authentication params according to docs.");
-                                wrapper.setErrorObject();
-                                break;
-                            case 403:
-                                LOG.error("Request is forbidden! Maybe your appkey is listed in blacklist or your params is invalid.");
-                                wrapper.setErrorObject();
-                                break;
-                            case 404:
-                                LOG.error("Request page is not found! Maybe your params is invalid.");
-                                wrapper.setErrorObject();
-                                break;
-                            case 410:
-                                LOG.error("Request resource is no longer in service. Please according to notice on official website.");
-                                wrapper.setErrorObject();
-                            case 429:
-                                LOG.error("Too many requests! Please review your appkey\'s request quota.");
-                                wrapper.setErrorObject();
-                                break;
-                            case 500:
-                            case 502:
-                            case 503:
-                            case 504:
-                                LOG.error("Seems encountered server error. Maybe JPush is in maintenance? Please retry later.");
-                                break;
-                            default:
-                                LOG.error("Unexpected response.");
-                        }
-
+                        wrapper.setErrorObject();
                         throw new APIRequestException(wrapper);
                     }
 
