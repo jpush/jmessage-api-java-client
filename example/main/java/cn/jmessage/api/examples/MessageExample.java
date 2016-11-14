@@ -1,7 +1,10 @@
 package cn.jmessage.api.examples;
 
+import cn.jmessage.api.common.model.MessagePayload;
 import cn.jmessage.api.message.MessageListResult;
 import cn.jmessage.api.message.MessageResult;
+import cn.jmessage.api.message.MessageType;
+import com.google.gson.JsonObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -59,6 +62,40 @@ public class MessageExample {
             LOG.info("HTTP Status: " + e.getStatus());
             LOG.info("Error Message: " + e.getMessage());
         }
+    }
+
+    public static void testSendImageMessage() {
+        JMessageClient client = new JMessageClient(appkey, masterSecret);
+        MessageBody messageBody = new MessageBody.Builder()
+                .setMediaId("qiniu/image/r/A92D550D57464CDF5ADC0D79FBD46210")
+                .setMediaCrc32(4258069839L)
+                .setWidth(43)
+                .setHeight(44)
+                .setFormat("png")
+                .setFsize(2670)
+                .build();
+
+        MessagePayload payload = MessagePayload.newBuilder()
+                .setVersion(1)
+                .setTargetType("single")
+                .setTargetId("test_user1")
+                .setFromType("admin")
+                .setFromId("junit_admin")
+                .setMessageType(MessageType.IMAGE)
+                .setMessageBody(messageBody)
+                .build();
+
+        try {
+            SendMessageResult res = client.sendMessage(payload);
+            System.out.println(res.getMsg_id());
+        } catch (APIConnectionException e) {
+            LOG.error("Connection error. Should retry later. ", e);
+        } catch (APIRequestException e) {
+            LOG.error("Error response from JPush server. Should review and fix it. ", e);
+            LOG.info("HTTP Status: " + e.getStatus());
+            LOG.info("Error Message: " + e.getMessage());
+        }
+
     }
 
     /**

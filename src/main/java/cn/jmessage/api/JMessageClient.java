@@ -304,6 +304,11 @@ public class JMessageClient {
         return _messageClient.sendMessage(payload);
     }
 
+    public SendMessageResult sendMessage(MessagePayload payload)
+            throws APIConnectionException, APIRequestException {
+        return _messageClient.sendMessage(payload);
+    }
+
     /**
      * Download file with mediaId, will return DownloadResult which include url.
      * @param mediaId Necessary
