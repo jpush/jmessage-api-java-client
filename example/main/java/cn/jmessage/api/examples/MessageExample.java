@@ -4,6 +4,7 @@ import cn.jmessage.api.common.model.MessagePayload;
 import cn.jmessage.api.message.MessageListResult;
 import cn.jmessage.api.message.MessageResult;
 import cn.jmessage.api.message.MessageType;
+import cn.jmessage.api.utils.StringUtils;
 import com.google.gson.JsonObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -107,9 +108,11 @@ public class MessageExample {
         try {
             MessageListResult result = client.getMessageList(10, "2016-09-08 10:10:10", "2016-09-15 10:10:10");
             String cursor = result.getCursor();
-            MessageResult[] messages = result.getMessages();
-            MessageListResult secondResult = client.getMessageListByCursor(cursor);
-            MessageResult[] secondMessages = secondResult.getMessages();
+            if (null != cursor && StringUtils.isNotEmpty(cursor)) {
+                MessageResult[] messages = result.getMessages();
+                MessageListResult secondResult = client.getMessageListByCursor(cursor);
+                MessageResult[] secondMessages = secondResult.getMessages();
+            }
         } catch (APIConnectionException e) {
             LOG.error("Connection error. Should retry later. ", e);
         } catch (APIRequestException e) {
