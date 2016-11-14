@@ -93,7 +93,6 @@ public class GroupExample {
             String[] addList = {"baobao148"};
             String[] removeList = {"baobao148"};
             client.addOrRemoveMembers(10003767, addList, null );
-            client.addOrRemoveMembers(10003767, null, removeList);
         } catch (APIConnectionException e) {
             LOG.error("Connection error. Should retry later. ", e);
         } catch (APIRequestException e) {

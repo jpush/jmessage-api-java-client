@@ -63,11 +63,10 @@ public class ResourceClient extends BaseClient {
     /**
      * Upload file, only support image file(jpg, bmp, gif, png) currently,
      * file size should not larger than 8M.
-     * @param name Necessary The file name which saved in server
      * @param path Necessary, the native path of the file you want to upload
      * @return UploadResult
      */
-    public UploadResult uploadFile(String name, String path)
+    public UploadResult uploadFile(String path)
             throws APIConnectionException, APIRequestException {
         Preconditions.checkArgument(null != path, "filename is necessary");
         File file = new File(path);
@@ -97,7 +96,7 @@ public class ResourceClient extends BaseClient {
                 sb.append(boundaryPrefix);
                 sb.append(BOUNDARY);
                 sb.append(newLine);
-                sb.append("Content-Disposition: form-data;name=\"" + name + "\";filename=\"" + path + "\"" + newLine);
+                sb.append("Content-Disposition: form-data;name=\"image\";filename=\"" + path + "\"" + newLine);
                 sb.append("Content-Type:application/octet-stream");
                 // 参数头设置完以后需要两个换行，然后才是参数内容
                 sb.append(newLine);

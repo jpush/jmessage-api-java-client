@@ -16,6 +16,9 @@ import cn.jmessage.api.message.MessageClient;
 import cn.jmessage.api.message.MessageListResult;
 import cn.jmessage.api.message.MessageType;
 import cn.jmessage.api.message.SendMessageResult;
+import cn.jmessage.api.resource.DownloadResult;
+import cn.jmessage.api.resource.ResourceClient;
+import cn.jmessage.api.resource.UploadResult;
 import cn.jmessage.api.user.*;
 
 public class JMessageClient {
@@ -23,6 +26,7 @@ public class JMessageClient {
     private final UserClient _userClient;
     private final GroupClient _groupClient;
     private final MessageClient _messageClient;
+    private final ResourceClient _resourceClient;
     private final CrossAppClient _crossAppClient;
     private final int _sendVersion;
 
@@ -85,6 +89,7 @@ public class JMessageClient {
         _groupClient = new GroupClient(appkey, masterSecret, proxy, config);
         _messageClient = new MessageClient(appkey, masterSecret, proxy, config);
         _crossAppClient = new CrossAppClient(appkey, masterSecret, proxy, config);
+        _resourceClient = new ResourceClient(appkey, masterSecret, proxy, config);
         _sendVersion = (Integer) config.get(JMessageConfig.SEND_VERSION);
     }
 
@@ -297,6 +302,29 @@ public class JMessageClient {
                 .setMessageBody(messageBody)
                 .build();
         return _messageClient.sendMessage(payload);
+    }
+
+    /**
+     * Download file with mediaId, will return DownloadResult which include url.
+     * @param mediaId Necessary
+     * @return DownloadResult
+     * @throws APIConnectionException connect exception
+     * @throws APIRequestException request exception
+     */
+    public DownloadResult downloadFile(String mediaId)
+            throws APIConnectionException, APIRequestException {
+        return _resourceClient.downloadFile(mediaId);
+    }
+
+    /**
+     * Upload file, only support image file(jpg, bmp, gif, png) currently,
+     * file size should not larger than 8M.
+     * @param path Necessary, the native path of the file you want to upload
+     * @return UploadResult
+     */
+    public UploadResult uploadFile(String path)
+            throws APIConnectionException, APIRequestException {
+        return _resourceClient.uploadFile(path);
     }
 
     /**

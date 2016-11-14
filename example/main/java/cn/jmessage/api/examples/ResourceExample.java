@@ -37,7 +37,7 @@ public class ResourceExample {
     public static void testUploadFile() {
         ResourceClient client = new ResourceClient(appkey, masterSecret);
         try {
-            UploadResult result = client.uploadFile("icon", "G:\\MyDownloads\\discourse-icon.png");
+            UploadResult result = client.uploadFile("G:\\MyDownloads\\discourse-icon.png");
             String mediaId = result.getMediaId();
         } catch (APIConnectionException e) {
             LOG.error("Connection error. Should retry later. ", e);
