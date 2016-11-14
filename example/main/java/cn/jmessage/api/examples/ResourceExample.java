@@ -19,7 +19,7 @@ public class ResourceExample {
 
     }
 
-    public void testDownloadFile() {
+    public static void testDownloadFile() {
         ResourceClient client = new ResourceClient(appkey, masterSecret);
         try {
             DownloadResult result = client.downloadFile("qiniu/image/r/48449FBC073184BDB5B50964D45FC8C3");
@@ -34,7 +34,7 @@ public class ResourceExample {
 
     }
 
-    public void testUploadFile() {
+    public static void testUploadFile() {
         ResourceClient client = new ResourceClient(appkey, masterSecret);
         try {
             UploadResult result = client.uploadFile("icon", "G:\\MyDownloads\\discourse-icon.png");

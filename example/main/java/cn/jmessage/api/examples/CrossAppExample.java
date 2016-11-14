@@ -17,7 +17,7 @@ import java.util.List;
 
 public class CrossAppExample {
 
-    private Logger LOG = LoggerFactory.getLogger(CrossAppExample.class);
+    private static Logger LOG = LoggerFactory.getLogger(CrossAppExample.class);
     private static final String appkey = "242780bfdd7315dc1989fe2b";
     private static final String masterSecret = "2f5ced2bef64167950e63d13";
 
@@ -25,7 +25,7 @@ public class CrossAppExample {
 
     }
 
-    public void testAddOrRemoveMembersFromCrossGroup() {
+    public static void testAddOrRemoveMembersFromCrossGroup() {
         JMessageClient client = new JMessageClient(appkey, masterSecret);
         try {
             List<CrossGroup> crossGroups = new ArrayList<CrossGroup>();
@@ -46,7 +46,7 @@ public class CrossAppExample {
         }
     }
 
-    public void testGetCrossGroupMembers() {
+    public static void testGetCrossGroupMembers() {
         JMessageClient client = new JMessageClient(appkey, masterSecret);
         try {
             MemberListResult result = client.getCrossGroupMembers(10004809);
@@ -61,7 +61,7 @@ public class CrossAppExample {
         }
     }
 
-    public void testAddCrossBlacklist() {
+    public static void testAddCrossBlacklist() {
         JMessageClient client = new JMessageClient(appkey, masterSecret);
         try {
             List<CrossBlacklist> crossBlacklists = new ArrayList<CrossBlacklist>();
@@ -82,7 +82,7 @@ public class CrossAppExample {
         }
     }
 
-    public void testDeleteCrossBlacklist() {
+    public static void testDeleteCrossBlacklist() {
         JMessageClient client = new JMessageClient(appkey, masterSecret);
         try {
             List<CrossBlacklist> crossBlacklists = new ArrayList<CrossBlacklist>();
@@ -103,7 +103,7 @@ public class CrossAppExample {
         }
     }
 
-    public void testSetCrossNoDisturb() {
+    public static void testSetCrossNoDisturb() {
         JMessageClient client = new JMessageClient(appkey, masterSecret);
         try {
             List<CrossNoDisturb> list = new ArrayList<CrossNoDisturb>();

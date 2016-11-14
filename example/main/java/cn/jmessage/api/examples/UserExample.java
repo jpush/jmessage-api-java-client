@@ -153,7 +153,7 @@ public class UserExample {
     /**
      * Get admins by appkey
      */
-    public void testGetAdminListByAppkey() {
+    public static void testGetAdminListByAppkey() {
     	JMessageClient client = new JMessageClient(appkey, masterSecret);
     	try {
 			UserListResult res = client.getAdminListByAppkey(0, 1);
@@ -167,7 +167,7 @@ public class UserExample {
 		}
     }
 
-    public void testGetBlackList() {
+    public static void testGetBlackList() {
         JMessageClient client = new JMessageClient(appkey, masterSecret);
         try {
             UserInfoResult[] result = client.getBlackList("username");
@@ -180,7 +180,20 @@ public class UserExample {
         }
     }
 
-    public void testAddBlackList() {
+    public static void testRemoveBlacklist() {
+        JMessageClient client = new JMessageClient(appkey, masterSecret);
+        try {
+            ResponseWrapper response = client.removeBlacklist("test_user", "test_user1", "test_user2");
+        } catch (APIConnectionException e) {
+            LOG.error("Connection error. Should retry later. ", e);
+        } catch (APIRequestException e) {
+            LOG.error("Error response from JPush server. Should review and fix it. ", e);
+            LOG.info("HTTP Status: " + e.getStatus());
+            LOG.info("Error Message: " + e.getMessage());
+        }
+    }
+
+    public static void testAddBlackList() {
         JMessageClient client = new JMessageClient(appkey, masterSecret);
         try {
             ResponseWrapper response = client.addBlackList("username", "user1", "user2");
@@ -193,7 +206,7 @@ public class UserExample {
         }
     }
 
-    public void testSetNoDisturb() {
+    public static void testSetNoDisturb() {
         JMessageClient client = new JMessageClient(appkey, masterSecret);
         try {
             NoDisturbPayload payload = new NoDisturbPayload.Builder()
@@ -210,7 +223,7 @@ public class UserExample {
         }
     }
 
-    public void testAddFriends() {
+    public static void testAddFriends() {
         JMessageClient client = new JMessageClient(appkey, masterSecret);
         try {
             ResponseWrapper response = client.addFriends("test_user", "test_user1", "test_user2");
@@ -223,7 +236,7 @@ public class UserExample {
         }
     }
 
-    public void testDeleteFriends() {
+    public static void testDeleteFriends() {
         JMessageClient client = new JMessageClient(appkey, masterSecret);
         try {
             ResponseWrapper response = client.deleteFriends("test_user", "test_user1", "test_user2");
@@ -236,7 +249,7 @@ public class UserExample {
         }
     }
 
-    public void testUpdateFriendsNote() {
+    public static void testUpdateFriendsNote() {
         JMessageClient client = new JMessageClient(appkey, masterSecret);
         try {
             List<FriendNote> friendNotes = new ArrayList<FriendNote>();
@@ -263,7 +276,7 @@ public class UserExample {
         }
     }
 
-    public void testGetFriends() {
+    public static void testGetFriends() {
         JMessageClient client = new JMessageClient(appkey, masterSecret);
         try {
             UserInfoResult[] userInfoArray = client.getFriendsInfo("test_user");

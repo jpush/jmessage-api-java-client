@@ -188,6 +188,11 @@ public class JMessageClient {
         return _userClient.addBlackList(username, users);
     }
 
+    public ResponseWrapper removeBlacklist(String username, String...users)
+            throws APIConnectionException, APIRequestException {
+        return _userClient.removeBlackList(username, users);
+    }
+
     /**
      * Get all groups of a user
      * @param username Necessary
