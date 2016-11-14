@@ -44,7 +44,7 @@ public class ResourceClientTest extends BaseTest {
     @Test
     public void testUploadFile() {
         try {
-            UploadResult result = resourceClient.uploadFile("G:\\MyDownloads\\discourse-icon.png");
+            UploadResult result = resourceClient.uploadFile("/users/caiyg/Desktop/discourse.png");
             if (null != result) {
                 assertTrue(result.isResultOK());
                 LOG.info("media_id: " + result.getMediaId());
