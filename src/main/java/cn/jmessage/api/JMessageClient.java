@@ -326,6 +326,8 @@ public class JMessageClient {
      * file size should not larger than 8M.
      * @param path Necessary, the native path of the file you want to upload
      * @return UploadResult
+     * @throws APIConnectionException connect exception
+     * @throws APIRequestException request exception
      */
     public UploadResult uploadFile(String path)
             throws APIConnectionException, APIRequestException {
@@ -538,7 +540,7 @@ public class JMessageClient {
 
     /**
      * Set cross app no disturb
-     * @link https://docs.jiguang.cn/jmessage/server/rest_api_im/#api_1
+     * https://docs.jiguang.cn/jmessage/server/rest_api_im/#api_1
      * @param username Necessary
      * @param array CrossNoDisturb array
      * @return No content
