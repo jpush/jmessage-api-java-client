@@ -122,7 +122,7 @@ public class CrossAppClient extends BaseClient {
 
     /**
      * Set cross app no disturb
-     * @link https://docs.jiguang.cn/jmessage/server/rest_api_im/#api_1
+     * https://docs.jiguang.cn/jmessage/server/rest_api_im/#api_1
      * @param username Necessary
      * @param array CrossNoDisturb array
      * @return No content
