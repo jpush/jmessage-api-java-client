@@ -32,12 +32,10 @@ public class ResourceClientTest extends BaseTest {
             assertTrue(result.isResultOK());
         } catch (APIConnectionException e) {
             LOG.error("Connection error. Should retry later. ", e);
-            assertTrue(false);
         } catch (APIRequestException e) {
             LOG.error("Error response from JPush server. Should review and fix it. ", e);
             LOG.info("HTTP Status: " + e.getStatus());
             LOG.info("Error Message: " + e.getMessage());
-            assertTrue(false);
         }
     }
 
@@ -51,12 +49,10 @@ public class ResourceClientTest extends BaseTest {
             }
         } catch (APIConnectionException e) {
             LOG.error("Connection error. Should retry later. ", e);
-            assertTrue(false);
         } catch (APIRequestException e) {
             LOG.error("Error response from JPush server. Should review and fix it. ", e);
             LOG.info("HTTP Status: " + e.getStatus());
             LOG.info("Error Message: " + e.getMessage());
-            assertTrue(false);
         }
     }
 }

@@ -46,12 +46,10 @@ public class GroupClientTest extends BaseTest {
 
         } catch (APIConnectionException e) {
             LOG.error("Connection error. Should retry later. ", e);
-            assertTrue(false);
         } catch (APIRequestException e) {
             LOG.error("Error response from JPush server. Should review and fix it. ", e);
             LOG.info("HTTP Status: " + e.getStatus());
             LOG.info("Error Message: " + e.getMessage());
-            assertTrue(false);
         }
     }
 
@@ -75,12 +73,10 @@ public class GroupClientTest extends BaseTest {
             assertTrue(res.isResultOK());
         } catch (APIConnectionException e) {
             LOG.error("Connection error. Should retry later. ", e);
-            assertTrue(false);
         } catch (APIRequestException e) {
             LOG.error("Error response from JPush server. Should review and fix it. ", e);
             LOG.info("HTTP Status: " + e.getStatus());
             LOG.info("Error Message: " + e.getMessage());
-            assertTrue(false);
         }
     }
 
@@ -107,12 +103,10 @@ public class GroupClientTest extends BaseTest {
             assertEquals(Integer.valueOf(2), res.getCount());
         } catch (APIConnectionException e) {
             LOG.error("Connection error. Should retry later. ", e);
-            assertTrue(false);
         } catch (APIRequestException e) {
             LOG.error("Error response from JPush server. Should review and fix it. ", e);
             LOG.info("HTTP Status: " + e.getStatus());
             LOG.info("Error Message: " + e.getMessage());
-            assertTrue(false);
         }
     }
 
@@ -188,12 +182,10 @@ public class GroupClientTest extends BaseTest {
 
         } catch (APIConnectionException e) {
             LOG.error("Connection error. Should retry later. ", e);
-            assertTrue(false);
         } catch (APIRequestException e) {
             LOG.error("Error response from JPush server. Should review and fix it. ", e);
             LOG.info("HTTP Status: " + e.getStatus());
             LOG.info("Error Message: " + e.getMessage());
-            assertTrue(false);
         }
     }
 
@@ -285,12 +277,10 @@ public class GroupClientTest extends BaseTest {
 
         } catch (APIConnectionException e) {
             LOG.error("Connection error. Should retry later. ", e);
-            assertTrue(false);
         } catch (APIRequestException e) {
             LOG.error("Error response from JPush server. Should review and fix it. ", e);
             LOG.info("HTTP Status: " + e.getStatus());
             LOG.info("Error Message: " + e.getMessage());
-            assertTrue(false);
         }
     }
 
@@ -353,12 +343,10 @@ public class GroupClientTest extends BaseTest {
             assertEquals(204, res1.responseCode);
         } catch (APIConnectionException e) {
             LOG.error("Connection error. Should retry later. ", e);
-            assertTrue(false);
         } catch (APIRequestException e) {
             LOG.error("Error response from JPush server. Should review and fix it. ", e);
             LOG.info("HTTP Status: " + e.getStatus());
             LOG.info("Error Message: " + e.getMessage());
-            assertTrue(false);
         }
     }
 

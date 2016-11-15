@@ -73,12 +73,10 @@ public class UserClientTest extends BaseTest {
 
         } catch (APIConnectionException e) {
             LOG.error("Connection error. Should retry later. ", e);
-            assertTrue(false);
         } catch (APIRequestException e) {
             LOG.error("Error response from JPush server. Should review and fix it. ", e);
             LOG.info("HTTP Status: " + e.getStatus());
             LOG.info("Error Message: " + e.getMessage());
-            assertTrue(false);
         }
     }
     
@@ -279,7 +277,6 @@ public class UserClientTest extends BaseTest {
 
         } catch (APIConnectionException e) {
             LOG.error("Connection error. Should retry later. ", e);
-            assertTrue(false);
         } catch (APIRequestException e) {
             LOG.info("HTTP Status: " + e.getStatus());
             LOG.info("Error Message: " + e.getMessage());
@@ -322,12 +319,10 @@ public class UserClientTest extends BaseTest {
 
         } catch (APIConnectionException e) {
             LOG.error("Connection error. Should retry later. ", e);
-            assertTrue(false);
         } catch (APIRequestException e) {
             LOG.error("Error response from JPush server. Should review and fix it. ", e);
             LOG.info("HTTP Status: " + e.getStatus());
             LOG.info("Error Message: " + e.getMessage());
-            assertTrue(false);
         }
     }
 
@@ -355,12 +350,10 @@ public class UserClientTest extends BaseTest {
             assertEquals(JUNIT_USER, res.getUsername());
         } catch (APIConnectionException e) {
             LOG.error("Connection error. Should retry later. ", e);
-            assertTrue(false);
         } catch (APIRequestException e) {
             LOG.error("Error response from JPush server. Should review and fix it. ", e);
             LOG.info("HTTP Status: " + e.getStatus());
             LOG.info("Error Message: " + e.getMessage());
-            assertTrue(false);
         }
     }
 
@@ -439,12 +432,10 @@ public class UserClientTest extends BaseTest {
             assertEquals(204, res.responseCode);
         } catch (APIConnectionException e) {
             LOG.error("Connection error. Should retry later. ", e);
-            assertTrue(false);
         } catch (APIRequestException e) {
             LOG.error("Error response from JPush server. Should review and fix it. ", e);
             LOG.info("HTTP Status: " + e.getStatus());
             LOG.info("Error Message: " + e.getMessage());
-            assertTrue(false);
         }
     }
 
@@ -551,12 +542,10 @@ public class UserClientTest extends BaseTest {
 
         } catch (APIConnectionException e) {
             LOG.error("Connection error. Should retry later. ", e);
-            assertTrue(false);
         } catch (APIRequestException e) {
             LOG.error("Error response from JPush server. Should review and fix it. ", e);
             LOG.info("HTTP Status: " + e.getStatus());
             LOG.info("Error Message: " + e.getMessage());
-            assertTrue(false);
         }
     }
 
@@ -606,20 +595,13 @@ public class UserClientTest extends BaseTest {
     public void testGetUserList() {
         try {
             UserListResult res = userClient.getUserList(0, 5);
-            try {
-                assertEquals(Integer.valueOf(5), res.getCount());
-            } catch (Exception e) {
-                LOG.error("parse response content error.", e);
-                assertTrue(false);
-            }
+            assertTrue(res.isResultOK());
         } catch (APIConnectionException e) {
             LOG.error("Connection error. Should retry later. ", e);
-            assertTrue(false);
         } catch (APIRequestException e) {
             LOG.error("Error response from JPush server. Should review and fix it. ", e);
             LOG.info("HTTP Status: " + e.getStatus());
             LOG.info("Error Message: " + e.getMessage());
-            assertTrue(false);
         }
     }
 
@@ -666,20 +648,13 @@ public class UserClientTest extends BaseTest {
     public void testGetAdminListByAppkey() {
     	try {
 			UserListResult res = userClient.getAdminListByAppkey(0, 1);
-			try {
-                assertEquals(Integer.valueOf(1), res.getCount());
-            } catch (Exception e) {
-                LOG.error("parse response content error.", e);
-                assertTrue(false);
-            }
+            assertTrue(res.isResultOK());
 		} catch (APIConnectionException e) {
 			LOG.error("Connection error. Should retry later. ", e);
-            assertTrue(false);
 		} catch (APIRequestException e) {
 			LOG.error("Error response from JPush server. Should review and fix it. ", e);
             LOG.info("HTTP Status: " + e.getStatus());
             LOG.info("Error Message: " + e.getMessage());
-            assertTrue(false);
 		}
     }
     
@@ -732,12 +707,10 @@ public class UserClientTest extends BaseTest {
             assertTrue(res.isResultOK());
         } catch (APIConnectionException e) {
             LOG.error("Connection error. Should retry later. ", e);
-            assertTrue(false);
         } catch (APIRequestException e) {
             LOG.error("Error response from JPush server. Should review and fix it. ", e);
             LOG.info("HTTP Status: " + e.getStatus());
             LOG.info("Error Message: " + e.getMessage());
-            assertTrue(false);
         }
     }
 
