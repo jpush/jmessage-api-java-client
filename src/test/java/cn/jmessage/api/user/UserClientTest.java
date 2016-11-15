@@ -7,6 +7,7 @@ import static org.junit.Assert.assertTrue;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.jmessage.api.common.model.*;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -22,9 +23,6 @@ import cn.jiguang.common.resp.APIRequestException;
 import cn.jiguang.common.resp.ResponseWrapper;
 import cn.jmessage.api.BaseTest;
 import cn.jmessage.api.SlowTests;
-import cn.jmessage.api.common.model.RegisterInfo;
-import cn.jmessage.api.common.model.RegisterPayload;
-import cn.jmessage.api.common.model.UserPayload;
 
 @Category(SlowTests.class)
 public class UserClientTest extends BaseTest {
@@ -75,12 +73,10 @@ public class UserClientTest extends BaseTest {
 
         } catch (APIConnectionException e) {
             LOG.error("Connection error. Should retry later. ", e);
-            assertTrue(false);
         } catch (APIRequestException e) {
             LOG.error("Error response from JPush server. Should review and fix it. ", e);
             LOG.info("HTTP Status: " + e.getStatus());
             LOG.info("Error Message: " + e.getMessage());
-            assertTrue(false);
         }
     }
     
@@ -281,7 +277,6 @@ public class UserClientTest extends BaseTest {
 
         } catch (APIConnectionException e) {
             LOG.error("Connection error. Should retry later. ", e);
-            assertTrue(false);
         } catch (APIRequestException e) {
             LOG.info("HTTP Status: " + e.getStatus());
             LOG.info("Error Message: " + e.getMessage());
@@ -324,12 +319,10 @@ public class UserClientTest extends BaseTest {
 
         } catch (APIConnectionException e) {
             LOG.error("Connection error. Should retry later. ", e);
-            assertTrue(false);
         } catch (APIRequestException e) {
             LOG.error("Error response from JPush server. Should review and fix it. ", e);
             LOG.info("HTTP Status: " + e.getStatus());
             LOG.info("Error Message: " + e.getMessage());
-            assertTrue(false);
         }
     }
 
@@ -357,12 +350,10 @@ public class UserClientTest extends BaseTest {
             assertEquals(JUNIT_USER, res.getUsername());
         } catch (APIConnectionException e) {
             LOG.error("Connection error. Should retry later. ", e);
-            assertTrue(false);
         } catch (APIRequestException e) {
             LOG.error("Error response from JPush server. Should review and fix it. ", e);
             LOG.info("HTTP Status: " + e.getStatus());
             LOG.info("Error Message: " + e.getMessage());
-            assertTrue(false);
         }
     }
 
@@ -418,6 +409,19 @@ public class UserClientTest extends BaseTest {
         }
     }
 
+    @Test
+    public void testGetUserState() {
+        try {
+            userClient.getUserState(JUNIT_USER);
+        } catch (APIConnectionException e) {
+            LOG.error("Connection error. Should retry later. ", e);
+        } catch (APIRequestException e) {
+            LOG.error("Error response from JPush server. Should review and fix it. ", e);
+            LOG.info("HTTP Status: " + e.getStatus());
+            LOG.info("Error Message: " + e.getMessage());
+        }
+    }
+
     /**
      * Method: updatePassword(String username, String password)
      */
@@ -428,12 +432,10 @@ public class UserClientTest extends BaseTest {
             assertEquals(204, res.responseCode);
         } catch (APIConnectionException e) {
             LOG.error("Connection error. Should retry later. ", e);
-            assertTrue(false);
         } catch (APIRequestException e) {
             LOG.error("Error response from JPush server. Should review and fix it. ", e);
             LOG.info("HTTP Status: " + e.getStatus());
             LOG.info("Error Message: " + e.getMessage());
-            assertTrue(false);
         }
     }
 
@@ -540,12 +542,10 @@ public class UserClientTest extends BaseTest {
 
         } catch (APIConnectionException e) {
             LOG.error("Connection error. Should retry later. ", e);
-            assertTrue(false);
         } catch (APIRequestException e) {
             LOG.error("Error response from JPush server. Should review and fix it. ", e);
             LOG.info("HTTP Status: " + e.getStatus());
             LOG.info("Error Message: " + e.getMessage());
-            assertTrue(false);
         }
     }
 
@@ -595,20 +595,13 @@ public class UserClientTest extends BaseTest {
     public void testGetUserList() {
         try {
             UserListResult res = userClient.getUserList(0, 5);
-            try {
-                assertEquals(Integer.valueOf(5), res.getCount());
-            } catch (Exception e) {
-                LOG.error("parse response content error.", e);
-                assertTrue(false);
-            }
+            assertTrue(res.isResultOK());
         } catch (APIConnectionException e) {
             LOG.error("Connection error. Should retry later. ", e);
-            assertTrue(false);
         } catch (APIRequestException e) {
             LOG.error("Error response from JPush server. Should review and fix it. ", e);
             LOG.info("HTTP Status: " + e.getStatus());
             LOG.info("Error Message: " + e.getMessage());
-            assertTrue(false);
         }
     }
 
@@ -655,20 +648,13 @@ public class UserClientTest extends BaseTest {
     public void testGetAdminListByAppkey() {
     	try {
 			UserListResult res = userClient.getAdminListByAppkey(0, 1);
-			try {
-                assertEquals(Integer.valueOf(1), res.getCount());
-            } catch (Exception e) {
-                LOG.error("parse response content error.", e);
-                assertTrue(false);
-            }
+            assertTrue(res.isResultOK());
 		} catch (APIConnectionException e) {
 			LOG.error("Connection error. Should retry later. ", e);
-            assertTrue(false);
 		} catch (APIRequestException e) {
 			LOG.error("Error response from JPush server. Should review and fix it. ", e);
             LOG.info("HTTP Status: " + e.getStatus());
             LOG.info("Error Message: " + e.getMessage());
-            assertTrue(false);
 		}
     }
     
@@ -721,12 +707,10 @@ public class UserClientTest extends BaseTest {
             assertTrue(res.isResultOK());
         } catch (APIConnectionException e) {
             LOG.error("Connection error. Should retry later. ", e);
-            assertTrue(false);
         } catch (APIRequestException e) {
             LOG.error("Error response from JPush server. Should review and fix it. ", e);
             LOG.info("HTTP Status: " + e.getStatus());
             LOG.info("Error Message: " + e.getMessage());
-            assertTrue(false);
         }
     }
 
@@ -806,6 +790,89 @@ public class UserClientTest extends BaseTest {
     public void testDeleteUser_UsernameInvalid() {
         try {
             userClient.deleteUser("junit \n test");
+        } catch (APIConnectionException e) {
+            LOG.error("Connection error. Should retry later. ", e);
+        } catch (APIRequestException e) {
+            LOG.error("Error response from JPush server. Should review and fix it. ", e);
+            LOG.info("HTTP Status: " + e.getStatus());
+            LOG.info("Error Message: " + e.getMessage());
+        }
+    }
+
+    @Test
+    public void testSetNoDisturb() {
+        try {
+            NoDisturbPayload payload = new NoDisturbPayload.Builder()
+                    .setAddSingleUsers(JUNIT_USER1, JUNIT_USER2)
+                    .setAddGroupIds(JUNIT_GID)
+                    .build();
+            ResponseWrapper response = userClient.setNoDisturb(JUNIT_USER, payload);
+        } catch (APIConnectionException e) {
+            LOG.error("Connection error. Should retry later. ", e);
+        } catch (APIRequestException e) {
+            LOG.error("Error response from JPush server. Should review and fix it. ", e);
+            LOG.info("HTTP Status: " + e.getStatus());
+            LOG.info("Error Message: " + e.getMessage());
+        }
+    }
+
+    @Test
+    public void testAddFriends() {
+        try {
+            ResponseWrapper response = userClient.addFriends(JUNIT_USER, "test_user", "test_user1");
+        } catch (APIConnectionException e) {
+            LOG.error("Connection error. Should retry later. ", e);
+        } catch (APIRequestException e) {
+            LOG.error("Error response from JPush server. Should review and fix it. ", e);
+            LOG.info("HTTP Status: " + e.getStatus());
+            LOG.info("Error Message: " + e.getMessage());
+        }
+    }
+
+    @Test
+    public void testDeleteFriends() {
+        try {
+            ResponseWrapper response = userClient.deleteFriends(JUNIT_USER, "test_user", "test_user1");
+        } catch (APIConnectionException e) {
+            LOG.error("Connection error. Should retry later. ", e);
+        } catch (APIRequestException e) {
+            LOG.error("Error response from JPush server. Should review and fix it. ", e);
+            LOG.info("HTTP Status: " + e.getStatus());
+            LOG.info("Error Message: " + e.getMessage());
+        }
+    }
+
+    @Test
+    public void testUpdateFriendsNote() {
+        try {
+            List<FriendNote> friendNotes = new ArrayList<FriendNote>();
+            FriendNote friendNote1 = new FriendNote.Builder()
+                    .setNoteName("note name 1")
+                    .setOthers("test")
+                    .setUsername(JUNIT_USER1)
+                    .builder();
+            FriendNote friendNote2 = new FriendNote.Builder()
+                    .setNoteName("note name 2")
+                    .setOthers("test")
+                    .setUsername(JUNIT_USER2)
+                    .builder();
+            friendNotes.add(friendNote1);
+            friendNotes.add(friendNote2);
+            FriendNote[] array = new FriendNote[friendNotes.size()];
+            ResponseWrapper result = userClient.updateFriendsNote(JUNIT_USER, friendNotes.toArray(array));
+        } catch (APIConnectionException e) {
+            LOG.error("Connection error. Should retry later. ", e);
+        } catch (APIRequestException e) {
+            LOG.error("Error response from JPush server. Should review and fix it. ", e);
+            LOG.info("HTTP Status: " + e.getStatus());
+            LOG.info("Error Message: " + e.getMessage());
+        }
+    }
+
+    @Test
+    public void testGetFriends() {
+        try {
+            UserInfoResult[] result = userClient.getFriendsInfo(JUNIT_USER);
         } catch (APIConnectionException e) {
             LOG.error("Connection error. Should retry later. ", e);
         } catch (APIRequestException e) {

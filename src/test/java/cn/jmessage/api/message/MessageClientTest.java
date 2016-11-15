@@ -28,6 +28,7 @@ public class MessageClientTest extends BaseTest {
 
     private static Logger LOG = LoggerFactory.getLogger(MessageClientTest.class);
     private MessageClient messageClient = null;
+    private static String cursor;
 
     @Before
     public void before() throws Exception {
@@ -53,7 +54,7 @@ public class MessageClientTest extends BaseTest {
                 .setTargetId(JUNIT_USER)
                 .setFromType("admin")
                 .setFromId("junit_admin")
-                .setMessageType("text")
+                .setMessageType(MessageType.TEXT)
                 .setMessageBody(messageBody)
                 .build();
 
@@ -74,14 +75,118 @@ public class MessageClientTest extends BaseTest {
             System.out.println(res.getMsg_id());
         } catch (APIConnectionException e) {
             LOG.error("Connection error. Should retry later. ", e);
-            assertTrue(false);
         } catch (APIRequestException e) {
             LOG.error("Error response from JPush server. Should review and fix it. ", e);
             LOG.info("HTTP Status: " + e.getStatus());
             LOG.info("Error Message: " + e.getMessage());
-            assertTrue(false);
         }
 
+    }
+
+    @Test
+    public void testSendImageMessage() {
+        MessageBody messageBody = new MessageBody.Builder()
+                .setMediaId("qiniu/image/r/A92D550D57464CDF5ADC0D79FBD46210")
+                .setMediaCrc32(4258069839L)
+                .setWidth(43)
+                .setHeight(44)
+                .setFormat("png")
+                .setFsize(2670)
+                .build();
+
+        JsonObject bodyObj = new JsonObject();
+        bodyObj.addProperty("media_id", "qiniu/image/r/A92D550D57464CDF5ADC0D79FBD46210");
+        bodyObj.addProperty("media_crc32", 4258069839L);
+        bodyObj.addProperty("width", 43);
+        bodyObj.addProperty("height", 44);
+        bodyObj.addProperty("format", "png");
+        bodyObj.addProperty("fsize", 2670);
+
+        assertEquals(bodyObj, messageBody.toJSON());
+
+        MessagePayload payload = MessagePayload.newBuilder()
+                .setVersion(1)
+                .setTargetType("single")
+                .setTargetId(JUNIT_USER)
+                .setFromType("admin")
+                .setFromId("junit_admin")
+                .setMessageType(MessageType.IMAGE)
+                .setMessageBody(messageBody)
+                .build();
+
+        JsonObject messObj = new JsonObject();
+        messObj.addProperty("version", 1);
+        messObj.addProperty("target_type", "single");
+        messObj.addProperty("target_id", JUNIT_USER);
+        messObj.addProperty("from_type", "admin");
+        messObj.addProperty("from_id", "junit_admin");
+        messObj.addProperty("msg_type", "image");
+        messObj.add("msg_body", messageBody.toJSON());
+
+        assertEquals(messObj, payload.toJSON());
+
+        try {
+            SendMessageResult res = messageClient.sendMessage(payload);
+            assertTrue(res.isResultOK());
+            System.out.println(res.getMsg_id());
+        } catch (APIConnectionException e) {
+            LOG.error("Connection error. Should retry later. ", e);
+        } catch (APIRequestException e) {
+            LOG.error("Error response from JPush server. Should review and fix it. ", e);
+            LOG.info("HTTP Status: " + e.getStatus());
+            LOG.info("Error Message: " + e.getMessage());
+        }
+
+    }
+
+    @Test
+    public void testSendCustomMessage() {
+        MessageBody messageBody = new MessageBody.Builder()
+                .setText("Test api send Message")
+                .addExtra("test", "jpush")
+                .build();
+
+        JsonObject bodyObj = new JsonObject();
+        bodyObj.addProperty("text", "Test api send Message");
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("test", "jpush");
+        bodyObj.add("extras", jsonObject);
+
+        assertEquals(bodyObj, messageBody.toJSON());
+
+
+        MessagePayload payload = MessagePayload.newBuilder()
+                .setVersion(1)
+                .setTargetType("single")
+                .setTargetId(JUNIT_USER)
+                .setFromType("admin")
+                .setFromId("junit_admin")
+                .setMessageType(MessageType.CUSTOM)
+                .setMessageBody(messageBody)
+                .build();
+
+        JsonObject messObj = new JsonObject();
+        messObj.addProperty("version", 1);
+        messObj.addProperty("target_type", "single");
+        messObj.addProperty("target_id", JUNIT_USER);
+        messObj.addProperty("from_type", "admin");
+        messObj.addProperty("from_id", "junit_admin");
+        messObj.addProperty("msg_type", "custom");
+        messObj.add("msg_body", messageBody.toJSON());
+
+        assertEquals(messObj, payload.toJSON());
+
+        try {
+            SendMessageResult res = messageClient.sendMessage(payload);
+            assertTrue(res.isResultOK());
+            System.out.println(res.getMsg_id());
+        } catch (APIConnectionException e) {
+            LOG.error("Connection error. Should retry later. ", e);
+        } catch (APIRequestException e) {
+            LOG.error("Error response from JPush server. Should review and fix it. ", e);
+            LOG.info("HTTP Status: " + e.getStatus());
+            LOG.info("Error Message: " + e.getMessage());
+        }
     }
     
     @Test(expected = IllegalArgumentException.class)
@@ -92,7 +197,7 @@ public class MessageClientTest extends BaseTest {
                 .setTargetId(JUNIT_USER)
                 .setFromType("admin")
                 .setFromId("junit_admin")
-                .setMessageType("text")
+                .setMessageType(MessageType.TEXT)
                 .build();
     }
     
@@ -112,7 +217,7 @@ public class MessageClientTest extends BaseTest {
                 .setTargetId(JUNIT_USER)
                 .setFromType("admin")
                 .setFromId("junit_admin")
-                .setMessageType("text")
+                .setMessageType(MessageType.TEXT)
                 .build();
     }
     
@@ -132,7 +237,7 @@ public class MessageClientTest extends BaseTest {
                 .setTargetId(JUNIT_USER)
                 .setFromType("admin")
                 .setFromId("junit_admin")
-                .setMessageType("text")
+                .setMessageType(MessageType.TEXT)
                 .build();
     }
     
@@ -152,7 +257,7 @@ public class MessageClientTest extends BaseTest {
                 .setTargetType("single")
                 .setFromType("admin")
                 .setFromId("junit_admin")
-                .setMessageType("text")
+                .setMessageType(MessageType.TEXT)
                 .setMessageBody(messageBody)
                 .build();
     }
@@ -174,7 +279,7 @@ public class MessageClientTest extends BaseTest {
                 .setTargetId("junit \n test id")
                 .setFromType("admin")
                 .setFromId("junit_admin")
-                .setMessageType("text")
+                .setMessageType(MessageType.TEXT)
                 .setMessageBody(messageBody)
                 .build();
     }
@@ -195,7 +300,7 @@ public class MessageClientTest extends BaseTest {
                 .setTargetType("single")
                 .setTargetId(JUNIT_USER)
                 .setFromId("junit_admin")
-                .setMessageType("text")
+                .setMessageType(MessageType.TEXT)
                 .setMessageBody(messageBody)
                 .build();
     }
@@ -216,7 +321,7 @@ public class MessageClientTest extends BaseTest {
                 .setTargetType("single")
                 .setTargetId(JUNIT_USER)
                 .setFromType("admin")
-                .setMessageType("text")
+                .setMessageType(MessageType.TEXT)
                 .setMessageBody(messageBody)
                 .build();
     }
@@ -238,7 +343,7 @@ public class MessageClientTest extends BaseTest {
                 .setTargetId(JUNIT_USER)
                 .setFromType("admin")
                 .setFromId("junit \n admin")
-                .setMessageType("text")
+                .setMessageType(MessageType.TEXT)
                 .setMessageBody(messageBody)
                 .build();
     }
@@ -262,5 +367,78 @@ public class MessageClientTest extends BaseTest {
                 .setFromId("junit_admin")
                 .setMessageBody(messageBody)
                 .build();
+    }
+
+    @Test
+    public void testGetMessageList() {
+        try {
+            MessageListResult result = messageClient.getMessageList(10, "2016-09-08 10:10:10", "2016-09-15 10:10:10");
+            assertTrue(result.isResultOK());
+            String cursor = result.getCursor();
+            LOG.info("Cursor: " + cursor);
+        } catch (APIConnectionException e) {
+            LOG.error("Connection error. Should retry later. ", e);
+        } catch (APIRequestException e) {
+            LOG.error("Error response from JPush server. Should review and fix it. ", e);
+            LOG.info("HTTP Status: " + e.getStatus());
+            LOG.info("Error Message: " + e.getMessage());
+        }
+    }
+
+    @Test
+    public void testGetMessageListByCursor() {
+        try {
+            MessageListResult result = messageClient.getMessageListByCursor("1B9FFFC066E6D2305BA6A746D4113667");
+            assertTrue(result.isResultOK());
+        } catch (APIConnectionException e) {
+            LOG.error("Connection error. Should retry later. ", e);
+        } catch (APIRequestException e) {
+            LOG.error("Error response from JPush server. Should review and fix it. ", e);
+            LOG.info("HTTP Status: " + e.getStatus());
+            LOG.info("Error Message: " + e.getMessage());
+        }
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testGetMessageList_invalidCount() {
+        try {
+            MessageListResult result = messageClient.getMessageList(1001, null, null);
+        } catch (APIConnectionException e) {
+            LOG.error("Connection error. Should retry later. ", e);
+        } catch (APIRequestException e) {
+            LOG.error("Error response from JPush server. Should review and fix it. ", e);
+            LOG.info("HTTP Status: " + e.getStatus());
+            LOG.info("Error Message: " + e.getMessage());
+        }
+    }
+
+    @Test
+    public void testGetUserMessageList() {
+        try {
+            MessageListResult result = messageClient.getUserMessages("junit_admin", 5, "2016-11-08 10:10:10", "2016-11-15 10:10:10");
+            cursor = result.getCursor();
+            LOG.info("Cursor: " + cursor);
+            assertTrue(result.isResultOK());
+        } catch (APIConnectionException e) {
+            LOG.error("Connection error. Should retry later. ", e);
+        } catch (APIRequestException e) {
+            LOG.error("Error response from JPush server. Should review and fix it. ", e);
+            LOG.info("HTTP Status: " + e.getStatus());
+            LOG.info("Error Message: " + e.getMessage());
+        }
+    }
+
+    @Test
+    public void testGetUserMessagesByCursor() {
+        try {
+            MessageListResult result = messageClient.getUserMessagesByCursor(JUNIT_USER, "14352B2CE97B02D9");
+            assertTrue(result.isResultOK());
+        } catch (APIConnectionException e) {
+            LOG.error("Connection error. Should retry later. ", e);
+        } catch (APIRequestException e) {
+            LOG.error("Error response from JPush server. Should review and fix it. ", e);
+            LOG.info("HTTP Status: " + e.getStatus());
+            LOG.info("Error Message: " + e.getMessage());
+        }
     }
 }

@@ -1,6 +1,6 @@
 package cn.jmessage.api.common;
 
-import cn.jiguang.commom.ClientConfig;
+import cn.jiguang.common.ClientConfig;
 
 public class JMessageConfig {
 
@@ -9,14 +9,22 @@ public class JMessageConfig {
     private static JMessageConfig instance = new JMessageConfig();
 
     public static final String API_HOST_NAME = "im.api.host.name";
+    public static final String API_REPORT_HOST_NAME = "im.api.report.host.name";
 
     public static final String ADMIN_PATH = "im.admin.path";
 
     public static final String USER_PATH = "im.user.path";
+    public static final String V2_USER_PATH = "im.v2.user.path";
 
     public static final String GROUP_PATH = "im.group.path";
 
     public static final String MESSAGE_PATH = "im.message.path";
+    public static final String V2_MESSAGE_PATH = "im.v2.message.path";
+
+    public static final String RESOURCE_PATH = "im.resource.path";
+
+    public static final String CROSS_USER_PATH = "im.cross.user.path";
+    public static final String CROSS_GROUP_PATH = "im.cross.group.path";
 
     public static final String MAX_RETRY_TIMES = ClientConfig.MAX_RETRY_TIMES;
 
@@ -25,10 +33,16 @@ public class JMessageConfig {
 
     private JMessageConfig() {
         clientConfig.put(API_HOST_NAME, "https://api.im.jpush.cn");
+        clientConfig.put(API_REPORT_HOST_NAME, "https://report.im.jpush.cn");
         clientConfig.put(ADMIN_PATH, "/v1/admins");
         clientConfig.put(USER_PATH, "/v1/users");
+        clientConfig.put(V2_USER_PATH, "/v2/users");
         clientConfig.put(GROUP_PATH, "/v1/groups");
         clientConfig.put(MESSAGE_PATH, "/v1/messages");
+        clientConfig.put(V2_MESSAGE_PATH, "/v2/messages");
+        clientConfig.put(RESOURCE_PATH, "/v1/resource");
+        clientConfig.put(CROSS_USER_PATH, "/v1/cross/users");
+        clientConfig.put(CROSS_GROUP_PATH, "/v1/cross/groups");
         clientConfig.put(MAX_RETRY_TIMES, 3);
         clientConfig.put(SEND_VERSION, 1);
     }

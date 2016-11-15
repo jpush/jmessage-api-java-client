@@ -70,8 +70,6 @@ public class GroupExample {
     /**
      * Get group list by appkey, this method will invoke getGroupListByAppkey() in GroupClient, whose parameters
      * are list as follow:
-     * @param start The start index of the list
-     * @param count The number that you want to get from the list
      */
     public static void testGetGroupListByAppkey() {
         JMessageClient client = new JMessageClient(appkey, masterSecret);
@@ -95,7 +93,6 @@ public class GroupExample {
             String[] addList = {"baobao148"};
             String[] removeList = {"baobao148"};
             client.addOrRemoveMembers(10003767, addList, null );
-            client.addOrRemoveMembers(10003767, null, removeList);
         } catch (APIConnectionException e) {
             LOG.error("Connection error. Should retry later. ", e);
         } catch (APIRequestException e) {

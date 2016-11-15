@@ -8,23 +8,35 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 
-import cn.jiguang.commom.utils.Preconditions;
-import cn.jiguang.commom.utils.StringUtils;
+import cn.jiguang.common.utils.Preconditions;
+import cn.jiguang.common.utils.StringUtils;
 
 /**
- * MessageBody
+ * MessageBodyResult
  * Created by tangyikai on 15/9/8.
  */
 public class MessageBody implements IModel {
 
     private static final String MSG_BODY_TEXT = "text";
     private static final String MSG_BODY_EXTRAS = "extras";
+    private static final String MEDIA_ID = "media_id";
+    private static final String MEDIA_CRC32 = "media_crc32";
+    private static final String WIDTH = "width";
+    private static final String HEIGHT = "height";
+    private static final String FORMAT = "format";
+    private static final String FSIZE = "fsize";
 
     private static Gson gson = new Gson();
 
     private Map<String, String> extras;
     private Map<String, Number> numberExtras;
     private Map<String, Boolean> booleanExtras;
+    private String media_id;
+    private Long media_crc32;
+    private Integer width;
+    private Integer height;
+    private String format;
+    private Integer fsize;
 
     private String text;
 
@@ -36,6 +48,15 @@ public class MessageBody implements IModel {
         this.extras = extra;
         this.numberExtras = numberExtra;
         this.booleanExtras = booleanExtra;
+    }
+
+    private MessageBody(String mediaId, Long crc32, Integer width, Integer height, String format, Integer fsize) {
+        this.media_id = mediaId;
+        this.media_crc32 = crc32;
+        this.width = width;
+        this.height = height;
+        this.format = format;
+        this.fsize = fsize;
     }
 
     public static Builder newBuilder() {
@@ -80,6 +101,30 @@ public class MessageBody implements IModel {
             json.add(MSG_BODY_EXTRAS, extrasObject);
         }
 
+        if (null != media_id) {
+            json.addProperty(MEDIA_ID, media_id);
+        }
+
+        if (null != media_crc32) {
+            json.addProperty(MEDIA_CRC32, media_crc32);
+        }
+
+        if (null != width) {
+            json.addProperty(WIDTH, width);
+        }
+
+        if (null != height) {
+            json.addProperty(HEIGHT, height);
+        }
+
+        if (null != format) {
+            json.addProperty(FORMAT, format);
+        }
+
+        if (null != fsize) {
+            json.addProperty(FSIZE, fsize);
+        }
+
         return json;
     }
 
@@ -93,6 +138,12 @@ public class MessageBody implements IModel {
         private Map<String, String> extrasBuilder;
         private Map<String, Number> numberExtrasBuilder;
         private Map<String, Boolean> booleanExtrasBuilder;
+        private String media_id;
+        private Long media_crc32;
+        private Integer width;
+        private Integer height;
+        private String format;
+        private Integer fsize;
 
         public Builder setText(String text) {
             this.text = text;
@@ -137,10 +188,41 @@ public class MessageBody implements IModel {
             return this;
         }
 
+        public Builder setMediaId(String mediaId) {
+            this.media_id = mediaId;
+            return this;
+        }
+
+        public Builder setMediaCrc32(Long crc32) {
+            this.media_crc32 = crc32;
+            return this;
+        }
+
+        public Builder setWidth(Integer width) {
+            this.width = width;
+            return this;
+        }
+
+        public Builder setHeight(Integer height) {
+            this.height = height;
+            return this;
+        }
+
+        public Builder setFormat(String format) {
+            this.format = format;
+            return this;
+        }
+
+        public Builder setFsize(Integer fsize) {
+            this.fsize = fsize;
+            return this;
+        }
+
         public MessageBody build() {
-            Preconditions.checkArgument(StringUtils.isNotEmpty(text), "The text should be set");
-            return new MessageBody(text,
-                    extrasBuilder, numberExtrasBuilder, booleanExtrasBuilder);
+            if (null != media_id) {
+                return new MessageBody(media_id, media_crc32, width, height, format, fsize);
+            }
+            return new MessageBody(text, extrasBuilder, numberExtrasBuilder, booleanExtrasBuilder);
         }
     }
 }

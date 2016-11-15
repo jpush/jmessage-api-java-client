@@ -1,24 +1,21 @@
 package cn.jmessage.api.common.model;
 
+import cn.jiguang.common.utils.Preconditions;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 
-import cn.jiguang.common.utils.Preconditions;
-
-public class RegisterPayload implements IModel {
-
-
+public class CrossGroupPayload implements IModel {
     private static Gson gson = new Gson();
 
     private JsonArray array ;
 
-    private RegisterPayload(JsonArray array) {
+    private CrossGroupPayload(JsonArray array) {
         this.array = array;
     }
 
     public static Builder newBuilder() {
-        return new Builder();
+        return new CrossGroupPayload.Builder();
     }
 
     @Override
@@ -30,25 +27,26 @@ public class RegisterPayload implements IModel {
 
         private JsonArray array = new JsonArray();
 
-        public Builder addUsers(RegisterInfo... users) {
+        public Builder setCrossGroups(CrossGroup... groups) {
 
-            if( null == users ) {
+            if( null == groups ) {
                 return this;
             }
 
-            for ( RegisterInfo user : users) {
+            for ( CrossGroup group : groups) {
 
-                array.add(user.toJSON());
+                array.add(group.toJSON());
             }
 
             return this;
         }
 
-        public RegisterPayload build() {
+        public CrossGroupPayload build() {
 
-            Preconditions.checkArgument(0 != array.size(), "The user list must not be empty.");
+            Preconditions.checkArgument(0 != array.size(), "The array must not be empty.");
+            Preconditions.checkArgument(array.size() <= 500, "The array size must not over 500");
 
-            return new RegisterPayload(array);
+            return new CrossGroupPayload(array);
         }
     }
 

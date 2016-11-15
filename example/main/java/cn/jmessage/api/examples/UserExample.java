@@ -3,6 +3,10 @@ package cn.jmessage.api.examples;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.jiguang.common.resp.ResponseWrapper;
+import cn.jmessage.api.common.model.FriendNote;
+import cn.jmessage.api.common.model.NoDisturbPayload;
+import cn.jmessage.api.user.UserStateResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,10 +23,13 @@ public class UserExample {
 
     private static final String appkey = "242780bfdd7315dc1989fe2b";
     private static final String masterSecret = "2f5ced2bef64167950e63d13";
+    private static final long test_gid = 10004809;
     
     public static void main(String[] args) {
-    	
+//        testRegisterUsers();
     }
+
+
 
     public static void testRegisterUsers() {
         JMessageClient client = new JMessageClient(appkey, masterSecret);
@@ -63,6 +70,20 @@ public class UserExample {
         try {
             UserInfoResult res = client.getUserInfo("test_user");
             LOG.info(res.getUsername());
+        } catch (APIConnectionException e) {
+            LOG.error("Connection error. Should retry later. ", e);
+        } catch (APIRequestException e) {
+            LOG.error("Error response from JPush server. Should review and fix it. ", e);
+            LOG.info("HTTP Status: " + e.getStatus());
+            LOG.info("Error Message: " + e.getMessage());
+        }
+    }
+
+    public static void testGetUserState() {
+        JMessageClient client = new JMessageClient(appkey, masterSecret);
+
+        try {
+            UserStateResult result = client.getUserState("test_user");
         } catch (APIConnectionException e) {
             LOG.error("Connection error. Should retry later. ", e);
         } catch (APIRequestException e) {
@@ -131,13 +152,8 @@ public class UserExample {
     
     /**
      * Get admins by appkey
-     * @param start The start index of the list
-     * @param count The number that how many you want to get from list
-     * @return
-     * @throws APIConnectionException
-     * @throws APIRequestException
      */
-    public void testGetAdminListByAppkey() {
+    public static void testGetAdminListByAppkey() {
     	JMessageClient client = new JMessageClient(appkey, masterSecret);
     	try {
 			UserListResult res = client.getAdminListByAppkey(0, 1);
@@ -149,6 +165,128 @@ public class UserExample {
             LOG.info("HTTP Status: " + e.getStatus());
             LOG.info("Error Message: " + e.getMessage());
 		}
+    }
+
+    public static void testGetBlackList() {
+        JMessageClient client = new JMessageClient(appkey, masterSecret);
+        try {
+            UserInfoResult[] result = client.getBlackList("username");
+        } catch (APIConnectionException e) {
+            LOG.error("Connection error. Should retry later. ", e);
+        } catch (APIRequestException e) {
+            LOG.error("Error response from JPush server. Should review and fix it. ", e);
+            LOG.info("HTTP Status: " + e.getStatus());
+            LOG.info("Error Message: " + e.getMessage());
+        }
+    }
+
+    public static void testRemoveBlacklist() {
+        JMessageClient client = new JMessageClient(appkey, masterSecret);
+        try {
+            ResponseWrapper response = client.removeBlacklist("test_user", "test_user1", "test_user2");
+        } catch (APIConnectionException e) {
+            LOG.error("Connection error. Should retry later. ", e);
+        } catch (APIRequestException e) {
+            LOG.error("Error response from JPush server. Should review and fix it. ", e);
+            LOG.info("HTTP Status: " + e.getStatus());
+            LOG.info("Error Message: " + e.getMessage());
+        }
+    }
+
+    public static void testAddBlackList() {
+        JMessageClient client = new JMessageClient(appkey, masterSecret);
+        try {
+            ResponseWrapper response = client.addBlackList("username", "user1", "user2");
+        } catch (APIConnectionException e) {
+            LOG.error("Connection error. Should retry later. ", e);
+        } catch (APIRequestException e) {
+            LOG.error("Error response from JPush server. Should review and fix it. ", e);
+            LOG.info("HTTP Status: " + e.getStatus());
+            LOG.info("Error Message: " + e.getMessage());
+        }
+    }
+
+    public static void testSetNoDisturb() {
+        JMessageClient client = new JMessageClient(appkey, masterSecret);
+        try {
+            NoDisturbPayload payload = new NoDisturbPayload.Builder()
+                    .setAddSingleUsers("test_user1", "test_user2")
+                    .setAddGroupIds(test_gid)
+                    .build();
+            ResponseWrapper response = client.setNoDisturb("test_user", payload);
+        } catch (APIConnectionException e) {
+            LOG.error("Connection error. Should retry later. ", e);
+        } catch (APIRequestException e) {
+            LOG.error("Error response from JPush server. Should review and fix it. ", e);
+            LOG.info("HTTP Status: " + e.getStatus());
+            LOG.info("Error Message: " + e.getMessage());
+        }
+    }
+
+    public static void testAddFriends() {
+        JMessageClient client = new JMessageClient(appkey, masterSecret);
+        try {
+            ResponseWrapper response = client.addFriends("test_user", "test_user1", "test_user2");
+        } catch (APIConnectionException e) {
+            LOG.error("Connection error. Should retry later. ", e);
+        } catch (APIRequestException e) {
+            LOG.error("Error response from JPush server. Should review and fix it. ", e);
+            LOG.info("HTTP Status: " + e.getStatus());
+            LOG.info("Error Message: " + e.getMessage());
+        }
+    }
+
+    public static void testDeleteFriends() {
+        JMessageClient client = new JMessageClient(appkey, masterSecret);
+        try {
+            ResponseWrapper response = client.deleteFriends("test_user", "test_user1", "test_user2");
+        } catch (APIConnectionException e) {
+            LOG.error("Connection error. Should retry later. ", e);
+        } catch (APIRequestException e) {
+            LOG.error("Error response from JPush server. Should review and fix it. ", e);
+            LOG.info("HTTP Status: " + e.getStatus());
+            LOG.info("Error Message: " + e.getMessage());
+        }
+    }
+
+    public static void testUpdateFriendsNote() {
+        JMessageClient client = new JMessageClient(appkey, masterSecret);
+        try {
+            List<FriendNote> friendNotes = new ArrayList<FriendNote>();
+            FriendNote friendNote1 = new FriendNote.Builder()
+                    .setNoteName("note name 1")
+                    .setOthers("test")
+                    .setUsername("test_user1")
+                    .builder();
+            FriendNote friendNote2 = new FriendNote.Builder()
+                    .setNoteName("note name 2")
+                    .setOthers("test")
+                    .setUsername("test_user2")
+                    .builder();
+            friendNotes.add(friendNote1);
+            friendNotes.add(friendNote2);
+            FriendNote[] array = new FriendNote[friendNotes.size()];
+            ResponseWrapper result = client.updateFriendsNote("test_user", friendNotes.toArray(array));
+        } catch (APIConnectionException e) {
+            LOG.error("Connection error. Should retry later. ", e);
+        } catch (APIRequestException e) {
+            LOG.error("Error response from JPush server. Should review and fix it. ", e);
+            LOG.info("HTTP Status: " + e.getStatus());
+            LOG.info("Error Message: " + e.getMessage());
+        }
+    }
+
+    public static void testGetFriends() {
+        JMessageClient client = new JMessageClient(appkey, masterSecret);
+        try {
+            UserInfoResult[] userInfoArray = client.getFriendsInfo("test_user");
+        } catch (APIConnectionException e) {
+            LOG.error("Connection error. Should retry later. ", e);
+        } catch (APIRequestException e) {
+            LOG.error("Error response from JPush server. Should review and fix it. ", e);
+            LOG.info("HTTP Status: " + e.getStatus());
+            LOG.info("Error Message: " + e.getMessage());
+        }
     }
 
 }

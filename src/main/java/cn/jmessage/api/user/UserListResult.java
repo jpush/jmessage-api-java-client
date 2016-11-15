@@ -1,7 +1,6 @@
 package cn.jmessage.api.user;
 
-import java.util.List;
-
+import cn.jiguang.common.resp.ResponseWrapper;
 import com.google.gson.annotations.Expose;
 
 import cn.jiguang.common.resp.BaseResult;
@@ -11,7 +10,16 @@ public class UserListResult extends BaseResult {
     @Expose Integer total;
     @Expose Integer start;
     @Expose Integer count;
-    @Expose List<UserInfoResult> users;
+    @Expose UserInfoResult[] users;
+
+    public static UserListResult fromResponse(ResponseWrapper responseWrapper) {
+        UserListResult result = new UserListResult();
+        if (responseWrapper.isServerResponse()) {
+            result.users = _gson.fromJson(responseWrapper.responseContent, UserInfoResult[].class);
+        }
+        result.setResponseWrapper(responseWrapper);
+        return result;
+    }
 
     public Integer getTotal() {
         return total;
@@ -25,7 +33,7 @@ public class UserListResult extends BaseResult {
         return count;
     }
 
-    public List<UserInfoResult> getUsers() {
+    public UserInfoResult[] getUsers() {
         return users;
     }
 }
