@@ -6,6 +6,7 @@ import cn.jiguang.common.resp.ResponseWrapper;
 import cn.jmessage.api.BaseTest;
 import cn.jmessage.api.CrossApp.CrossAppClient;
 import cn.jmessage.api.common.model.CrossBlacklist;
+import cn.jmessage.api.common.model.CrossFriendPayload;
 import cn.jmessage.api.common.model.CrossGroup;
 import cn.jmessage.api.common.model.CrossNoDisturb;
 import cn.jmessage.api.group.MemberListResult;
@@ -135,6 +136,42 @@ public class CrossAppClientTest extends BaseTest {
             list.add(crossNoDisturb);
             CrossNoDisturb[] array = new CrossNoDisturb[list.size()];
             ResponseWrapper response = client.setCrossNoDisturb(JUNIT_USER, list.toArray(array));
+        } catch (APIConnectionException e) {
+            LOG.error("Connection error. Should retry later. ", e);
+        } catch (APIRequestException e) {
+            LOG.error("Error response from JPush server. Should review and fix it. ", e);
+            LOG.info("HTTP Status: " + e.getStatus());
+            LOG.info("Error Message: " + e.getMessage());
+        }
+    }
+
+    @Test
+    public void testAddCrossUsers() {
+        try {
+            CrossFriendPayload payload = new CrossFriendPayload.Builder()
+                    .setAppKey(CROSS_APP_KEY)
+                    .setUsers("0001", "0002")
+                    .build();
+            ResponseWrapper response = client.addCrossFriends(JUNIT_USER, payload);
+            LOG.info("Http status: " + response.responseCode);
+        } catch (APIConnectionException e) {
+            LOG.error("Connection error. Should retry later. ", e);
+        } catch (APIRequestException e) {
+            LOG.error("Error response from JPush server. Should review and fix it. ", e);
+            LOG.info("HTTP Status: " + e.getStatus());
+            LOG.info("Error Message: " + e.getMessage());
+        }
+    }
+
+    @Test
+    public void testDeleteCrossFriends() {
+        try {
+            CrossFriendPayload payload = new CrossFriendPayload.Builder()
+                    .setAppKey(CROSS_APP_KEY)
+                    .setUsers("0001", "0002")
+                    .build();
+            ResponseWrapper response = client.deleteCrossFriends(JUNIT_USER, payload);
+            LOG.info("Http status: " + response.responseCode);
         } catch (APIConnectionException e) {
             LOG.error("Connection error. Should retry later. ", e);
         } catch (APIRequestException e) {
