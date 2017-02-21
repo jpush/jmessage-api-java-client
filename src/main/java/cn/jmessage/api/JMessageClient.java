@@ -552,4 +552,30 @@ public class JMessageClient {
         return _crossAppClient.setCrossNoDisturb(username, array);
     }
 
+    /**
+     * Add users from cross app.
+     * @param username Necessary
+     * @param payload CrossFriendPayload
+     * @return No content
+     * @throws APIConnectionException connect exception
+     * @throws APIRequestException request exception
+     */
+    public ResponseWrapper addCrossFriends(String username, CrossFriendPayload payload)
+            throws APIConnectionException, APIRequestException {
+        return _crossAppClient.addCrossFriends(username, payload);
+    }
+
+    /**
+     * Delete cross app friends
+     * @param username Necessary
+     * @param payload CrossFriendPayload
+     * @return No content
+     * @throws APIConnectionException connect exception
+     * @throws APIRequestException request exception
+     */
+    public ResponseWrapper deleteCrossFriends(String username, CrossFriendPayload payload)
+            throws APIConnectionException, APIRequestException {
+        return _crossAppClient.deleteCrossFriends(username, payload);
+    }
+
 }

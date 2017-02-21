@@ -415,7 +415,7 @@ public class MessageClientTest extends BaseTest {
     @Test
     public void testGetUserMessageList() {
         try {
-            MessageListResult result = messageClient.getUserMessages("junit_admin", 5, "2016-11-08 10:10:10", "2016-11-15 10:10:10");
+            MessageListResult result = messageClient.getUserMessages(JUNIT_USER, 5, "2016-11-08 10:10:10", "2016-11-15 10:10:10");
             cursor = result.getCursor();
             LOG.info("Cursor: " + cursor);
             assertTrue(result.isResultOK());

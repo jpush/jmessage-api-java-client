@@ -5,6 +5,7 @@ import cn.jiguang.common.resp.APIRequestException;
 import cn.jiguang.common.resp.ResponseWrapper;
 import cn.jmessage.api.JMessageClient;
 import cn.jmessage.api.common.model.CrossBlacklist;
+import cn.jmessage.api.common.model.CrossFriendPayload;
 import cn.jmessage.api.common.model.CrossGroup;
 import cn.jmessage.api.common.model.CrossNoDisturb;
 import cn.jmessage.api.group.MemberListResult;
@@ -116,6 +117,24 @@ public class CrossAppExample {
             CrossNoDisturb[] array = new CrossNoDisturb[list.size()];
             ResponseWrapper response = client.setCrossNoDisturb("test_user", list.toArray(array));
         } catch (APIConnectionException e) {
+            LOG.error("Connection error. Should retry later. ", e);
+        } catch (APIRequestException e) {
+            LOG.error("Error response from JPush server. Should review and fix it. ", e);
+            LOG.info("HTTP Status: " + e.getStatus());
+            LOG.info("Error Message: " + e.getMessage());
+        }
+    }
+
+    public static void testAddCrossUsers() {
+        JMessageClient client = new JMessageClient(appkey, masterSecret);
+        try {
+            CrossFriendPayload payload = new CrossFriendPayload.Builder()
+                    .setAppKey(appkey)
+                    .setUsers("test_user1", "test_user2")
+                    .build();
+            ResponseWrapper response = client.addCrossFriends("test_user", payload);
+        } catch (APIConnectionException e) {
+            e.printStackTrace();
             LOG.error("Connection error. Should retry later. ", e);
         } catch (APIRequestException e) {
             LOG.error("Error response from JPush server. Should review and fix it. ", e);
