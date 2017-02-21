@@ -27,12 +27,12 @@
 <dependency>
     <groupId>cn.jpush.api</groupId>
     <artifactId>jmessage-client</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
 </dependency>
 <dependency>
     <groupId>cn.jpush.api</groupId>
     <artifactId>jiguang-common</artifactId>
-    <version>0.1.6</version>
+    <version>1.0.3</version>
     <exclusions>
     	<exclusion>
 	    <groupId>org.slf4j</groupId>
