@@ -33,16 +33,6 @@
     <groupId>cn.jpush.api</groupId>
     <artifactId>jiguang-common</artifactId>
     <version>1.0.3</version>
-    <exclusions>
-    	<exclusion>
-	    <groupId>org.slf4j</groupId>
-	    <artifactId>slf4j-jdk14</artifactId>
-	</exclusion>
-	<exclusion>
-	    <groupId>org.slf4j</groupId>
-	    <artifactId>slf4j-nop</artifactId>
-	</exclusion>
-    </exclusions>
 </dependency>
 <dependency>
 	<groupId>com.google.code.gson</groupId>
