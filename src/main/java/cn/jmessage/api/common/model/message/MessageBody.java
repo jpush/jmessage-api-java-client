@@ -160,7 +160,7 @@ public class MessageBody implements IModel {
         private Integer height;
         private String format;
         private Integer fsize;
-        private Integer duration;
+        private Integer duration = -1;
         private String hash;
 
         public Builder setText(String text) {
