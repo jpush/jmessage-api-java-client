@@ -2,4 +2,4 @@
  * Cross App API features.
  *
  */
-package cn.jmessage.api.CrossApp;
+package cn.jmessage.api.crossapp;

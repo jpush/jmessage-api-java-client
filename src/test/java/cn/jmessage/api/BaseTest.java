@@ -5,9 +5,9 @@ import com.google.gson.JsonParser;
 
 public class BaseTest {
 
-    protected static final String APP_KEY ="242780bfdd7315dc1989fe2b";
+    protected static final String APP_KEY ="c12bb0902ad1c069ffb67667";
     protected static final String CROSS_APP_KEY = "4f7aef34fb361292c566a1cd";
-    protected static final String MASTER_SECRET = "2f5ced2bef64167950e63d13";
+    protected static final String MASTER_SECRET = "bcf206e4dde5d40875c16a51";
 
     protected static final String MORE_THAN_64 = "a0123456789012345678901234567890123456789012345678901234567890123";
 
@@ -20,6 +20,8 @@ public class BaseTest {
             "01234567890123456789012345678901234567890123456789" ;
 
     protected static JsonParser parser = new JsonParser();
+
+    protected static final String JUNIT_ADMIN = "junit_admin";
 
     protected static final String JUNIT_USER = "junit_no_delete";
 

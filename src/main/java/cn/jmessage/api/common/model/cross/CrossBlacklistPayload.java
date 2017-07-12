@@ -1,22 +1,22 @@
-package cn.jmessage.api.common.model;
+package cn.jmessage.api.common.model.cross;
 
 import cn.jiguang.common.utils.Preconditions;
+import cn.jmessage.api.common.model.IModel;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 
-public class CrossNoDisturbPayload implements IModel {
-
+public class CrossBlacklistPayload implements IModel {
     private static Gson gson = new Gson();
 
     private JsonArray array ;
 
-    private CrossNoDisturbPayload(JsonArray array) {
+    private CrossBlacklistPayload(JsonArray array) {
         this.array = array;
     }
 
     public static Builder newBuilder() {
-        return new CrossNoDisturbPayload.Builder();
+        return new CrossBlacklistPayload.Builder();
     }
 
     @Override
@@ -28,26 +28,26 @@ public class CrossNoDisturbPayload implements IModel {
 
         private JsonArray array = new JsonArray();
 
-        public Builder setCrossNoDistrub(CrossNoDisturb... lists) {
+        public Builder setCrossBlacklists(CrossBlacklist... blacklists) {
 
-            if( null == lists ) {
+            if( null == blacklists ) {
                 return this;
             }
 
-            for ( CrossNoDisturb entity : lists) {
+            for ( CrossBlacklist blacklist : blacklists) {
 
-                array.add(entity.toJSON());
+                array.add(blacklist.toJSON());
             }
 
             return this;
         }
 
-        public CrossNoDisturbPayload build() {
+        public CrossBlacklistPayload build() {
 
             Preconditions.checkArgument(0 != array.size(), "The array must not be empty.");
             Preconditions.checkArgument(array.size() <= 500, "The array size must not over 500");
 
-            return new CrossNoDisturbPayload(array);
+            return new CrossBlacklistPayload(array);
         }
     }
 

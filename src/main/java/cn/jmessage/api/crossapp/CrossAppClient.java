@@ -1,4 +1,4 @@
-package cn.jmessage.api.CrossApp;
+package cn.jmessage.api.crossapp;
 
 import cn.jiguang.common.utils.Preconditions;
 import cn.jiguang.common.connection.HttpProxy;
@@ -7,7 +7,7 @@ import cn.jiguang.common.resp.APIRequestException;
 import cn.jiguang.common.resp.ResponseWrapper;
 import cn.jmessage.api.common.BaseClient;
 import cn.jmessage.api.common.JMessageConfig;
-import cn.jmessage.api.common.model.*;
+import cn.jmessage.api.common.model.cross.*;
 import cn.jmessage.api.group.MemberListResult;
 import cn.jmessage.api.user.UserInfoResult;
 import cn.jmessage.api.utils.StringUtils;

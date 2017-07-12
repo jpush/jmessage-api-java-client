@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.jiguang.common.resp.ResponseWrapper;
-import cn.jmessage.api.common.model.FriendNote;
+import cn.jmessage.api.common.model.friend.FriendNote;
 import cn.jmessage.api.common.model.NoDisturbPayload;
 import cn.jmessage.api.user.UserStateResult;
 import org.slf4j.Logger;

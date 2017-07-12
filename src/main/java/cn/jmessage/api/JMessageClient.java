@@ -4,9 +4,16 @@ import cn.jiguang.common.connection.HttpProxy;
 import cn.jiguang.common.resp.APIConnectionException;
 import cn.jiguang.common.resp.APIRequestException;
 import cn.jiguang.common.resp.ResponseWrapper;
-import cn.jmessage.api.CrossApp.CrossAppClient;
+import cn.jmessage.api.crossapp.CrossAppClient;
 import cn.jmessage.api.common.JMessageConfig;
 import cn.jmessage.api.common.model.*;
+import cn.jmessage.api.common.model.cross.CrossBlacklist;
+import cn.jmessage.api.common.model.cross.CrossFriendPayload;
+import cn.jmessage.api.common.model.cross.CrossGroup;
+import cn.jmessage.api.common.model.cross.CrossNoDisturb;
+import cn.jmessage.api.common.model.friend.FriendNote;
+import cn.jmessage.api.common.model.message.MessageBody;
+import cn.jmessage.api.common.model.message.MessagePayload;
 import cn.jmessage.api.group.CreateGroupResult;
 import cn.jmessage.api.group.GroupClient;
 import cn.jmessage.api.group.GroupInfoResult;
@@ -19,7 +26,12 @@ import cn.jmessage.api.message.SendMessageResult;
 import cn.jmessage.api.resource.DownloadResult;
 import cn.jmessage.api.resource.ResourceClient;
 import cn.jmessage.api.resource.UploadResult;
+import cn.jmessage.api.sensitiveword.SensitiveWordClient;
+import cn.jmessage.api.sensitiveword.SensitiveWordListResult;
+import cn.jmessage.api.sensitiveword.SensitiveWordStatusResult;
 import cn.jmessage.api.user.*;
+
+import java.util.Set;
 
 public class JMessageClient {
 
@@ -28,6 +40,7 @@ public class JMessageClient {
     private final MessageClient _messageClient;
     private final ResourceClient _resourceClient;
     private final CrossAppClient _crossAppClient;
+    private final SensitiveWordClient _sensitiveWordClient;
     private final int _sendVersion;
 
     /**
@@ -90,8 +103,11 @@ public class JMessageClient {
         _messageClient = new MessageClient(appkey, masterSecret, proxy, config);
         _crossAppClient = new CrossAppClient(appkey, masterSecret, proxy, config);
         _resourceClient = new ResourceClient(appkey, masterSecret, proxy, config);
+        _sensitiveWordClient = new SensitiveWordClient(appkey, masterSecret, proxy, config);
         _sendVersion = (Integer) config.get(JMessageConfig.SEND_VERSION);
     }
+
+    // ------------------------------- User API
 
     public String registerUsers(RegisterInfo[] users)
             throws APIConnectionException, APIRequestException {
@@ -215,6 +231,72 @@ public class JMessageClient {
         _userClient.deleteUser(username);
     }
 
+    /**
+     * Set don't disturb service while receiving messages.
+     * You can Add or remove single conversation or group conversation
+     * @param username Necessary
+     * @param payload NoDisturbPayload
+     * @return No content
+     * @throws APIConnectionException connect exception
+     * @throws APIRequestException request exception
+     */
+    public ResponseWrapper setNoDisturb(String username, NoDisturbPayload payload)
+            throws APIConnectionException, APIRequestException {
+        return _userClient.setNoDisturb(username, payload);
+    }
+
+    /**
+     * Add friends to username
+     * @param username Necessary
+     * @param users username to be add
+     * @return No content
+     * @throws APIConnectionException connect exception
+     * @throws APIRequestException request exception
+     */
+    public ResponseWrapper addFriends(String username, String...users)
+            throws APIConnectionException, APIRequestException {
+        return _userClient.addFriends(username, users);
+    }
+
+    /**
+     * Delete friends
+     * @param username Friends you want to delete to
+     * @param users username to be delete
+     * @return No content
+     * @throws APIConnectionException connect exception
+     * @throws APIRequestException request exception
+     */
+    public ResponseWrapper deleteFriends(String username, String...users)
+            throws APIConnectionException, APIRequestException {
+        return _userClient.deleteFriends(username, users);
+    }
+
+    /**
+     * Update friends' note information. The size is limit to 500.
+     * @param username Necessary
+     * @param array FriendNote array
+     * @return No content
+     * @throws APIConnectionException connect exception
+     * @throws APIRequestException request exception
+     */
+    public ResponseWrapper updateFriendsNote(String username, FriendNote[] array)
+            throws APIConnectionException, APIRequestException {
+        return _userClient.updateFriendsNote(username, array);
+    }
+
+    /**
+     * Get all friends'info from a gived username
+     * @param username Necessary
+     * @return UserList
+     * @throws APIConnectionException connect exception
+     * @throws APIRequestException request exception
+     */
+    public UserInfoResult[] getFriendsInfo(String username)
+            throws APIConnectionException, APIRequestException {
+        return _userClient.getFriendsInfo(username);
+    }
+
+    // ------------------------------- Group API
 
     public GroupInfoResult getGroupInfo(long gid)
             throws APIConnectionException, APIRequestException {
@@ -276,6 +358,8 @@ public class JMessageClient {
         _groupClient.updateGroupInfo(gid, groupName, groupDesc);
     }
 
+    // ------------------------------- Message API
+
     /**
      * Send message
      * @param version Current version is 1
@@ -307,31 +391,6 @@ public class JMessageClient {
     public SendMessageResult sendMessage(MessagePayload payload)
             throws APIConnectionException, APIRequestException {
         return _messageClient.sendMessage(payload);
-    }
-
-    /**
-     * Download file with mediaId, will return DownloadResult which include url.
-     * @param mediaId Necessary
-     * @return DownloadResult
-     * @throws APIConnectionException connect exception
-     * @throws APIRequestException request exception
-     */
-    public DownloadResult downloadFile(String mediaId)
-            throws APIConnectionException, APIRequestException {
-        return _resourceClient.downloadFile(mediaId);
-    }
-
-    /**
-     * Upload file, only support image file(jpg, bmp, gif, png) currently,
-     * file size should not larger than 8M.
-     * @param path Necessary, the native path of the file you want to upload
-     * @return UploadResult
-     * @throws APIConnectionException connect exception
-     * @throws APIRequestException request exception
-     */
-    public UploadResult uploadFile(String path)
-            throws APIConnectionException, APIRequestException {
-        return _resourceClient.uploadFile(path);
     }
 
     /**
@@ -411,69 +470,50 @@ public class JMessageClient {
     }
 
     /**
-     * Set don't disturb service while receiving messages.
-     * You can Add or remove single conversation or group conversation
-     * @param username Necessary
-     * @param payload NoDisturbPayload
-     * @return No content
+     * retract message
+     * 消息撤回
+     * @param username 用户名
+     * @param msgId message id
+     * @return No Content， Error Code：
+     * 855001 out of retract message time, the effective time is within 3 minutes after sending message
+     * 855003 the retract message is not exist
+     * 855004 the message had been retracted
      * @throws APIConnectionException connect exception
      * @throws APIRequestException request exception
      */
-    public ResponseWrapper setNoDisturb(String username, NoDisturbPayload payload)
+    public ResponseWrapper retractMessage(String username, long msgId)
             throws APIConnectionException, APIRequestException {
-        return _userClient.setNoDisturb(username, payload);
+        return _messageClient.retractMessage(username, msgId);
+    }
+
+    // ------------------------------- Resource API
+
+    /**
+     * Download file with mediaId, will return DownloadResult which include url.
+     * @param mediaId Necessary
+     * @return DownloadResult
+     * @throws APIConnectionException connect exception
+     * @throws APIRequestException request exception
+     */
+    public DownloadResult downloadFile(String mediaId)
+            throws APIConnectionException, APIRequestException {
+        return _resourceClient.downloadFile(mediaId);
     }
 
     /**
-     * Add friends to username
-     * @param username Necessary
-     * @param users username to be add
-     * @return No content
+     * Upload file, only support image file(jpg, bmp, gif, png) currently,
+     * file size should not larger than 8M.
+     * @param path Necessary, the native path of the file you want to upload
+     * @return UploadResult
      * @throws APIConnectionException connect exception
      * @throws APIRequestException request exception
      */
-    public ResponseWrapper addFriends(String username, String...users)
+    public UploadResult uploadFile(String path)
             throws APIConnectionException, APIRequestException {
-        return _userClient.addFriends(username, users);
+        return _resourceClient.uploadFile(path);
     }
 
-    /**
-     * Delete friends
-     * @param username Friends you want to delete to
-     * @param users username to be delete
-     * @return No content
-     * @throws APIConnectionException connect exception
-     * @throws APIRequestException request exception
-     */
-    public ResponseWrapper deleteFriends(String username, String...users)
-            throws APIConnectionException, APIRequestException {
-        return _userClient.deleteFriends(username, users);
-    }
-
-    /**
-     * Update friends' note information. The size is limit to 500.
-     * @param username Necessary
-     * @param array FriendNote array
-     * @return No content
-     * @throws APIConnectionException connect exception
-     * @throws APIRequestException request exception
-     */
-    public ResponseWrapper updateFriendsNote(String username, FriendNote[] array)
-            throws APIConnectionException, APIRequestException {
-        return _userClient.updateFriendsNote(username, array);
-    }
-
-    /**
-     * Get all friends'info from a gived username
-     * @param username Necessary
-     * @return UserList
-     * @throws APIConnectionException connect exception
-     * @throws APIRequestException request exception
-     */
-    public UserInfoResult[] getFriendsInfo(String username)
-            throws APIConnectionException, APIRequestException {
-        return _userClient.getFriendsInfo(username);
-    }
+    // ------------------------------- Cross APP API
 
     /**
      * Add or remove group members from a given group id.
@@ -576,6 +616,88 @@ public class JMessageClient {
     public ResponseWrapper deleteCrossFriends(String username, CrossFriendPayload payload)
             throws APIConnectionException, APIRequestException {
         return _crossAppClient.deleteCrossFriends(username, payload);
+    }
+
+    // ------------------------------- Sensitive Word API
+
+    /**
+     * Add sensitive words
+     * @param words String array
+     * @return No content
+     * @throws APIConnectionException connect exception
+     * @throws APIRequestException request exception
+     */
+    public ResponseWrapper addSensitiveWords(String...words) throws APIConnectionException, APIRequestException {
+        return _sensitiveWordClient.addSensitiveWords(words);
+    }
+
+    /**
+     * Add sensitive words
+     * @param words String Set
+     * @return No content
+     * @throws APIConnectionException connect exception
+     * @throws APIRequestException request exception
+     */
+    public ResponseWrapper addSensitiveWords(Set<String> words) throws APIConnectionException, APIRequestException {
+        return _sensitiveWordClient.addSensitiveWords(words);
+    }
+
+    /**
+     * Update sensitive word
+     * @param newWord new word
+     * @param oldWord old word
+     * @return No content
+     * @throws APIConnectionException connect exception
+     * @throws APIRequestException request exception
+     */
+    public ResponseWrapper updateSensitiveWord(String newWord, String oldWord)
+            throws APIConnectionException, APIRequestException {
+        return _sensitiveWordClient.updateSensitiveWord(newWord, oldWord);
+    }
+
+    /**
+     * Delete sensitive word
+     * @param word word to be deleted
+     * @return No content
+     * @throws APIConnectionException connect exception
+     * @throws APIRequestException request exception
+     */
+    public ResponseWrapper deleteSensitiveWord(String word) throws APIConnectionException, APIRequestException {
+        return _sensitiveWordClient.deleteSensitiveWord(word);
+    }
+
+    /**
+     * Get sensitive word list
+     * @param start the begin of the list
+     * @param count the count of the list
+     * @return SensitiveWordListResult
+     * @throws APIConnectionException connect exception
+     * @throws APIRequestException request exception
+     */
+    public SensitiveWordListResult getSensitiveWordList(int start, int count)
+            throws APIConnectionException, APIRequestException {
+        return _sensitiveWordClient.getSensitiveWordList(start, count);
+    }
+
+    /**
+     * Update sensitive word status
+     * @param status 1 represent turn on filtering, 0 represent turn off.
+     * @return No content
+     * @throws APIConnectionException
+     * @throws APIRequestException
+     */
+    public ResponseWrapper updateSensitiveWordStatus(int status) throws APIConnectionException, APIRequestException {
+        return _sensitiveWordClient.updateSensitiveWordStatus(status);
+    }
+
+    /**
+     * Get sensitive word status
+     * @return status of sensitive word
+     * @throws APIConnectionException connect exception
+     * @throws APIRequestException request exception
+     */
+    public SensitiveWordStatusResult getSensitiveWordStatus() throws APIConnectionException, APIRequestException {
+        return _sensitiveWordClient.getSensitiveWordStatus();
     }
 
 }

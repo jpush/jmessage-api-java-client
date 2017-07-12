@@ -19,6 +19,8 @@ public class MessageResult extends BaseResult {
     @Expose Integer msgid;
     @Expose Integer msg_level;
     @Expose Long msg_ctime;
+    @Expose Boolean no_offline;
+    @Expose Boolean no_notification;
 
     public String getTargetType() {
         return target_type;
@@ -74,6 +76,14 @@ public class MessageResult extends BaseResult {
 
     public Long getMsgCtime() {
         return msg_ctime;
+    }
+
+    public Boolean getNoOffline() {
+        return no_offline;
+    }
+
+    public Boolean getNoNotification() {
+        return no_notification;
     }
 }
 

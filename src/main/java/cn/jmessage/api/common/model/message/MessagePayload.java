@@ -1,5 +1,6 @@
-package cn.jmessage.api.common.model;
+package cn.jmessage.api.common.model.message;
 
+import cn.jmessage.api.common.model.IModel;
 import cn.jmessage.api.message.MessageType;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
@@ -21,6 +22,9 @@ public class MessagePayload implements IModel {
     private static final String TARGET_ID = "target_id";
     private static final String FROM_ID = "from_id";
     private static final String MSG_BODY = "msg_body";
+    private static final String NO_OFFLINE = "no_offline";
+    private static final String NO_NOTIFICATION = "no_notification";
+    private static final String NOTIFICATION = "notification";
 
 
     private static Gson gson = new Gson();
@@ -32,10 +36,11 @@ public class MessagePayload implements IModel {
     private String from_id;
     private MessageType msg_type;
     private MessageBody msg_body;
+    private Notification notification;
 
     public MessagePayload(Integer version, String target_type, String target_id,
                           String from_type, String from_id, MessageType msg_type,
-                          MessageBody msg_body) {
+                          MessageBody msg_body, Notification notification) {
         this.version = version;
         this.target_type = target_type;
         this.target_id = target_id;
@@ -43,6 +48,7 @@ public class MessagePayload implements IModel {
         this.from_id = from_id;
         this.msg_type = msg_type;
         this.msg_body = msg_body;
+        this.notification = notification;
     }
 
     public static Builder newBuilder(){
@@ -75,6 +81,10 @@ public class MessagePayload implements IModel {
             json.add(MSG_BODY, msg_body.toJSON());
         }
 
+        if (null != notification) {
+            json.add(NOTIFICATION, notification.toJSON());
+        }
+
         return json;
     }
 
@@ -91,6 +101,7 @@ public class MessagePayload implements IModel {
         private String from_id;
         private MessageType msg_type;
         private MessageBody msg_body;
+        private Notification notification;
 
         public Builder setVersion(Integer version) {
             this.version = version;
@@ -127,6 +138,11 @@ public class MessagePayload implements IModel {
             return this;
         }
 
+        public Builder setNotification(Notification notification) {
+            this.notification = notification;
+            return this;
+        }
+
         public MessagePayload build() {
             Preconditions.checkArgument(null != version, "The version must not be empty!");
             Preconditions.checkArgument(StringUtils.isNotEmpty(target_type), "The target type must not be empty!");
@@ -136,7 +152,7 @@ public class MessagePayload implements IModel {
             Preconditions.checkArgument(msg_type != null, "The message type must not be empty!");
             Preconditions.checkArgument(null != msg_body, "The message body must not be empty!");
 
-            return new MessagePayload(version, target_type, target_id, from_type, from_id, msg_type, msg_body);
+            return new MessagePayload(version, target_type, target_id, from_type, from_id, msg_type, msg_body, notification);
         }
     }
 }

@@ -1,18 +1,18 @@
 package cn.jmessage.api.examples;
 
-import cn.jmessage.api.common.model.MessagePayload;
+import cn.jiguang.common.resp.ResponseWrapper;
+import cn.jmessage.api.common.model.message.MessagePayload;
 import cn.jmessage.api.message.MessageListResult;
 import cn.jmessage.api.message.MessageResult;
 import cn.jmessage.api.message.MessageType;
 import cn.jmessage.api.utils.StringUtils;
-import com.google.gson.JsonObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import cn.jiguang.common.resp.APIConnectionException;
 import cn.jiguang.common.resp.APIRequestException;
 import cn.jmessage.api.JMessageClient;
-import cn.jmessage.api.common.model.MessageBody;
+import cn.jmessage.api.common.model.message.MessageBody;
 import cn.jmessage.api.message.SendMessageResult;
 
 public class MessageExample {
@@ -128,6 +128,20 @@ public class MessageExample {
             MessageListResult result = client.getUserMessages("username", 10, "2016-09-08 10:10:10", "2016-09-15 10:10:10");
             String cursor = result.getCursor();
             MessageListResult secondResult = client.getUserMessagesByCursor("username", cursor);
+        } catch (APIConnectionException e) {
+            LOG.error("Connection error. Should retry later. ", e);
+        } catch (APIRequestException e) {
+            LOG.error("Error response from JPush server. Should review and fix it. ", e);
+            LOG.info("HTTP Status: " + e.getStatus());
+            LOG.info("Error Message: " + e.getMessage());
+        }
+    }
+
+    public static void testRetractMessage() {
+        JMessageClient client = new JMessageClient(appkey, masterSecret);
+        try {
+            ResponseWrapper result = client.retractMessage("username", 12345);
+            LOG.info(result.toString());
         } catch (APIConnectionException e) {
             LOG.error("Connection error. Should retry later. ", e);
         } catch (APIRequestException e) {
