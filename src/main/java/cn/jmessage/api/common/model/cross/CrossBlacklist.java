@@ -1,23 +1,26 @@
-package cn.jmessage.api.common.model;
+package cn.jmessage.api.common.model.cross;
 
 import cn.jiguang.common.utils.Preconditions;
+import cn.jmessage.api.common.model.IModel;
 import com.google.gson.*;
 
-public class CrossFriendPayload implements IModel {
+public class CrossBlacklist implements IModel {
 
-    private final static String APP_KEY = "appkey";
-    private final static String USERS = "users";
+    private static String APP_KEY = "appkey";
+    private static String USERNAMES = "usernames";
+
     private Gson gson = new Gson();
+
     private String appKey;
     private String[] users;
 
-    public CrossFriendPayload(String appKey, String[] users) {
+    private CrossBlacklist(String appKey, String[] users) {
         this.appKey = appKey;
         this.users = users;
     }
 
-    public CrossFriendPayload newBuilder() {
-        return new Builder().build();
+    public Builder newBuilder() {
+        return new CrossBlacklist.Builder();
     }
 
     public static class Builder {
@@ -29,25 +32,24 @@ public class CrossFriendPayload implements IModel {
             return this;
         }
 
-        public Builder setUsers(String...users) {
+        public Builder addUsers(String...users) {
             this.users = users;
             return this;
         }
 
-        public CrossFriendPayload build() {
-            Preconditions.checkArgument(null != appKey, "AppKey should not be null!");
-            Preconditions.checkArgument(null != users, "Users should not be null");
-            return new CrossFriendPayload(appKey, users);
+        public CrossBlacklist build() {
+            Preconditions.checkArgument(null != appKey, "AppKey must not be null");
+            Preconditions.checkArgument(null != users, "At least add one user");
+            return new CrossBlacklist(appKey, users);
         }
     }
 
-
     @Override
     public JsonElement toJSON() {
-        JsonObject jsonObject = new JsonObject();
+        JsonObject json = new JsonObject();
 
         if (null != appKey) {
-            jsonObject.addProperty(APP_KEY, appKey);
+            json.addProperty(APP_KEY, appKey);
         }
 
         if (null != users) {
@@ -55,10 +57,10 @@ public class CrossFriendPayload implements IModel {
             for (String user : users) {
                 array.add(new JsonPrimitive(user));
             }
-            jsonObject.add(USERS, array);
+            json.add(USERNAMES, array);
         }
 
-        return jsonObject;
+        return json;
     }
 
     @Override

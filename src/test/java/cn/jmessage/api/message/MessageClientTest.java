@@ -3,6 +3,8 @@ package cn.jmessage.api.message;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import cn.jiguang.common.resp.ResponseWrapper;
+import cn.jmessage.api.JMessageClient;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
@@ -15,8 +17,8 @@ import cn.jiguang.common.resp.APIConnectionException;
 import cn.jiguang.common.resp.APIRequestException;
 import cn.jmessage.api.BaseTest;
 import cn.jmessage.api.SlowTests;
-import cn.jmessage.api.common.model.MessageBody;
-import cn.jmessage.api.common.model.MessagePayload;
+import cn.jmessage.api.common.model.message.MessageBody;
+import cn.jmessage.api.common.model.message.MessagePayload;
 
 
 /**
@@ -53,7 +55,7 @@ public class MessageClientTest extends BaseTest {
                 .setTargetType("single")
                 .setTargetId(JUNIT_USER)
                 .setFromType("admin")
-                .setFromId("junit_admin")
+                .setFromId(JUNIT_ADMIN)
                 .setMessageType(MessageType.TEXT)
                 .setMessageBody(messageBody)
                 .build();
@@ -63,7 +65,7 @@ public class MessageClientTest extends BaseTest {
         messObj.addProperty("target_type", "single");
         messObj.addProperty("target_id", JUNIT_USER);
         messObj.addProperty("from_type", "admin");
-        messObj.addProperty("from_id", "junit_admin");
+        messObj.addProperty("from_id", JUNIT_ADMIN);
         messObj.addProperty("msg_type", "text");
         messObj.add("msg_body", messageBody.toJSON());
 
@@ -433,6 +435,21 @@ public class MessageClientTest extends BaseTest {
         try {
             MessageListResult result = messageClient.getUserMessagesByCursor(JUNIT_USER, "14352B2CE97B02D9");
             assertTrue(result.isResultOK());
+        } catch (APIConnectionException e) {
+            LOG.error("Connection error. Should retry later. ", e);
+        } catch (APIRequestException e) {
+            LOG.error("Error response from JPush server. Should review and fix it. ", e);
+            LOG.info("HTTP Status: " + e.getStatus());
+            LOG.info("Error Message: " + e.getMessage());
+        }
+    }
+
+    @Test
+    public void testRetractMessage() {
+        JMessageClient client = new JMessageClient(APP_KEY, MASTER_SECRET);
+        try {
+            ResponseWrapper result = client.retractMessage(JUNIT_ADMIN, 364561741);
+            LOG.info(result.responseContent);
         } catch (APIConnectionException e) {
             LOG.error("Connection error. Should retry later. ", e);
         } catch (APIRequestException e) {

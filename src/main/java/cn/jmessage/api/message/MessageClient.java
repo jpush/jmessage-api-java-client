@@ -13,7 +13,7 @@ import cn.jiguang.common.resp.APIRequestException;
 import cn.jiguang.common.resp.ResponseWrapper;
 import cn.jmessage.api.common.BaseClient;
 import cn.jmessage.api.common.JMessageConfig;
-import cn.jmessage.api.common.model.MessagePayload;
+import cn.jmessage.api.common.model.message.MessagePayload;
 import cn.jmessage.api.utils.StringUtils;
 
 
@@ -184,6 +184,24 @@ public class MessageClient extends BaseClient {
         } else {
             throw new IllegalArgumentException("the cursor parameter should not be null");
         }
+    }
+
+    /**
+     * retract message
+     * 消息撤回
+     * @param username 用户名
+     * @param messageId message id
+     * @return No Content， Error Code：
+     * 855001 out of retract message time, the effective time is within 3 minutes after sending message
+     * 855003 the retract message is not exist
+     * 855004 the message had been retracted
+     * @throws APIConnectionException connect exception
+     * @throws APIRequestException request exception
+     */
+    public ResponseWrapper retractMessage(String username, long messageId)
+            throws APIConnectionException, APIRequestException {
+        StringUtils.checkUsername(username);
+        return _httpClient.sendPost(_baseUrl + messagePath + "/" + username + "/" + messageId + "/retract", null);
     }
 
 }

@@ -1,15 +1,12 @@
-package cn.jmessage.api.common.model;
+package cn.jmessage.api.common.model.message;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonPrimitive;
+import cn.jmessage.api.common.model.IModel;
+import com.google.gson.*;
 
 import cn.jiguang.common.utils.Preconditions;
-import cn.jiguang.common.utils.StringUtils;
 
 /**
  * MessageBodyResult
@@ -25,6 +22,8 @@ public class MessageBody implements IModel {
     private static final String HEIGHT = "height";
     private static final String FORMAT = "format";
     private static final String FSIZE = "fsize";
+    private static final String DURATION = "duration";
+    private static final String HASH = "hash";
 
     private static Gson gson = new Gson();
 
@@ -37,6 +36,8 @@ public class MessageBody implements IModel {
     private Integer height;
     private String format;
     private Integer fsize;
+    private Integer duration = -1;
+    private String hash;
 
     private String text;
 
@@ -50,13 +51,16 @@ public class MessageBody implements IModel {
         this.booleanExtras = booleanExtra;
     }
 
-    private MessageBody(String mediaId, Long crc32, Integer width, Integer height, String format, Integer fsize) {
+    private MessageBody(String mediaId, Long crc32, Integer width, Integer height, String format, Integer fsize,
+                        Integer duration, String hash) {
         this.media_id = mediaId;
         this.media_crc32 = crc32;
         this.width = width;
         this.height = height;
         this.format = format;
         this.fsize = fsize;
+        this.duration = duration;
+        this.hash = hash;
     }
 
     public static Builder newBuilder() {
@@ -83,7 +87,11 @@ public class MessageBody implements IModel {
 
         if (null != extras) {
             for (String key : extras.keySet()) {
-                extrasObject.add(key, new JsonPrimitive(extras.get(key)));
+                if (extras.get(key) != null) {
+                    extrasObject.add(key, new JsonPrimitive(extras.get(key)));
+                } else {
+                    extrasObject.add(key, JsonNull.INSTANCE);
+                }
             }
         }
         if (null != numberExtras) {
@@ -125,6 +133,14 @@ public class MessageBody implements IModel {
             json.addProperty(FSIZE, fsize);
         }
 
+        if (-1 != duration) {
+            json.addProperty(DURATION, duration);
+        }
+
+        if (null != hash) {
+            json.addProperty(HASH, hash);
+        }
+
         return json;
     }
 
@@ -144,6 +160,8 @@ public class MessageBody implements IModel {
         private Integer height;
         private String format;
         private Integer fsize;
+        private Integer duration;
+        private String hash;
 
         public Builder setText(String text) {
             this.text = text;
@@ -218,9 +236,19 @@ public class MessageBody implements IModel {
             return this;
         }
 
+        public Builder setDuration(Integer duration) {
+            this.duration = duration;
+            return this;
+        }
+
+        public Builder setHash(String hash) {
+            this.hash = hash;
+            return this;
+        }
+
         public MessageBody build() {
             if (null != media_id) {
-                return new MessageBody(media_id, media_crc32, width, height, format, fsize);
+                return new MessageBody(media_id, media_crc32, width, height, format, fsize, duration, hash);
             }
             return new MessageBody(text, extrasBuilder, numberExtrasBuilder, booleanExtrasBuilder);
         }

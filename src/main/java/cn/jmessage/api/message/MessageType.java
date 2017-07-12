@@ -3,6 +3,7 @@ package cn.jmessage.api.message;
 public enum MessageType {
     TEXT("text"),
     IMAGE("image"),
+    VOICE("voice"),
     CUSTOM("custom");
 
     private String value;

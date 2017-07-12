@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.jmessage.api.common.model.*;
+import cn.jmessage.api.common.model.friend.FriendNote;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

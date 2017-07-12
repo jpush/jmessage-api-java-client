@@ -2,7 +2,8 @@ package cn.jmessage.api.user;
 
 
 import cn.jmessage.api.common.model.*;
-import com.google.gson.Gson;
+import cn.jmessage.api.common.model.friend.FriendNote;
+import cn.jmessage.api.common.model.friend.FriendNotePayload;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
