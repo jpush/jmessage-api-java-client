@@ -9,6 +9,7 @@ import java.util.List;
 
 import cn.jmessage.api.common.model.*;
 import cn.jmessage.api.common.model.friend.FriendNote;
+import cn.jmessage.api.common.model.group.GroupShieldPayload;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -805,7 +806,7 @@ public class UserClientTest extends BaseTest {
         try {
             NoDisturbPayload payload = new NoDisturbPayload.Builder()
                     .setAddSingleUsers(JUNIT_USER1, JUNIT_USER2)
-                    .setAddGroupIds(JUNIT_GID)
+                    .setAddGroupIds(JUNIT_GID1)
                     .build();
             ResponseWrapper response = userClient.setNoDisturb(JUNIT_USER, payload);
         } catch (APIConnectionException e) {
@@ -874,6 +875,24 @@ public class UserClientTest extends BaseTest {
     public void testGetFriends() {
         try {
             UserInfoResult[] result = userClient.getFriendsInfo(JUNIT_USER);
+        } catch (APIConnectionException e) {
+            LOG.error("Connection error. Should retry later. ", e);
+        } catch (APIRequestException e) {
+            LOG.error("Error response from JPush server. Should review and fix it. ", e);
+            LOG.info("HTTP Status: " + e.getStatus());
+            LOG.info("Error Message: " + e.getMessage());
+        }
+    }
+
+    @Test
+    public void testSetGroupShield() {
+        GroupShieldPayload payload = new GroupShieldPayload.Builder()
+                .addGroupShield(JUNIT_GID1)
+                .removeGroupShield(JUNIT_GID2)
+                .build();
+        try {
+            ResponseWrapper result = userClient.setGroupShield(payload, JUNIT_USER1);
+            LOG.info("Got result: " + result);
         } catch (APIConnectionException e) {
             LOG.error("Connection error. Should retry later. ", e);
         } catch (APIRequestException e) {

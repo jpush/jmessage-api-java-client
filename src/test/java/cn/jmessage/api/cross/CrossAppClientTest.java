@@ -42,7 +42,7 @@ public class CrossAppClientTest extends BaseTest {
                     .build();
             crossGroups.add(crossGroup);
             CrossGroup[] array = new CrossGroup[crossGroups.size()];
-            ResponseWrapper response = client.addOrRemoveCrossGroupMembers(JUNIT_GID, crossGroups.toArray(array));
+            ResponseWrapper response = client.addOrRemoveCrossGroupMembers(JUNIT_GID1, crossGroups.toArray(array));
         } catch (APIConnectionException e) {
             LOG.error("Connection error. Should retry later. ", e);
         } catch (APIRequestException e) {
@@ -55,7 +55,7 @@ public class CrossAppClientTest extends BaseTest {
     @Test
     public void testGetCrossGroupMembers() {
         try {
-            MemberListResult result = client.getCrossGroupMembers(JUNIT_GID);
+            MemberListResult result = client.getCrossGroupMembers(JUNIT_GID1);
             MemberResult[] members = result.getMembers();
             LOG.info("Member size " + members.length);
             assertTrue(result.isResultOK());
@@ -131,7 +131,7 @@ public class CrossAppClientTest extends BaseTest {
             CrossNoDisturb crossNoDisturb = new CrossNoDisturb.Builder()
                     .setAppKey(APP_KEY)
                     .setRemoveSingleUsers(JUNIT_USER1, JUNIT_USER2)
-                    .setRemoveGroupIds(JUNIT_GID)
+                    .setRemoveGroupIds(JUNIT_GID1)
                     .build();
             list.add(crossNoDisturb);
             CrossNoDisturb[] array = new CrossNoDisturb[list.size()];
