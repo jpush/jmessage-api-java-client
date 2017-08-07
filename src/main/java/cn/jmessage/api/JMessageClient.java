@@ -4,6 +4,8 @@ import cn.jiguang.common.connection.HttpProxy;
 import cn.jiguang.common.resp.APIConnectionException;
 import cn.jiguang.common.resp.APIRequestException;
 import cn.jiguang.common.resp.ResponseWrapper;
+import cn.jmessage.api.common.model.group.GroupPayload;
+import cn.jmessage.api.common.model.group.GroupShieldPayload;
 import cn.jmessage.api.crossapp.CrossAppClient;
 import cn.jmessage.api.common.JMessageConfig;
 import cn.jmessage.api.common.model.*;
@@ -294,6 +296,19 @@ public class JMessageClient {
     public UserInfoResult[] getFriendsInfo(String username)
             throws APIConnectionException, APIRequestException {
         return _userClient.getFriendsInfo(username);
+    }
+
+    /**
+     * Set user's group message blocking
+     * @param payload GroupShieldPayload
+     * @param username Necessary
+     * @return No content
+     * @throws APIConnectionException connect exception
+     * @throws APIRequestException request exception
+     */
+    public ResponseWrapper setGroupShield(GroupShieldPayload payload, String username)
+            throws APIConnectionException, APIRequestException {
+        return _userClient.setGroupShield(payload, username);
     }
 
     // ------------------------------- Group API

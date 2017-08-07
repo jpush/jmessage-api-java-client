@@ -4,6 +4,7 @@ package cn.jmessage.api.user;
 import cn.jmessage.api.common.model.*;
 import cn.jmessage.api.common.model.friend.FriendNote;
 import cn.jmessage.api.common.model.friend.FriendNotePayload;
+import cn.jmessage.api.common.model.group.GroupShieldPayload;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -316,6 +317,21 @@ public class UserClient extends BaseClient {
         StringUtils.checkUsername(username);
         ResponseWrapper response = _httpClient.sendGet(_baseUrl + userPath + "/" + username + "/friends");
         return _gson.fromJson(response.responseContent, UserInfoResult[].class);
+    }
+
+    /**
+     * Set user's group message blocking
+     * @param payload GroupShieldPayload
+     * @param username Necessary
+     * @return No content
+     * @throws APIConnectionException connect exception
+     * @throws APIRequestException request exception
+     */
+    public ResponseWrapper setGroupShield(GroupShieldPayload payload, String username)
+            throws APIConnectionException, APIRequestException {
+        Preconditions.checkArgument(null != payload, "GroupShieldPayload should not be null");
+        StringUtils.checkUsername(username);
+        return _httpClient.sendPost(_baseUrl + userPath + "/" + username + "/groupsShield", payload.toString());
     }
 
 }

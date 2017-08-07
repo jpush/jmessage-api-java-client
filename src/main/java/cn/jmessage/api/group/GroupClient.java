@@ -12,7 +12,7 @@ import cn.jiguang.common.resp.APIRequestException;
 import cn.jiguang.common.resp.ResponseWrapper;
 import cn.jmessage.api.common.BaseClient;
 import cn.jmessage.api.common.JMessageConfig;
-import cn.jmessage.api.common.model.GroupPayload;
+import cn.jmessage.api.common.model.group.GroupPayload;
 import cn.jmessage.api.common.model.Members;
 import cn.jmessage.api.utils.StringUtils;
 
@@ -89,8 +89,7 @@ public class GroupClient extends BaseClient {
     }
 
     public CreateGroupResult createGroup(GroupPayload payload)
-            throws APIConnectionException, APIRequestException
-    {
+            throws APIConnectionException, APIRequestException {
         Preconditions.checkArgument(! (null == payload), "group payload should not be null");
 
         ResponseWrapper response = _httpClient.sendPost(_baseUrl + groupPath, payload.toString());
@@ -98,8 +97,7 @@ public class GroupClient extends BaseClient {
     }
 
     public ResponseWrapper addOrRemoveMembers( long gid, Members add, Members remove)
-            throws APIConnectionException, APIRequestException
-    {
+            throws APIConnectionException, APIRequestException {
         Preconditions.checkArgument(gid > 0, "gid should more than 0.");
 
         if ( null == add && null == remove ) {
@@ -121,15 +119,13 @@ public class GroupClient extends BaseClient {
     }
 
     public ResponseWrapper deleteGroup( long gid )
-            throws APIConnectionException, APIRequestException
-    {
+            throws APIConnectionException, APIRequestException {
         Preconditions.checkArgument(gid > 0, "gid should more than 0.");
         return _httpClient.sendDelete(_baseUrl + groupPath + "/" + gid);
     }
 
     public ResponseWrapper updateGroupInfo( long gid, String groupName, String groupDesc )
-            throws APIConnectionException, APIRequestException
-    {
+            throws APIConnectionException, APIRequestException {
         Preconditions.checkArgument(gid > 0, "gid should more than 0.");
 
         if ( StringUtils.isTrimedEmpty(groupName) && StringUtils.isTrimedEmpty(groupDesc)) {

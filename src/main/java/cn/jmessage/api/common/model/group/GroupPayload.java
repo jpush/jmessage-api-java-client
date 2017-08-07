@@ -1,6 +1,8 @@
-package cn.jmessage.api.common.model;
+package cn.jmessage.api.common.model.group;
 
 
+import cn.jmessage.api.common.model.IModel;
+import cn.jmessage.api.common.model.Members;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;

@@ -19,7 +19,7 @@ import cn.jiguang.common.resp.APIRequestException;
 import cn.jiguang.common.resp.ResponseWrapper;
 import cn.jmessage.api.BaseTest;
 import cn.jmessage.api.SlowTests;
-import cn.jmessage.api.common.model.GroupPayload;
+import cn.jmessage.api.common.model.group.GroupPayload;
 import cn.jmessage.api.common.model.Members;
 
 @Category(SlowTests.class)
@@ -41,8 +41,8 @@ public class GroupClientTest extends BaseTest {
     @Test
     public void testGetGroupInfo() {
         try {
-            GroupInfoResult res = groupClient.getGroupInfo(JUNIT_GID);
-            assertEquals(Long.valueOf(JUNIT_GID), res.getGid());
+            GroupInfoResult res = groupClient.getGroupInfo(JUNIT_GID1);
+            assertEquals(Long.valueOf(JUNIT_GID1), res.getGid());
 
         } catch (APIConnectionException e) {
             LOG.error("Connection error. Should retry later. ", e);
@@ -69,7 +69,7 @@ public class GroupClientTest extends BaseTest {
     @Test
     public void testGetGroupMembers() {
         try {
-            MemberListResult res = groupClient.getGroupMembers(JUNIT_GID);
+            MemberListResult res = groupClient.getGroupMembers(JUNIT_GID1);
             assertTrue(res.isResultOK());
         } catch (APIConnectionException e) {
             LOG.error("Connection error. Should retry later. ", e);
@@ -269,10 +269,10 @@ public class GroupClientTest extends BaseTest {
             array.add(mem);
             assertEquals(array, members.toJSON());
 
-            ResponseWrapper res = groupClient.addOrRemoveMembers(JUNIT_GID, members, null);
+            ResponseWrapper res = groupClient.addOrRemoveMembers(JUNIT_GID1, members, null);
             assertEquals(204, res.responseCode);
 
-            ResponseWrapper res1 = groupClient.addOrRemoveMembers(JUNIT_GID, null, members);
+            ResponseWrapper res1 = groupClient.addOrRemoveMembers(JUNIT_GID1, null, members);
             assertEquals(204, res1.responseCode);
 
         } catch (APIConnectionException e) {
@@ -336,10 +336,10 @@ public class GroupClientTest extends BaseTest {
     @Test
     public void testUpdateGroupInfo() {
         try {
-            ResponseWrapper res = groupClient.updateGroupInfo(JUNIT_GID, "junit_group_new", null);
+            ResponseWrapper res = groupClient.updateGroupInfo(JUNIT_GID1, "junit_group_new", null);
             assertEquals(204, res.responseCode);
 
-            ResponseWrapper res1 = groupClient.updateGroupInfo(JUNIT_GID, null, "junit group desc");
+            ResponseWrapper res1 = groupClient.updateGroupInfo(JUNIT_GID1, null, "junit group desc");
             assertEquals(204, res1.responseCode);
         } catch (APIConnectionException e) {
             LOG.error("Connection error. Should retry later. ", e);
