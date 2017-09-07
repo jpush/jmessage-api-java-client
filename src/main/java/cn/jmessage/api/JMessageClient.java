@@ -140,6 +140,18 @@ public class JMessageClient {
         return _userClient.getUserState(username);
     }
 
+    /**
+     * Get users' state
+     * @param users username of users
+     * @return {@link UserStateListResult}
+     * @throws APIConnectionException connect exception
+     * @throws APIRequestException request exception
+     */
+    public UserStateListResult[] getUsersState(String...users)
+            throws APIConnectionException, APIRequestException {
+        return _userClient.getUsersState(users);
+    }
+
     public void updateUserPassword(String username, String password)
             throws APIConnectionException, APIRequestException {
         _userClient.updatePassword(username, password);
@@ -309,6 +321,19 @@ public class JMessageClient {
     public ResponseWrapper setGroupShield(GroupShieldPayload payload, String username)
             throws APIConnectionException, APIRequestException {
         return _userClient.setGroupShield(payload, username);
+    }
+
+    /**
+     * Forbid or activate user
+     * @param username username
+     * @param disable true means forbid, false means activate
+     * @return No content
+     * @throws APIConnectionException connect exception
+     * @throws APIRequestException request exception
+     */
+    public ResponseWrapper forbidUser(String username, boolean disable)
+            throws APIConnectionException, APIRequestException {
+        return _userClient.forbidUser(username, disable);
     }
 
     // ------------------------------- Group API

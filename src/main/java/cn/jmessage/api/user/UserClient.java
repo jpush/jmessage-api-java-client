@@ -111,6 +111,23 @@ public class UserClient extends BaseClient {
         return UserStateResult.fromResponse(response, UserStateResult.class);
     }
 
+    /**
+     * Get users' state
+     * @param users username of users
+     * @return {@link UserStateListResult}
+     * @throws APIConnectionException connect exception
+     * @throws APIRequestException request exception
+     */
+    public UserStateListResult[] getUsersState(String...users) throws APIConnectionException, APIRequestException {
+        JsonArray jsonArray = new JsonArray();
+        for (String username : users) {
+            StringUtils.checkUsername(username);
+            jsonArray.add(new JsonPrimitive(username));
+        }
+        ResponseWrapper response = _httpClient.sendPost(_baseUrl + userPath + "/userstat", jsonArray.toString());
+        return _gson.fromJson(response.responseContent, UserStateListResult[].class);
+    }
+
     public ResponseWrapper updatePassword( String username, String password )
             throws APIConnectionException, APIRequestException {
 
@@ -333,5 +350,21 @@ public class UserClient extends BaseClient {
         StringUtils.checkUsername(username);
         return _httpClient.sendPost(_baseUrl + userPath + "/" + username + "/groupsShield", payload.toString());
     }
+
+    /**
+     * Forbid or activate user
+     * @param username username
+     * @param disable true means forbid, false means activate
+     * @return No content
+     * @throws APIConnectionException connect exception
+     * @throws APIRequestException request exception
+     */
+    public ResponseWrapper forbidUser(String username, boolean disable)
+            throws APIConnectionException, APIRequestException {
+        StringUtils.checkUsername(username);
+        return _httpClient.sendPut(_baseUrl + userPath + "/" + username + "/forbidden?disable=" + disable, null);
+    }
+
+
 
 }
