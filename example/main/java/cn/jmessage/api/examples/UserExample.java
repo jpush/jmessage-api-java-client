@@ -6,6 +6,7 @@ import java.util.List;
 import cn.jiguang.common.resp.ResponseWrapper;
 import cn.jmessage.api.common.model.friend.FriendNote;
 import cn.jmessage.api.common.model.NoDisturbPayload;
+import cn.jmessage.api.user.UserStateListResult;
 import cn.jmessage.api.user.UserStateResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -84,6 +85,22 @@ public class UserExample {
 
         try {
             UserStateResult result = client.getUserState("test_user");
+        } catch (APIConnectionException e) {
+            LOG.error("Connection error. Should retry later. ", e);
+        } catch (APIRequestException e) {
+            LOG.error("Error response from JPush server. Should review and fix it. ", e);
+            LOG.info("HTTP Status: " + e.getStatus());
+            LOG.info("Error Message: " + e.getMessage());
+        }
+    }
+
+    public static void testGetUsersState() {
+        JMessageClient client = new JMessageClient(appkey, masterSecret);
+        try {
+            UserStateListResult[] results = client.getUsersState("user1", "user2", "user3");
+            for (UserStateListResult result : results) {
+                LOG.info(result.toString());
+            }
         } catch (APIConnectionException e) {
             LOG.error("Connection error. Should retry later. ", e);
         } catch (APIRequestException e) {
@@ -280,6 +297,20 @@ public class UserExample {
         JMessageClient client = new JMessageClient(appkey, masterSecret);
         try {
             UserInfoResult[] userInfoArray = client.getFriendsInfo("test_user");
+        } catch (APIConnectionException e) {
+            LOG.error("Connection error. Should retry later. ", e);
+        } catch (APIRequestException e) {
+            LOG.error("Error response from JPush server. Should review and fix it. ", e);
+            LOG.info("HTTP Status: " + e.getStatus());
+            LOG.info("Error Message: " + e.getMessage());
+        }
+    }
+
+    public static void testForbidUser() {
+        JMessageClient client = new JMessageClient(appkey, masterSecret);
+        try {
+            ResponseWrapper result = client.forbidUser("user1", true);
+            LOG.info("response code: " + result.responseCode);
         } catch (APIConnectionException e) {
             LOG.error("Connection error. Should retry later. ", e);
         } catch (APIRequestException e) {

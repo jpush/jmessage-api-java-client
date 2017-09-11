@@ -414,7 +414,24 @@ public class UserClientTest extends BaseTest {
     @Test
     public void testGetUserState() {
         try {
-            userClient.getUserState(JUNIT_USER);
+            UserStateResult result = userClient.getUserState(JUNIT_USER);
+            LOG.info(result.toString());
+        } catch (APIConnectionException e) {
+            LOG.error("Connection error. Should retry later. ", e);
+        } catch (APIRequestException e) {
+            LOG.error("Error response from JPush server. Should review and fix it. ", e);
+            LOG.info("HTTP Status: " + e.getStatus());
+            LOG.info("Error Message: " + e.getMessage());
+        }
+    }
+
+    @Test
+    public void testGetUsersState() {
+        try {
+            UserStateListResult[] results = userClient.getUsersState(JUNIT_USER, JUNIT_USER1, JUNIT_USER2);
+            for (UserStateListResult result : results) {
+                LOG.info(result.toString());
+            }
         } catch (APIConnectionException e) {
             LOG.error("Connection error. Should retry later. ", e);
         } catch (APIRequestException e) {
@@ -893,6 +910,20 @@ public class UserClientTest extends BaseTest {
         try {
             ResponseWrapper result = userClient.setGroupShield(payload, JUNIT_USER1);
             LOG.info("Got result: " + result);
+        } catch (APIConnectionException e) {
+            LOG.error("Connection error. Should retry later. ", e);
+        } catch (APIRequestException e) {
+            LOG.error("Error response from JPush server. Should review and fix it. ", e);
+            LOG.info("HTTP Status: " + e.getStatus());
+            LOG.info("Error Message: " + e.getMessage());
+        }
+    }
+
+    @Test
+    public void testForbidUser() {
+        try {
+            ResponseWrapper result = userClient.forbidUser(JUNIT_USER, true);
+            LOG.info("response code: " + result.responseCode);
         } catch (APIConnectionException e) {
             LOG.error("Connection error. Should retry later. ", e);
         } catch (APIRequestException e) {
