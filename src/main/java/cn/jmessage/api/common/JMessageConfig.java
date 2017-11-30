@@ -63,6 +63,11 @@ public class JMessageConfig {
         return this;
     }
 
+    public JMessageConfig setReportHostName(String hostName) {
+        clientConfig.put(API_REPORT_HOST_NAME, hostName);
+        return this;
+    }
+
     public JMessageConfig setMaxRetryTimes(int maxRetryTimes) {
         clientConfig.setMaxRetryTimes(maxRetryTimes);
         return this;

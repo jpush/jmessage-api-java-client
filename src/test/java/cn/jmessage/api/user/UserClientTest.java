@@ -48,12 +48,13 @@ public class UserClientTest extends BaseTest {
             RegisterInfo user = RegisterInfo.newBuilder()
                     .setUsername("junit_test_user")
                     .setPassword("junit_test_pass")
+                    .setNickname("Test user")
                     .build();
 
             JsonObject obj = new JsonObject();
             obj.addProperty("username", "junit_test_user");
             obj.addProperty("password", "junit_test_pass");
-
+            obj.addProperty("nickname", "Test user");
             Assert.assertEquals("", obj, user.toJSON());
 
             users.add(user);
