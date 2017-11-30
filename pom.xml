@@ -34,7 +34,7 @@
 		<url>https://github.com/jpush/jmessage-api-java-client</url>
 		<connection>scm:git:git@github.com:jpush/jmessage-api-java-client.git</connection>
 		<developerConnection>scm:git:git@github.com:jpush/jmessage-api-java-client.git</developerConnection>
-		<tag>v1.1.3</tag>
+		<tag>v1.1.4</tag>
 	</scm>
 
 	<dependencies>
