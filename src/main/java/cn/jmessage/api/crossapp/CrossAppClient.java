@@ -1,7 +1,7 @@
 package cn.jmessage.api.crossapp;
 
+import cn.jiguang.common.connection.*;
 import cn.jiguang.common.utils.Preconditions;
-import cn.jiguang.common.connection.HttpProxy;
 import cn.jiguang.common.resp.APIConnectionException;
 import cn.jiguang.common.resp.APIRequestException;
 import cn.jiguang.common.resp.ResponseWrapper;

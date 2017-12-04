@@ -7,7 +7,6 @@ import cn.jiguang.common.resp.ResponseWrapper;
 import cn.jiguang.common.utils.Preconditions;
 import cn.jmessage.api.common.BaseClient;
 import cn.jmessage.api.common.JMessageConfig;
-import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;

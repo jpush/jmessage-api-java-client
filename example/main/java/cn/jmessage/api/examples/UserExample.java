@@ -3,7 +3,11 @@ package cn.jmessage.api.examples;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.jiguang.common.ClientConfig;
+import cn.jiguang.common.ServiceHelper;
+import cn.jiguang.common.connection.ApacheHttpClient;
 import cn.jiguang.common.resp.ResponseWrapper;
+import cn.jmessage.api.common.JMessageConfig;
 import cn.jmessage.api.common.model.friend.FriendNote;
 import cn.jmessage.api.common.model.NoDisturbPayload;
 import cn.jmessage.api.user.UserStateListResult;
@@ -34,7 +38,10 @@ public class UserExample {
 
     public static void testRegisterUsers() {
         JMessageClient client = new JMessageClient(appkey, masterSecret);
-
+        String authCode = ServiceHelper.getBasicAuthorization(appkey, masterSecret);
+        ApacheHttpClient httpClient = new ApacheHttpClient(authCode, null, ClientConfig.getInstance());
+        // 用 ApacheHttpClient 代替默认的 NativeHttpClient
+        client.setHttpClient(httpClient);
         try {
 
             List<RegisterInfo> users = new ArrayList<RegisterInfo>();

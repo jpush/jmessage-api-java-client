@@ -1,6 +1,7 @@
 package cn.jmessage.api;
 
 import cn.jiguang.common.connection.HttpProxy;
+import cn.jiguang.common.connection.IHttpClient;
 import cn.jiguang.common.resp.APIConnectionException;
 import cn.jiguang.common.resp.APIRequestException;
 import cn.jiguang.common.resp.ResponseWrapper;
@@ -738,6 +739,15 @@ public class JMessageClient {
      */
     public SensitiveWordStatusResult getSensitiveWordStatus() throws APIConnectionException, APIRequestException {
         return _sensitiveWordClient.getSensitiveWordStatus();
+    }
+
+    public void setHttpClient(IHttpClient httpClient) {
+        this._userClient.setHttpClient(httpClient);
+        this._sensitiveWordClient.setHttpClient(httpClient);
+        this._groupClient.setHttpClient(httpClient);
+        this._messageClient.setHttpClient(httpClient);
+        this._resourceClient.setHttpClient(httpClient);
+        this._crossAppClient.setHttpClient(httpClient);
     }
 
 }

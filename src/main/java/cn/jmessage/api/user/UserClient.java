@@ -1,6 +1,7 @@
 package cn.jmessage.api.user;
 
 
+import cn.jiguang.common.connection.*;
 import cn.jmessage.api.common.model.*;
 import cn.jmessage.api.common.model.friend.FriendNote;
 import cn.jmessage.api.common.model.friend.FriendNotePayload;
@@ -13,7 +14,6 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 
 import cn.jiguang.common.utils.Preconditions;
-import cn.jiguang.common.connection.HttpProxy;
 import cn.jiguang.common.resp.APIConnectionException;
 import cn.jiguang.common.resp.APIRequestException;
 import cn.jiguang.common.resp.ResponseWrapper;

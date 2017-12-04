@@ -2,12 +2,13 @@ package cn.jmessage.api.common;
 
 import cn.jiguang.common.ServiceHelper;
 import cn.jiguang.common.connection.HttpProxy;
+import cn.jiguang.common.connection.IHttpClient;
 import cn.jiguang.common.connection.NativeHttpClient;
 import com.google.gson.Gson;
 
 public class BaseClient {
 
-    protected final NativeHttpClient _httpClient;
+    protected IHttpClient _httpClient;
     protected String _baseUrl;
     protected Gson _gson = new Gson();
 
@@ -24,6 +25,10 @@ public class BaseClient {
         String authCode = ServiceHelper.getBasicAuthorization(appkey, masterSecret);
         this._baseUrl = (String) config.get(JMessageConfig.API_HOST_NAME);
         this._httpClient = new NativeHttpClient(authCode, proxy, config.getClientConfig());
+    }
+
+    public void setHttpClient(IHttpClient httpClient) {
+        this._httpClient = httpClient;
     }
 
 }
