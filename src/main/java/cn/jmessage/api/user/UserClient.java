@@ -1,6 +1,7 @@
 package cn.jmessage.api.user;
 
 
+import cn.jiguang.common.connection.*;
 import cn.jmessage.api.common.model.*;
 import cn.jmessage.api.common.model.friend.FriendNote;
 import cn.jmessage.api.common.model.friend.FriendNotePayload;
@@ -13,7 +14,6 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 
 import cn.jiguang.common.utils.Preconditions;
-import cn.jiguang.common.connection.HttpProxy;
 import cn.jiguang.common.resp.APIConnectionException;
 import cn.jiguang.common.resp.APIRequestException;
 import cn.jiguang.common.resp.ResponseWrapper;
@@ -31,7 +31,7 @@ public class UserClient extends BaseClient {
     /**
      * Create a User Client with default parameters.
      *
-     * @param appkey The key of one application on JPush.
+     * @param appkey       The key of one application on JPush.
      * @param masterSecret API access secret of the appKey.
      */
     public UserClient(String appkey, String masterSecret) {
@@ -41,9 +41,9 @@ public class UserClient extends BaseClient {
     /**
      * Create a User Client with a proxy.
      *
-     * @param appkey The key of one application on JPush.
+     * @param appkey       The key of one application on JPush.
      * @param masterSecret API access secret of the appKey.
-     * @param proxy The proxy, if there is no proxy, should be null.
+     * @param proxy        The proxy, if there is no proxy, should be null.
      */
     public UserClient(String appkey, String masterSecret, HttpProxy proxy) {
         this(appkey, masterSecret, proxy, JMessageConfig.getInstance());
@@ -53,10 +53,10 @@ public class UserClient extends BaseClient {
      * Create a User Client with custom config.
      * If you are using JMessage privacy cloud or custom parameters, maybe this constructor is what you needed.
      *
-     * @param appkey The key of one application on JPush.
+     * @param appkey       The key of one application on JPush.
      * @param masterSecret API access secret of the appKey.
-     * @param proxy The proxy, if there is no proxy, should be null.
-     * @param config The client configuration. Can use JMessageConfig.getInstance() as default.
+     * @param proxy        The proxy, if there is no proxy, should be null.
+     * @param config       The client configuration. Can use JMessageConfig.getInstance() as default.
      */
     public UserClient(String appkey, String masterSecret, HttpProxy proxy, JMessageConfig config) {
         super(appkey, masterSecret, proxy, config);
@@ -84,13 +84,13 @@ public class UserClient extends BaseClient {
     public UserInfoResult getUserInfo(String username)
             throws APIConnectionException, APIRequestException {
 
-    	StringUtils.checkUsername(username);
+        StringUtils.checkUsername(username);
         ResponseWrapper response = _httpClient.sendGet(_baseUrl + userPath + "/" + username);
         return UserInfoResult.fromResponse(response, UserInfoResult.class);
     }
 
     public ResponseWrapper updateUserInfo(String username, UserPayload payload)
-            throws APIConnectionException,APIRequestException {
+            throws APIConnectionException, APIRequestException {
         StringUtils.checkUsername(username);
         Preconditions.checkArgument(null != payload, "payload should not be null");
 
@@ -99,10 +99,11 @@ public class UserClient extends BaseClient {
 
     /**
      * Get user state
+     *
      * @param username Necessary
      * @return user state info, include login and online message.
      * @throws APIConnectionException connect exception
-     * @throws APIRequestException request exception
+     * @throws APIRequestException    request exception
      */
     public UserStateResult getUserState(String username)
             throws APIConnectionException, APIRequestException {
@@ -113,12 +114,13 @@ public class UserClient extends BaseClient {
 
     /**
      * Get users' state
+     *
      * @param users username of users
      * @return {@link UserStateListResult}
      * @throws APIConnectionException connect exception
-     * @throws APIRequestException request exception
+     * @throws APIRequestException    request exception
      */
-    public UserStateListResult[] getUsersState(String...users) throws APIConnectionException, APIRequestException {
+    public UserStateListResult[] getUsersState(String... users) throws APIConnectionException, APIRequestException {
         JsonArray jsonArray = new JsonArray();
         for (String username : users) {
             StringUtils.checkUsername(username);
@@ -128,11 +130,11 @@ public class UserClient extends BaseClient {
         return _gson.fromJson(response.responseContent, UserStateListResult[].class);
     }
 
-    public ResponseWrapper updatePassword( String username, String password )
+    public ResponseWrapper updatePassword(String username, String password)
             throws APIConnectionException, APIRequestException {
 
-    	StringUtils.checkUsername(username);
-    	StringUtils.checkPassword(password);
+        StringUtils.checkUsername(username);
+        StringUtils.checkPassword(password);
 
         JsonObject jsonObj = new JsonObject();
         jsonObj.addProperty("new_password", password);
@@ -142,7 +144,7 @@ public class UserClient extends BaseClient {
 
     }
 
-    public ResponseWrapper deleteUser( String username )
+    public ResponseWrapper deleteUser(String username)
             throws APIConnectionException, APIRequestException {
         StringUtils.checkUsername(username);
         return _httpClient.sendDelete(_baseUrl + userPath + "/" + username);
@@ -150,27 +152,29 @@ public class UserClient extends BaseClient {
 
     /**
      * Get a user's all black list
+     *
      * @param username The owner of the black list
      * @return UserList
      * @throws APIConnectionException connect exception
-     * @throws APIRequestException request exception
+     * @throws APIRequestException    request exception
      */
     public UserInfoResult[] getBlackList(String username)
             throws APIConnectionException, APIRequestException {
         StringUtils.checkUsername(username);
-        ResponseWrapper response =  _httpClient.sendGet( _baseUrl + userPath + "/" + username + "/blacklist");
+        ResponseWrapper response = _httpClient.sendGet(_baseUrl + userPath + "/" + username + "/blacklist");
         return _gson.fromJson(response.responseContent, UserInfoResult[].class);
     }
 
     /**
      * Add Users to black list
+     *
      * @param username The owner of the black list
-     * @param users The users that will add to black list
+     * @param users    The users that will add to black list
      * @return add users to black list
      * @throws APIConnectionException connect exception
-     * @throws APIRequestException request exception
+     * @throws APIRequestException    request exception
      */
-    public ResponseWrapper addBlackList( String username, String... users )
+    public ResponseWrapper addBlackList(String username, String... users)
             throws APIConnectionException, APIRequestException {
         StringUtils.checkUsername(username);
         Preconditions.checkArgument(null != users && users.length > 0, "black list should not be empty");
@@ -182,7 +186,7 @@ public class UserClient extends BaseClient {
         return _httpClient.sendPut(_baseUrl + userPath + "/" + username + "/blacklist", array.toString());
     }
 
-    public ResponseWrapper removeBlackList( String username, String... users)
+    public ResponseWrapper removeBlackList(String username, String... users)
             throws APIConnectionException, APIRequestException {
         StringUtils.checkUsername(username);
         Preconditions.checkArgument(null != users && users.length > 0, "black list should not be empty");
@@ -196,49 +200,52 @@ public class UserClient extends BaseClient {
 
     /**
      * Get user list
+     *
      * @param start The start index of the list
      * @param count The number that how many you want to get from list
      * @return User info list
      * @throws APIConnectionException connect exception
-     * @throws APIRequestException request exception
+     * @throws APIRequestException    request exception
      */
-    public UserListResult getUserList( int start, int count )
+    public UserListResult getUserList(int start, int count)
             throws APIConnectionException, APIRequestException {
 
-        if(start < 0 || count <= 0 || count > 500) {
+        if (start < 0 || count <= 0 || count > 500) {
             throw new IllegalArgumentException("negative index or count must more than 0 and less than 501");
         }
         ResponseWrapper response = _httpClient.sendGet(_baseUrl + userPath + "?start=" + start + "&count=" + count);
-        return UserListResult.fromResponse(response, UserListResult.class);
+        return UserListResult.fromResponse(response);
 
     }
 
     /**
      * Get admins by appkey
+     *
      * @param start The start index of the list
      * @param count The number that how many you want to get from list
      * @return admin user info list
      * @throws APIConnectionException connect exception
-     * @throws APIRequestException request exception
+     * @throws APIRequestException    request exception
      */
     public UserListResult getAdminListByAppkey(int start, int count)
-    		throws APIConnectionException, APIRequestException {
-    	if(start < 0 || count <= 0 || count > 500) {
-        	throw new IllegalArgumentException("negative index or count must more than 0 and less than 501");
+            throws APIConnectionException, APIRequestException {
+        if (start < 0 || count <= 0 || count > 500) {
+            throw new IllegalArgumentException("negative index or count must more than 0 and less than 501");
         }
-    	ResponseWrapper response = _httpClient.sendGet(_baseUrl + adminPath + "?start=" + start + "&count=" + count);
-    	return UserListResult.fromResponse(response, UserListResult.class);
-    
+        ResponseWrapper response = _httpClient.sendGet(_baseUrl + adminPath + "?start=" + start + "&count=" + count);
+        return UserListResult.fromResponse(response, UserListResult.class);
+
     }
 
     /**
      * Set don't disturb service while receiving messages.
      * You can Add or remove single conversation or group conversation
+     *
      * @param username Necessary
-     * @param payload NoDisturbPayload
+     * @param payload  NoDisturbPayload
      * @return No content
      * @throws APIConnectionException connect exception
-     * @throws APIRequestException request exception
+     * @throws APIRequestException    request exception
      */
     public ResponseWrapper setNoDisturb(String username, NoDisturbPayload payload)
             throws APIConnectionException, APIRequestException {
@@ -250,14 +257,15 @@ public class UserClient extends BaseClient {
 
     /**
      * Get all groups of a user
+     *
      * @param username Necessary
      * @return Group info list
      * @throws APIConnectionException connect exception
-     * @throws APIRequestException request exception
+     * @throws APIRequestException    request exception
      */
     public UserGroupsResult getGroupList(String username)
             throws APIConnectionException, APIRequestException {
-    	StringUtils.checkUsername(username);
+        StringUtils.checkUsername(username);
         ResponseWrapper response = _httpClient.sendGet(_baseUrl + userPath + "/" + username + "/groups");
 
         return UserGroupsResult.fromResponse(response);
@@ -265,13 +273,14 @@ public class UserClient extends BaseClient {
 
     /**
      * Add friends to username
+     *
      * @param username Necessary
-     * @param users username to be add
+     * @param users    username to be add
      * @return No content
      * @throws APIConnectionException connect exception
-     * @throws APIRequestException request exception
+     * @throws APIRequestException    request exception
      */
-    public ResponseWrapper addFriends(String username, String...users)
+    public ResponseWrapper addFriends(String username, String... users)
             throws APIConnectionException, APIRequestException {
         StringUtils.checkUsername(username);
         Preconditions.checkArgument(null != users && users.length > 0, "friend list should not be empty");
@@ -286,13 +295,14 @@ public class UserClient extends BaseClient {
 
     /**
      * Delete friends
+     *
      * @param username Friends you want to delete to
-     * @param users username to be delete
+     * @param users    username to be delete
      * @return No content
      * @throws APIConnectionException connect exception
-     * @throws APIRequestException request exception
+     * @throws APIRequestException    request exception
      */
-    public ResponseWrapper deleteFriends(String username, String...users)
+    public ResponseWrapper deleteFriends(String username, String... users)
             throws APIConnectionException, APIRequestException {
         StringUtils.checkUsername(username);
         Preconditions.checkArgument(null != users && users.length > 0, "friend list should not be empty");
@@ -306,11 +316,12 @@ public class UserClient extends BaseClient {
 
     /**
      * Update friends' note information. The size is limit to 500.
+     *
      * @param username Necessary
-     * @param array FriendNote array
+     * @param array    FriendNote array
      * @return No content
      * @throws APIConnectionException connect exception
-     * @throws APIRequestException request exception
+     * @throws APIRequestException    request exception
      */
     public ResponseWrapper updateFriendsNote(String username, FriendNote[] array)
             throws APIConnectionException, APIRequestException {
@@ -324,10 +335,11 @@ public class UserClient extends BaseClient {
 
     /**
      * Get friends'info from user
+     *
      * @param username Necessary
      * @return UserList
      * @throws APIConnectionException connect exception
-     * @throws APIRequestException request exception
+     * @throws APIRequestException    request exception
      */
     public UserInfoResult[] getFriendsInfo(String username)
             throws APIConnectionException, APIRequestException {
@@ -338,11 +350,12 @@ public class UserClient extends BaseClient {
 
     /**
      * Set user's group message blocking
-     * @param payload GroupShieldPayload
+     *
+     * @param payload  GroupShieldPayload
      * @param username Necessary
      * @return No content
      * @throws APIConnectionException connect exception
-     * @throws APIRequestException request exception
+     * @throws APIRequestException    request exception
      */
     public ResponseWrapper setGroupShield(GroupShieldPayload payload, String username)
             throws APIConnectionException, APIRequestException {
@@ -353,18 +366,18 @@ public class UserClient extends BaseClient {
 
     /**
      * Forbid or activate user
+     *
      * @param username username
-     * @param disable true means forbid, false means activate
+     * @param disable  true means forbid, false means activate
      * @return No content
      * @throws APIConnectionException connect exception
-     * @throws APIRequestException request exception
+     * @throws APIRequestException    request exception
      */
     public ResponseWrapper forbidUser(String username, boolean disable)
             throws APIConnectionException, APIRequestException {
         StringUtils.checkUsername(username);
         return _httpClient.sendPut(_baseUrl + userPath + "/" + username + "/forbidden?disable=" + disable, null);
     }
-
 
 
 }

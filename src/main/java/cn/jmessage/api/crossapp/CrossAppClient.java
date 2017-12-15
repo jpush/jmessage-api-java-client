@@ -1,7 +1,7 @@
 package cn.jmessage.api.crossapp;
 
+import cn.jiguang.common.connection.*;
 import cn.jiguang.common.utils.Preconditions;
-import cn.jiguang.common.connection.HttpProxy;
 import cn.jiguang.common.resp.APIConnectionException;
 import cn.jiguang.common.resp.APIRequestException;
 import cn.jiguang.common.resp.ResponseWrapper;
@@ -22,20 +22,20 @@ public class CrossAppClient extends BaseClient {
         this(appkey, masterSecret, null, JMessageConfig.getInstance());
     }
 
-    public CrossAppClient(String appkey, String masterSecret, HttpProxy proxy) {
-        this(appkey, masterSecret, proxy, JMessageConfig.getInstance());
+    public CrossAppClient(String appKey, String masterSecret, HttpProxy proxy) {
+        this(appKey, masterSecret, proxy, JMessageConfig.getInstance());
     }
 
     /**
      * Create a JMessage Base Client
      *
-     * @param appkey       The KEY of one application on JPush.
+     * @param appKey       The KEY of one application on JPush.
      * @param masterSecret API access secret of the appKey.
      * @param proxy        The proxy, if there is no proxy, should be null.
      * @param config       The client configuration. Can use JMessageConfig.getInstance() as default.
      */
-    public CrossAppClient(String appkey, String masterSecret, HttpProxy proxy, JMessageConfig config) {
-        super(appkey, masterSecret, proxy, config);
+    public CrossAppClient(String appKey, String masterSecret, HttpProxy proxy, JMessageConfig config) {
+        super(appKey, masterSecret, proxy, config);
         this.crossUserPath = (String) config.get(JMessageConfig.CROSS_USER_PATH);
         this.crossGroupPath = (String) config.get(JMessageConfig.CROSS_GROUP_PATH);
     }

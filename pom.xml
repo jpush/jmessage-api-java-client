@@ -34,14 +34,14 @@
 		<url>https://github.com/jpush/jmessage-api-java-client</url>
 		<connection>scm:git:git@github.com:jpush/jmessage-api-java-client.git</connection>
 		<developerConnection>scm:git:git@github.com:jpush/jmessage-api-java-client.git</developerConnection>
-		<tag>v1.1.4</tag>
+		<tag>v1.1.6</tag>
 	</scm>
 
 	<dependencies>
 		<dependency>
 			<groupId>cn.jpush.api</groupId>
 			<artifactId>jiguang-common</artifactId>
-			<version>1.0.8</version>
+			<version>1.0.9</version>
 		</dependency>
 		<dependency>
 			<groupId>com.google.code.gson</groupId>

@@ -336,10 +336,10 @@ public class GroupClientTest extends BaseTest {
     @Test
     public void testUpdateGroupInfo() {
         try {
-            ResponseWrapper res = groupClient.updateGroupInfo(JUNIT_GID1, "junit_group_new", null);
+            ResponseWrapper res = groupClient.updateGroupInfo(JUNIT_GID1, "junit_group_new", null, "media id");
             assertEquals(204, res.responseCode);
 
-            ResponseWrapper res1 = groupClient.updateGroupInfo(JUNIT_GID1, null, "junit group desc");
+            ResponseWrapper res1 = groupClient.updateGroupInfo(JUNIT_GID1, null, "junit group desc", "media id");
             assertEquals(204, res1.responseCode);
         } catch (APIConnectionException e) {
             LOG.error("Connection error. Should retry later. ", e);
@@ -353,7 +353,7 @@ public class GroupClientTest extends BaseTest {
     @Test(expected = IllegalArgumentException.class)
     public void testUpdateGroupInfo_GidNegative() {
         try {
-            groupClient.updateGroupInfo(-1, "test_group", "group desc");
+            groupClient.updateGroupInfo(-1, "test_group", "group desc", "media id");
         } catch (APIConnectionException e) {
             LOG.error("Connection error. Should retry later. ", e);
         } catch (APIRequestException e) {
@@ -366,7 +366,7 @@ public class GroupClientTest extends BaseTest {
     @Test(expected = IllegalArgumentException.class)
     public void testUpdateGroupInfo_NameDescBothNull() {
         try {
-            groupClient.updateGroupInfo(10010, null, null);
+            groupClient.updateGroupInfo(10010, null, null, null);
         } catch (APIConnectionException e) {
             LOG.error("Connection error. Should retry later. ", e);
         } catch (APIRequestException e) {
@@ -379,7 +379,7 @@ public class GroupClientTest extends BaseTest {
     @Test(expected = IllegalArgumentException.class)
     public void testUpdateGroupInfo_NameOverLength() {
         try {
-            groupClient.updateGroupInfo(10010, MORE_THAN_64, "test desc");
+            groupClient.updateGroupInfo(10010, MORE_THAN_64, "test desc", "media id");
         } catch (APIConnectionException e) {
             LOG.error("Connection error. Should retry later. ", e);
         } catch (APIRequestException e) {
@@ -392,7 +392,7 @@ public class GroupClientTest extends BaseTest {
     @Test(expected = IllegalArgumentException.class)
     public void testUpdateGroupInfo_DescOverLength() {
         try {
-            groupClient.updateGroupInfo(10010, "test_name", MORE_THAN_250);
+            groupClient.updateGroupInfo(10010, "test_name", MORE_THAN_250, "media id");
         } catch (APIConnectionException e) {
             LOG.error("Connection error. Should retry later. ", e);
         } catch (APIRequestException e) {

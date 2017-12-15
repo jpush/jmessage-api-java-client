@@ -27,12 +27,12 @@ public class MessageClient extends BaseClient {
     private String v2_userPath;
 
 
-    public MessageClient(String appkey, String masterSecret) {
-        this(appkey, masterSecret, null, JMessageConfig.getInstance());
+    public MessageClient(String appKey, String masterSecret) {
+        this(appKey, masterSecret, null, JMessageConfig.getInstance());
     }
 
-    public MessageClient(String appkey, String masterSecret, HttpProxy proxy, JMessageConfig config) {
-        super(appkey, masterSecret, proxy, config);
+    public MessageClient(String appKey, String masterSecret, HttpProxy proxy, JMessageConfig config) {
+        super(appKey, masterSecret, proxy, config);
         this.messagePath = (String) config.get(JMessageConfig.MESSAGE_PATH);
         this.reportBaseUrl = (String) config.get(JMessageConfig.API_REPORT_HOST_NAME);
         this.v2_userPath = (String) config.get(JMessageConfig.V2_USER_PATH);
