@@ -165,6 +165,7 @@ public class GroupClientTest extends BaseTest {
             obj.addProperty("owner_username", JUNIT_USER);
             obj.addProperty("name", "junit_test_group");
             obj.addProperty("desc", "for junit test");
+            obj.addProperty("flag", 0);
 
             assertEquals(obj, payload.toJSON());
 

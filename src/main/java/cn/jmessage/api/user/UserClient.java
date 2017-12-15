@@ -214,7 +214,7 @@ public class UserClient extends BaseClient {
             throw new IllegalArgumentException("negative index or count must more than 0 and less than 501");
         }
         ResponseWrapper response = _httpClient.sendGet(_baseUrl + userPath + "?start=" + start + "&count=" + count);
-        return UserListResult.fromResponse(response);
+        return UserListResult.fromResponse(response, UserListResult.class);
 
     }
 
