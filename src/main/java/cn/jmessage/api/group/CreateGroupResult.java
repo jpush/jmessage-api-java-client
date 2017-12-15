@@ -12,9 +12,11 @@ public class CreateGroupResult extends BaseResult {
     @Expose String name;
     @Expose JsonArray members_username;
     @Expose String desc;
-    @Expose Integer level;
     @Expose String ctime;
     @Expose String mtime;
+    @Expose String appkey;
+    @Expose String avatar;
+    @Expose Integer MaxMemberCount;
 
     public Long getGid() {
         return gid;
@@ -36,8 +38,16 @@ public class CreateGroupResult extends BaseResult {
         return desc;
     }
 
-    public Integer getLevel() {
-        return level;
+    public Integer getMaxMemberCount() {
+        return MaxMemberCount;
+    }
+
+    public String getAppkey() {
+        return  appkey;
+    }
+
+    public String getAvatar() {
+        return avatar;
     }
 
     public String getCtime() {

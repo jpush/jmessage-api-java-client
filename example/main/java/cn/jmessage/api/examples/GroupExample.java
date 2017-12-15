@@ -106,7 +106,7 @@ public class GroupExample {
         JMessageClient client = new JMessageClient(appkey, masterSecret);
 
         try {
-            client.updateGroupInfo(10003767, "test_gname_new", "update desc");
+            client.updateGroupInfo(10003767, "test_gname_new", "update desc", "media id");
         } catch (APIConnectionException e) {
             LOG.error("Connection error. Should retry later. ", e);
         } catch (APIRequestException e) {

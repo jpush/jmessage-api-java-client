@@ -17,6 +17,8 @@ public class GroupPayload implements IModel {
     public static final String GROUP_NAME = "name";
     public static final String MEMBERS = "members_username";
     public static final String DESC = "desc";
+    public static final String AVATAR = "avatar";
+    public static final String FLAG = "flag";
 
     private static Gson gson = new Gson();
 
@@ -24,12 +26,18 @@ public class GroupPayload implements IModel {
     private String name;
     private Members members;
     private String desc;
+    // 上传接口后的 media_id
+    private String avatar;
+    // 类型，1 为私有群，2 为公开群，默认为 1
+    private int flag = 1;
 
-    private GroupPayload(String owner, String name, Members members, String desc) {
+    private GroupPayload(String owner, String name, Members members, String desc, String avatar, int flag) {
         this.owner = owner;
         this.name = name;
         this.members = members;
         this.desc = desc;
+        this.avatar = avatar;
+        this.flag = flag;
     }
 
     public static Builder newBuilder() {
@@ -57,6 +65,14 @@ public class GroupPayload implements IModel {
             json.addProperty(DESC, desc);
         }
 
+        if (null != avatar) {
+            json.addProperty(AVATAR, avatar);
+        }
+
+        if (flag != 1) {
+            json.addProperty(FLAG, flag);
+        }
+
         return json;
 
     }
@@ -72,6 +88,8 @@ public class GroupPayload implements IModel {
         private String name;
         private Members members;
         private String desc;
+        private String avatar;
+        private int flag;
 
         public Builder setOwner(String owner) {
             this.owner = owner.trim();
@@ -93,6 +111,17 @@ public class GroupPayload implements IModel {
             return this;
         }
 
+        public Builder setAvatar(String mediaId) {
+            this.avatar = mediaId;
+            return this;
+        }
+
+        public Builder setFlag(int flag) {
+            Preconditions.checkArgument(flag == 1 || flag == 2, "Flag must be 1 or 2");
+            this.flag = flag;
+            return this;
+        }
+
         public GroupPayload build() {
 
             Preconditions.checkArgument(StringUtils.isNotEmpty(owner), "The owner must not be empty.");
@@ -109,7 +138,7 @@ public class GroupPayload implements IModel {
                         "The length of group description must not more than 250 bytes.");
             }
 
-            return new GroupPayload(owner, name, members, desc);
+            return new GroupPayload(owner, name, members, desc, avatar, flag);
         }
 
     }

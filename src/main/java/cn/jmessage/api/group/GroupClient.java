@@ -26,7 +26,7 @@ public class GroupClient extends BaseClient {
     /**
      * Create a Group Client with default parameters.
      *
-     * @param appkey The key of one application on JPush.
+     * @param appkey       The key of one application on JPush.
      * @param masterSecret API access secret of the appKey.
      */
     public GroupClient(String appkey, String masterSecret) {
@@ -36,9 +36,9 @@ public class GroupClient extends BaseClient {
     /**
      * Create a Group Client with a proxy.
      *
-     * @param appkey The key of one application on JPush.
+     * @param appkey       The key of one application on JPush.
      * @param masterSecret API access secret of the appKey.
-     * @param proxy The proxy, if there is no proxy, should be null.
+     * @param proxy        The proxy, if there is no proxy, should be null.
      */
     public GroupClient(String appkey, String masterSecret, HttpProxy proxy) {
         this(appkey, masterSecret, proxy, JMessageConfig.getInstance());
@@ -48,19 +48,18 @@ public class GroupClient extends BaseClient {
      * Create a Group Client by custom config.
      * If you are using JMessage privacy cloud or custom parameters, maybe this constructor is what you needed.
      *
-     * @param appkey The key of one application on JPush.
+     * @param appkey       The key of one application on JPush.
      * @param masterSecret API access secret of the appKey.
-     * @param proxy The proxy, if there is no proxy, should be null.
-     * @param config The client configuration. Can use JMessageConfig.getInstance() as default.
+     * @param proxy        The proxy, if there is no proxy, should be null.
+     * @param config       The client configuration. Can use JMessageConfig.getInstance() as default.
      */
     public GroupClient(String appkey, String masterSecret, HttpProxy proxy, JMessageConfig config) {
         super(appkey, masterSecret, proxy, config);
         this.groupPath = (String) config.get(JMessageConfig.GROUP_PATH);
     }
 
-    public GroupInfoResult getGroupInfo( long gid )
-            throws APIConnectionException, APIRequestException
-    {
+    public GroupInfoResult getGroupInfo(long gid)
+            throws APIConnectionException, APIRequestException {
         Preconditions.checkArgument(gid > 0, "gid should more than 0.");
 
         ResponseWrapper response = _httpClient.sendGet(_baseUrl + groupPath + "/" + gid);
@@ -68,9 +67,8 @@ public class GroupClient extends BaseClient {
         return GroupInfoResult.fromResponse(response, GroupInfoResult.class);
     }
 
-    public MemberListResult getGroupMembers( long gid )
-            throws APIConnectionException, APIRequestException
-    {
+    public MemberListResult getGroupMembers(long gid)
+            throws APIConnectionException, APIRequestException {
         Preconditions.checkArgument(gid > 0, "gid should more than 0.");
 
         ResponseWrapper response = _httpClient.sendGet(_baseUrl + groupPath + "/" + gid + "/members");
@@ -78,11 +76,10 @@ public class GroupClient extends BaseClient {
         return MemberListResult.fromResponse(response);
     }
 
-    public GroupListResult getGroupListByAppkey( int start, int count )
-            throws APIConnectionException, APIRequestException
-    {
-    	if(start < 0 || count <= 0 || count > 500) {
-        	throw new IllegalArgumentException("negative index or count must more than 0 and less than 501");
+    public GroupListResult getGroupListByAppkey(int start, int count)
+            throws APIConnectionException, APIRequestException {
+        if (start < 0 || count <= 0 || count > 500) {
+            throw new IllegalArgumentException("negative index or count must more than 0 and less than 501");
         }
         ResponseWrapper response = _httpClient.sendGet(_baseUrl + groupPath + "?start=" + start + "&count=" + count);
         return GroupListResult.fromResponse(response, GroupListResult.class);
@@ -90,27 +87,27 @@ public class GroupClient extends BaseClient {
 
     public CreateGroupResult createGroup(GroupPayload payload)
             throws APIConnectionException, APIRequestException {
-        Preconditions.checkArgument(! (null == payload), "group payload should not be null");
+        Preconditions.checkArgument(!(null == payload), "group payload should not be null");
 
         ResponseWrapper response = _httpClient.sendPost(_baseUrl + groupPath, payload.toString());
         return CreateGroupResult.fromResponse(response, CreateGroupResult.class);
     }
 
-    public ResponseWrapper addOrRemoveMembers( long gid, Members add, Members remove)
+    public ResponseWrapper addOrRemoveMembers(long gid, Members add, Members remove)
             throws APIConnectionException, APIRequestException {
         Preconditions.checkArgument(gid > 0, "gid should more than 0.");
 
-        if ( null == add && null == remove ) {
+        if (null == add && null == remove) {
             Preconditions.checkArgument(false, "add list or remove list should not be null at the same time.");
         }
 
         JsonObject json = new JsonObject();
 
-        if ( null != add ) {
+        if (null != add) {
             json.add("add", add.toJSON());
         }
 
-        if ( null != remove ) {
+        if (null != remove) {
             json.add("remove", remove.toJSON());
         }
 
@@ -118,26 +115,27 @@ public class GroupClient extends BaseClient {
 
     }
 
-    public ResponseWrapper deleteGroup( long gid )
+    public ResponseWrapper deleteGroup(long gid)
             throws APIConnectionException, APIRequestException {
         Preconditions.checkArgument(gid > 0, "gid should more than 0.");
         return _httpClient.sendDelete(_baseUrl + groupPath + "/" + gid);
     }
 
-    public ResponseWrapper updateGroupInfo( long gid, String groupName, String groupDesc )
+    public ResponseWrapper updateGroupInfo(long gid, String groupName, String groupDesc, String avatar)
             throws APIConnectionException, APIRequestException {
         Preconditions.checkArgument(gid > 0, "gid should more than 0.");
 
-        if ( StringUtils.isTrimedEmpty(groupName) && StringUtils.isTrimedEmpty(groupDesc)) {
-            Preconditions.checkArgument(false, "group name or group description should not be null at the same time.");
+        if (StringUtils.isTrimedEmpty(groupName) && StringUtils.isTrimedEmpty(groupDesc)
+                && StringUtils.isTrimedEmpty(avatar)) {
+            Preconditions.checkArgument(false, "group name, group description and group avatar should not be null at the same time.");
         }
 
         JsonObject json = new JsonObject();
         if (StringUtils.isNotEmpty(groupName)) {
             groupName = groupName.trim();
-            Preconditions.checkArgument( groupName.getBytes().length <= 64,
+            Preconditions.checkArgument(groupName.getBytes().length <= 64,
                     "The length of group name must not more than 64 bytes.");
-            Preconditions.checkArgument( !StringUtils.isLineBroken(groupName),
+            Preconditions.checkArgument(!StringUtils.isLineBroken(groupName),
                     "The group name must not contain line feed character.");
             json.addProperty(GroupPayload.GROUP_NAME, groupName);
         }
@@ -147,6 +145,11 @@ public class GroupClient extends BaseClient {
             Preconditions.checkArgument(groupDesc.getBytes().length <= 250,
                     "The length of group description must not more than 250 bytes.");
             json.addProperty(GroupPayload.DESC, groupDesc);
+        }
+
+        if (StringUtils.isNotEmpty(avatar)) {
+            avatar = avatar.trim();
+            json.addProperty(GroupPayload.AVATAR, avatar);
         }
 
         return _httpClient.sendPut(_baseUrl + groupPath + "/" + gid, json.toString());

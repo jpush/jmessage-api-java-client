@@ -159,7 +159,7 @@ public class JMessageClient {
     }
 
     public void updateUserInfo(String username, String nickname, String birthday, String signature, int gender,
-                               String region, String address)
+                               String region, String address, String avatar)
             throws APIConnectionException, APIRequestException {
         UserPayload payload = UserPayload.newBuilder()
                 .setNickname(nickname)
@@ -168,8 +168,14 @@ public class JMessageClient {
                 .setGender(gender)
                 .setRegion(region)
                 .setAddress(address)
+                .setAvatar(avatar)
                 .build();
 
+        _userClient.updateUserInfo(username, payload);
+    }
+
+    public void updateUserInfo(String username, UserPayload payload)
+            throws APIConnectionException, APIRequestException {
         _userClient.updateUserInfo(username, payload);
     }
 
@@ -394,9 +400,9 @@ public class JMessageClient {
         _groupClient.deleteGroup(gid);
     }
 
-    public void updateGroupInfo(long gid, String groupName, String groupDesc)
+    public void updateGroupInfo(long gid, String groupName, String groupDesc, String avatar)
             throws APIConnectionException, APIRequestException {
-        _groupClient.updateGroupInfo(gid, groupName, groupDesc);
+        _groupClient.updateGroupInfo(gid, groupName, groupDesc, avatar);
     }
 
     // ------------------------------- Message API
