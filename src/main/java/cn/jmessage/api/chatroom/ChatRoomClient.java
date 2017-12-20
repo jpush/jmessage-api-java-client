@@ -166,6 +166,8 @@ public class ChatRoomClient extends BaseClient {
      * @param start  start index
      * @param count member count
      * @return {@link ChatRoomMemberList}
+     * @throws APIConnectionException connect exception
+     * @throws APIRequestException    request exception
      */
     public ChatRoomMemberList getChatRoomMembers(long roomId, int start, int count)
             throws APIConnectionException, APIRequestException {

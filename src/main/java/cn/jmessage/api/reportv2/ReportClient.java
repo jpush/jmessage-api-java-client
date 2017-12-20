@@ -288,7 +288,7 @@ public class ReportClient extends BaseClient {
     /**
      * Get group statistic, time unit only supports DAY now.
      * @param start Format: yyyy-MM-dd
-     * @param duration 0 <= duration <= 60
+     * @param duration duration must between 0 and 60
      * @return {@link GroupStatListResult}
      * @throws APIConnectionException connect exception
      * @throws APIRequestException request exception
