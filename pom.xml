@@ -3,7 +3,7 @@
 
 	<groupId>cn.jpush.api</groupId>
 	<artifactId>jmessage-client</artifactId>
-	<version>1.1.6-SNAPSHOT</version>
+	<version>1.1.6</version>
 	<packaging>jar</packaging>
 	<url>https://github.com/jpush/jmessage-api-java-client</url>
 	<name>JMessage API Java Client</name>
