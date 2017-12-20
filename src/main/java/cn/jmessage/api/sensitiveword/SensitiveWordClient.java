@@ -118,8 +118,8 @@ public class SensitiveWordClient extends BaseClient {
      * Update sensitive word status
      * @param status 1 represent turn on filtering, 0 represent turn off.
      * @return No content
-     * @throws APIConnectionException
-     * @throws APIRequestException
+     * @throws APIConnectionException connect exception
+     * @throws APIRequestException request exception
      */
     public ResponseWrapper updateSensitiveWordStatus(int status) throws APIConnectionException, APIRequestException {
         Preconditions.checkArgument(status == 0 || status == 1, "status should be 0 or 1");

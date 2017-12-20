@@ -745,8 +745,8 @@ public class JMessageClient {
      * Update sensitive word status
      * @param status 1 represent turn on filtering, 0 represent turn off.
      * @return No content
-     * @throws APIConnectionException
-     * @throws APIRequestException
+     * @throws APIConnectionException connect exception
+     * @throws APIRequestException request exception
      */
     public ResponseWrapper updateSensitiveWordStatus(int status) throws APIConnectionException, APIRequestException {
         return _sensitiveWordClient.updateSensitiveWordStatus(status);
@@ -864,6 +864,8 @@ public class JMessageClient {
      * @param start  start index
      * @param count member count
      * @return {@link ChatRoomMemberList}
+     * @throws APIConnectionException connect exception
+     * @throws APIRequestException    request exception
      */
     public ChatRoomMemberList getChatRoomMembers(long roomId, int start, int count)
             throws APIConnectionException, APIRequestException {
@@ -1007,7 +1009,7 @@ public class JMessageClient {
     /**
      * Get group statistic, time unit only supports DAY now.
      * @param start Format: yyyy-MM-dd
-     * @param duration 0 <= duration <= 60
+     * @param duration duration must between 0 and 60
      * @return {@link GroupStatListResult}
      * @throws APIConnectionException connect exception
      * @throws APIRequestException request exception
