@@ -48,6 +48,7 @@ public class MessageClient extends BaseClient {
     }
 
     /**
+     * Please use {@link cn.jmessage.api.reportv2.ReportClient#v2GetMessageList(int, String, String)}
      * Get message list from history, messages will store 60 days.
      * @param count Necessary parameter. The count of the message list.
      * @param begin_time Necessary parameter. The format must follow by 'yyyy-MM-dd HH:mm:ss'
@@ -56,6 +57,7 @@ public class MessageClient extends BaseClient {
      * @throws APIConnectionException connect exception
      * @throws APIRequestException request exception
      */
+    @Deprecated
     public MessageListResult getMessageList(int count, String begin_time, String end_time)
             throws APIConnectionException, APIRequestException {
         if(count <= 0 || count > 1000) {
@@ -96,6 +98,7 @@ public class MessageClient extends BaseClient {
     }
 
     /**
+     * Please use {@link cn.jmessage.api.reportv2.ReportClient#v2GetUserMessagesByCursor(String, String)}
      * Get message list with cursor, the cursor will effective in 120 seconds. And will
      * return same count of messages as first request.
      * @param cursor First request will return cursor
@@ -103,6 +106,7 @@ public class MessageClient extends BaseClient {
      * @throws APIConnectionException connect exception
      * @throws APIRequestException request exception
      */
+    @Deprecated
     public MessageListResult getMessageListByCursor(String cursor)
             throws APIConnectionException, APIRequestException {
         if (null != cursor) {
@@ -115,6 +119,7 @@ public class MessageClient extends BaseClient {
     }
 
     /**
+     * Please use {@link cn.jmessage.api.reportv2.ReportClient#v2GetUserMessages(String, int, String, String)}
      * Get message list from user's record, messages will store 60 days.
      * @param username Necessary parameter.
      * @param count Necessary parameter. The count of the message list.
@@ -124,6 +129,7 @@ public class MessageClient extends BaseClient {
      * @throws APIConnectionException connect exception
      * @throws APIRequestException request exception
      */
+    @Deprecated
     public MessageListResult getUserMessages(String username, int count, String begin_time, String end_time)
             throws APIConnectionException, APIRequestException {
         StringUtils.checkUsername(username);
@@ -166,6 +172,7 @@ public class MessageClient extends BaseClient {
     }
 
     /**
+     * Please use {@link cn.jmessage.api.reportv2.ReportClient#v2GetUserMessagesByCursor}
      * Get user's message list with cursor, the cursor will effective in 120 seconds.
      * And will return same count of messages as first request.
      * @param username Necessary parameter.
@@ -174,6 +181,7 @@ public class MessageClient extends BaseClient {
      * @throws APIConnectionException connect exception
      * @throws APIRequestException request exception
      */
+    @Deprecated
     public MessageListResult getUserMessagesByCursor(String username, String cursor)
             throws APIConnectionException, APIRequestException {
         StringUtils.checkUsername(username);

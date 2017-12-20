@@ -13,6 +13,7 @@ public class GroupInfoResult extends BaseResult {
     @Expose private Integer level;
     @Expose private String ctime;
     @Expose private String mtime;
+    @Expose private Integer MaxMemberCount;
 
     public Long getGid() {
         return gid;
@@ -40,5 +41,9 @@ public class GroupInfoResult extends BaseResult {
 
     public String getMtime() {
         return mtime;
+    }
+
+    public Integer getMaxMemberCount() {
+        return MaxMemberCount;
     }
 }

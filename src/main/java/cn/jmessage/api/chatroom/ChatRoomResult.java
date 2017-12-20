@@ -8,7 +8,7 @@ public class ChatRoomResult extends BaseResult {
     @Expose private Long id;
     @Expose private String owner_username;
     @Expose private String appkey;
-    @Expose private String max_member_count;
+    @Expose private Integer max_member_count;
     @Expose private String name;
     @Expose private String description;
     @Expose private Integer total_member_count;
@@ -33,7 +33,7 @@ public class ChatRoomResult extends BaseResult {
         return appkey;
     }
 
-    public String getMaxMemberCount() {
+    public Integer getMaxMemberCount() {
         return max_member_count;
     }
 

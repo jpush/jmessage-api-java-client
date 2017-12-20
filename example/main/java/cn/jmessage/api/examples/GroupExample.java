@@ -26,7 +26,7 @@ public class GroupExample {
     public static void testCreateGroup() {
         JMessageClient client = new JMessageClient(appkey, masterSecret);
         try {
-            CreateGroupResult res = client.createGroup("test_user", "test_gname1", "description", "test_user");
+            CreateGroupResult res = client.createGroup("test_user", "test_gname1", "description", "", 0, "test_user");
             LOG.info(res.getName());
         } catch (APIConnectionException e) {
             LOG.error("Connection error. Should retry later. ", e);
