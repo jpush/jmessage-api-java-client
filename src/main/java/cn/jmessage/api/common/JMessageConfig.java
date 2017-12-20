@@ -17,9 +17,11 @@ public class JMessageConfig {
     public static final String V2_USER_PATH = "im.v2.user.path";
 
     public static final String GROUP_PATH = "im.group.path";
+    public static final String V2_GROUP_PATH = "im.v2.group.path";
 
     public static final String MESSAGE_PATH = "im.message.path";
     public static final String V2_MESSAGE_PATH = "im.v2.message.path";
+    public static final String V2_STATISTIC_PATH = "im.v2.statistic.path";
 
     public static final String RESOURCE_PATH = "im.resource.path";
 
@@ -42,6 +44,7 @@ public class JMessageConfig {
         clientConfig.put(USER_PATH, "/v1/users");
         clientConfig.put(V2_USER_PATH, "/v2/users");
         clientConfig.put(GROUP_PATH, "/v1/groups");
+        clientConfig.put(V2_GROUP_PATH, "/v2/groups");
         clientConfig.put(MESSAGE_PATH, "/v1/messages");
         clientConfig.put(V2_MESSAGE_PATH, "/v2/messages");
         clientConfig.put(RESOURCE_PATH, "/v1/resource");
@@ -49,6 +52,7 @@ public class JMessageConfig {
         clientConfig.put(CROSS_GROUP_PATH, "/v1/cross/groups");
         clientConfig.put(SENSITIVE_WORD_PATH, "/v1/sensitiveword");
         clientConfig.put(CHAT_ROOM_PATH, "/v1/chatroom");
+        clientConfig.put(V2_STATISTIC_PATH, "/v2/statistic");
         clientConfig.put(MAX_RETRY_TIMES, 3);
         clientConfig.put(SEND_VERSION, 1);
     }

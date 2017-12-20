@@ -5,6 +5,11 @@ import cn.jiguang.common.connection.IHttpClient;
 import cn.jiguang.common.resp.APIConnectionException;
 import cn.jiguang.common.resp.APIRequestException;
 import cn.jiguang.common.resp.ResponseWrapper;
+import cn.jmessage.api.chatroom.ChatRoomClient;
+import cn.jmessage.api.chatroom.ChatRoomListResult;
+import cn.jmessage.api.chatroom.ChatRoomMemberList;
+import cn.jmessage.api.chatroom.CreateChatRoomResult;
+import cn.jmessage.api.common.model.chatroom.ChatRoomPayload;
 import cn.jmessage.api.common.model.group.GroupPayload;
 import cn.jmessage.api.common.model.group.GroupShieldPayload;
 import cn.jmessage.api.crossapp.CrossAppClient;
@@ -26,6 +31,10 @@ import cn.jmessage.api.message.MessageClient;
 import cn.jmessage.api.message.MessageListResult;
 import cn.jmessage.api.message.MessageType;
 import cn.jmessage.api.message.SendMessageResult;
+import cn.jmessage.api.reportv2.GroupStatListResult;
+import cn.jmessage.api.reportv2.MessageStatListResult;
+import cn.jmessage.api.reportv2.ReportClient;
+import cn.jmessage.api.reportv2.UserStatListResult;
 import cn.jmessage.api.resource.DownloadResult;
 import cn.jmessage.api.resource.ResourceClient;
 import cn.jmessage.api.resource.UploadResult;
@@ -44,6 +53,8 @@ public class JMessageClient {
     private final ResourceClient _resourceClient;
     private final CrossAppClient _crossAppClient;
     private final SensitiveWordClient _sensitiveWordClient;
+    private final ChatRoomClient _chatRoomClient;
+    private final ReportClient _reportClient;
     private final int _sendVersion;
 
     /**
@@ -107,6 +118,8 @@ public class JMessageClient {
         _crossAppClient = new CrossAppClient(appkey, masterSecret, proxy, config);
         _resourceClient = new ResourceClient(appkey, masterSecret, proxy, config);
         _sensitiveWordClient = new SensitiveWordClient(appkey, masterSecret, proxy, config);
+        _chatRoomClient = new ChatRoomClient(appkey, masterSecret, proxy, config);
+        _reportClient = new ReportClient(appkey, masterSecret, proxy, config);
         _sendVersion = (Integer) config.get(JMessageConfig.SEND_VERSION);
     }
 
@@ -360,7 +373,7 @@ public class JMessageClient {
         return _groupClient.getGroupListByAppkey(start, count);
     }
 
-    public CreateGroupResult createGroup(String owner, String gname, String desc, String... userlist)
+    public CreateGroupResult createGroup(String owner, String gname, String desc,  String avatar, int flag, String... userlist)
             throws APIConnectionException, APIRequestException {
         Members members = Members.newBuilder().addMember(userlist).build();
 
@@ -369,6 +382,8 @@ public class JMessageClient {
                 .setName(gname)
                 .setDesc(desc)
                 .setMembers(members)
+                .setAvatar(avatar)
+                .setFlag(flag)
                 .build();
 
         return _groupClient.createGroup(payload);
@@ -747,6 +762,261 @@ public class JMessageClient {
         return _sensitiveWordClient.getSensitiveWordStatus();
     }
 
+    // =========================    Chat room API    ==============================
+
+    /**
+     * Create chat room
+     *
+     * @param payload {@link ChatRoomPayload}
+     * @return result contains room id
+     * @throws APIConnectionException connect exception
+     * @throws APIRequestException    request exception
+     */
+    public CreateChatRoomResult createChatRoom(ChatRoomPayload payload) throws APIConnectionException, APIRequestException {
+        return _chatRoomClient.createChatRoom(payload);
+    }
+
+    /**
+     * Get chat room information by room ids
+     *
+     * @param roomIds Array of room id
+     * @return {@link ChatRoomListResult}
+     * @throws APIConnectionException connect exception
+     * @throws APIRequestException    request exception
+     */
+    public ChatRoomListResult getBatchChatRoomInfo(long... roomIds) throws APIConnectionException, APIRequestException {
+        return _chatRoomClient.getBatchChatRoomInfo(roomIds);
+    }
+
+    /**
+     * Get user's whole chat room information
+     *
+     * @param username required
+     * @return {@link ChatRoomListResult}
+     * @throws APIConnectionException connect exception
+     * @throws APIRequestException    request exception
+     */
+    public ChatRoomListResult getUserChatRoomInfo(String username) throws APIConnectionException, APIRequestException {
+        return _chatRoomClient.getUserChatRoomInfo(username);
+    }
+
+    /**
+     * Get application's chat room list
+     *
+     * @param start start index
+     * @param count list count
+     * @return {@link ChatRoomListResult}
+     * @throws APIConnectionException connect exception
+     * @throws APIRequestException    request exception
+     */
+    public ChatRoomListResult getAppChatRoomInfo(int start, int count)
+            throws APIConnectionException, APIRequestException {
+        return _chatRoomClient.getAppChatRoomInfo(start, count);
+    }
+
+    /**
+     * Update chat room info
+     *
+     * @param roomId        room id
+     * @param ownerUsername owner username
+     * @param name          new chat room name
+     * @param desc          chat room description
+     * @return No content
+     * @throws APIConnectionException connect exception
+     * @throws APIRequestException    request exception
+     */
+    public ResponseWrapper updateChatRoomInfo(long roomId, String ownerUsername, String name, String desc)
+            throws APIConnectionException, APIRequestException {
+        return _chatRoomClient.updateChatRoomInfo(roomId, ownerUsername, name, desc);
+    }
+
+    /**
+     * Delete chat room by id
+     *
+     * @param roomId room id
+     * @return No content
+     * @throws APIConnectionException connect exception
+     * @throws APIRequestException    request exception
+     */
+    public ResponseWrapper deleteChatRoom(long roomId) throws APIConnectionException, APIRequestException {
+        return _chatRoomClient.deleteChatRoom(roomId);
+    }
+
+    /**
+     * Update user speak status
+     *
+     * @param roomId   chat room id
+     * @param username user to be modified
+     * @param flag     0 means allow to speak, 1 means forbid to speak in chat room
+     * @return No content
+     * @throws APIConnectionException connect exception
+     * @throws APIRequestException    request exception
+     */
+    public ResponseWrapper updateUserSpeakStatus(long roomId, String username, int flag)
+            throws APIConnectionException, APIRequestException {
+        return _chatRoomClient.updateUserSpeakStatus(roomId, username, flag);
+    }
+
+    /**
+     * Get all member info of chat room
+     *
+     * @param roomId chat room id
+     * @param start  start index
+     * @param count member count
+     * @return {@link ChatRoomMemberList}
+     */
+    public ChatRoomMemberList getChatRoomMembers(long roomId, int start, int count)
+            throws APIConnectionException, APIRequestException {
+        return _chatRoomClient.getChatRoomMembers(roomId, start, count);
+    }
+
+    /**
+     * Add members to chat room
+     *
+     * @param roomId  chat room id
+     * @param members username array
+     * @return No content
+     * @throws APIConnectionException connect exception
+     * @throws APIRequestException    request exception
+     */
+    public ResponseWrapper addChatRoomMember(long roomId, String... members)
+            throws APIConnectionException, APIRequestException {
+        return _chatRoomClient.addChatRoomMember(roomId, members);
+    }
+
+    /**
+     * Add members to chat room
+     *
+     * @param roomId  chat room id
+     * @param members {@link Members}
+     * @return No content
+     * @throws APIConnectionException connect exception
+     * @throws APIRequestException    request exception
+     */
+    public ResponseWrapper addChatRoomMember(long roomId, Members members)
+            throws APIConnectionException, APIRequestException {
+        return _chatRoomClient.addChatRoomMember(roomId, members);
+    }
+
+    /**
+     * remove members from chat room
+     *
+     * @param roomId  chat room id
+     * @param members username array
+     * @return No content
+     * @throws APIConnectionException connect exception
+     * @throws APIRequestException    request exception
+     */
+    public ResponseWrapper removeChatRoomMembers(long roomId, String... members)
+            throws APIConnectionException, APIRequestException {
+        return _chatRoomClient.removeChatRoomMembers(roomId, members);
+    }
+
+    /**
+     * remove members from chat room
+     *
+     * @param roomId  chat room id
+     * @param members {@link Members}
+     * @return No content
+     * @throws APIConnectionException connect exception
+     * @throws APIRequestException    request exception
+     */
+    public ResponseWrapper removeChatRoomMembers(long roomId, Members members)
+            throws APIConnectionException, APIRequestException {
+        return _chatRoomClient.removeChatRoomMembers(roomId, members);
+    }
+
+    // ===========================    Report API     ==============================
+
+    /**
+     * Get message list from history, messages will store 60 days.
+     * @param count Necessary parameter. The count of the message list.
+     * @param begin_time Necessary parameter. The format must follow by 'yyyy-MM-dd HH:mm:ss'
+     * @param end_time Necessary parameter. The format must follow by 'yyyy-MM-dd HH:mm:ss'
+     * @return MessageListResult
+     * @throws APIConnectionException connect exception
+     * @throws APIRequestException request exception
+     */
+    public MessageListResult v2GetMessageList(int count, String begin_time, String end_time)
+            throws APIConnectionException, APIRequestException {
+        return _reportClient.v2GetMessageList(count, begin_time, end_time);
+    }
+
+    public MessageListResult v2GetMessageListByCursor(String cursor)
+            throws APIConnectionException, APIRequestException {
+        return _reportClient.v2GetMessageListByCursor(cursor);
+    }
+
+    /**
+     * Get message list from user's record, messages will store 60 days.
+     * @param username Necessary parameter.
+     * @param count Necessary parameter. The count of the message list.
+     * @param begin_time Optional parameter. The format must follow by 'yyyy-MM-dd HH:mm:ss'
+     * @param end_time Optional parameter. The format must follow by 'yyyy-MM-dd HH:mm:ss'
+     * @return MessageListResult
+     * @throws APIConnectionException connect exception
+     * @throws APIRequestException request exception
+     */
+    public MessageListResult v2GetUserMessages(String username, int count, String begin_time, String end_time)
+            throws APIConnectionException, APIRequestException {
+        return _reportClient.v2GetUserMessages(username, count, begin_time, end_time);
+    }
+
+    /**
+     * Get user's message list with cursor, the cursor will effective in 120 seconds.
+     * And will return same count of messages as first request.
+     * @param username Necessary parameter.
+     * @param cursor First request will return cursor
+     * @return MessageListResult
+     * @throws APIConnectionException connect exception
+     * @throws APIRequestException request exception
+     */
+    public MessageListResult v2GetUserMessagesByCursor(String username, String cursor)
+            throws APIConnectionException, APIRequestException {
+        return _reportClient.v2GetUserMessagesByCursor(username, cursor);
+    }
+
+    // ============================   Report v2   VIP Only     ====================
+    /**
+     * Get user statistic, now time unit only supports DAY
+     * @param startTime start time, format: yyyy-MM-dd
+     * @param duration 0-60
+     * @return {@link UserStatListResult}
+     * @throws APIConnectionException connect exception
+     * @throws APIRequestException request exception
+     */
+    public UserStatListResult getUserStatistic(String startTime, int duration)
+            throws APIConnectionException, APIRequestException {
+        return _reportClient.getUserStatistic(startTime, duration);
+    }
+
+    /**
+     * Get message statistic. Detail instructions please refer to https://docs.jiguang.cn/jmessage/server/rest_api_im_report_v2/#_6
+     * @param timeUnit MUST be one of HOUR, DAY, MONTH
+     * @param start start time, when timeUnit is HOUR, format: yyyy-MM-dd HH,
+     * @param duration depends on timeUnit, the duration has limit
+     * @return {@link MessageStatListResult}
+     * @throws APIConnectionException connect exception
+     * @throws APIRequestException request exception
+     */
+    public MessageStatListResult getMessageStatistic(String timeUnit, String start, int duration)
+            throws APIConnectionException, APIRequestException {
+        return _reportClient.getMessageStatistic(timeUnit, start, duration);
+    }
+
+    /**
+     * Get group statistic, time unit only supports DAY now.
+     * @param start Format: yyyy-MM-dd
+     * @param duration 0 <= duration <= 60
+     * @return {@link GroupStatListResult}
+     * @throws APIConnectionException connect exception
+     * @throws APIRequestException request exception
+     */
+    public GroupStatListResult getGroupStatistic(String start, int duration)
+            throws APIConnectionException, APIRequestException {
+        return _reportClient.getGroupStatistic(start, duration);
+    }
+
     public void setHttpClient(IHttpClient httpClient) {
         this._userClient.setHttpClient(httpClient);
         this._sensitiveWordClient.setHttpClient(httpClient);
@@ -754,6 +1024,8 @@ public class JMessageClient {
         this._messageClient.setHttpClient(httpClient);
         this._resourceClient.setHttpClient(httpClient);
         this._crossAppClient.setHttpClient(httpClient);
+        this._chatRoomClient.setHttpClient(httpClient);
+        this._reportClient.setHttpClient(httpClient);
     }
 
 }
