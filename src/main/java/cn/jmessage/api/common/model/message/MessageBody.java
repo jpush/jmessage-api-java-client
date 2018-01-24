@@ -10,7 +10,6 @@ import cn.jiguang.common.utils.Preconditions;
 
 /**
  * MessageBodyResult
- * Created by tangyikai on 15/9/8.
  */
 public class MessageBody implements IModel {
 
