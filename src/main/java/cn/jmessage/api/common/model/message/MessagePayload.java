@@ -10,8 +10,7 @@ import cn.jiguang.common.utils.Preconditions;
 import cn.jmessage.api.utils.StringUtils;
 
 /**
- * MessagePayload
- * Created by tangyikai on 15/9/7.
+ * MessagePayload https://docs.jiguang.cn/jmessage/server/rest_api_im/#_17
  */
 public class MessagePayload implements IModel {
 
@@ -21,6 +20,9 @@ public class MessagePayload implements IModel {
     private static final String MSG_TYPE = "msg_type";
     private static final String TARGET_ID = "target_id";
     private static final String FROM_ID = "from_id";
+    private static final String TARGET_APP_KEY = "target_appkey";
+    private static final String FROM_NAME = "from_name";
+    private static final String TARGET_NAME = "target_name";
     private static final String MSG_BODY = "msg_body";
     private static final String NO_OFFLINE = "no_offline";
     private static final String NO_NOTIFICATION = "no_notification";
@@ -29,26 +31,38 @@ public class MessagePayload implements IModel {
 
     private static Gson gson = new Gson();
 
-    private Integer version;
-    private String target_type;
-    private String target_id;
-    private String from_type;
-    private String from_id;
-    private MessageType msg_type;
-    private MessageBody msg_body;
-    private Notification notification;
+    private Integer mVersion;
+    private String mTargetType;
+    private String mTargetId;
+    private String mFromType;
+    private String mFromId;
+    private String mTargetAppKey;
+    private String mFromName;
+    private String mTargetName;
+    // 默认为false，表示需要离线存储
+    private boolean mNoOffline = false;
+    // 默认为false，表示在通知栏展示
+    private boolean mNoNotification = false;
+    private MessageType mMsgType;
+    private MessageBody mMsgBody;
+    private Notification mNotification;
 
-    public MessagePayload(Integer version, String target_type, String target_id,
-                          String from_type, String from_id, MessageType msg_type,
-                          MessageBody msg_body, Notification notification) {
-        this.version = version;
-        this.target_type = target_type;
-        this.target_id = target_id;
-        this.from_type = from_type;
-        this.from_id = from_id;
-        this.msg_type = msg_type;
-        this.msg_body = msg_body;
-        this.notification = notification;
+    public MessagePayload(Integer version, String targetType, String targetId, String fromType, String fromId,
+                          String targetAppKey, String fromName, String targetName, boolean noOffline,
+                          boolean noNotification, MessageType msgType, MessageBody msgBody, Notification notification) {
+        this.mVersion = version;
+        this.mTargetType = targetType;
+        this.mTargetId = targetId;
+        this.mFromType = fromType;
+        this.mFromId = fromId;
+        this.mTargetAppKey = targetAppKey;
+        this.mFromName = fromName;
+        this.mTargetName = targetName;
+        this.mNoOffline = noOffline;
+        this.mNoNotification = noNotification;
+        this.mMsgType = msgType;
+        this.mMsgBody = msgBody;
+        this.mNotification = notification;
     }
 
     public static Builder newBuilder(){
@@ -59,30 +73,45 @@ public class MessagePayload implements IModel {
     public JsonElement toJSON() {
         JsonObject json = new JsonObject();
 
-        if (null != version) {
-            json.addProperty(VERSION, version);
+        if (null != mVersion) {
+            json.addProperty(VERSION, mVersion);
         }
-        if (null != target_type) {
-            json.addProperty(TARGET_TYPE, target_type);
+        if (null != mTargetType) {
+            json.addProperty(TARGET_TYPE, mTargetType);
         }
-        if (null != target_id) {
-            json.addProperty(TARGET_ID, target_id);
+        if (null != mTargetId) {
+            json.addProperty(TARGET_ID, mTargetId);
         }
-        if (null != from_type) {
-            json.addProperty(FROM_TYPE, from_type);
+        if (null != mFromType) {
+            json.addProperty(FROM_TYPE, mFromType);
         }
-        if (null != from_id) {
-            json.addProperty(FROM_ID, from_id);
+        if (null != mFromId) {
+            json.addProperty(FROM_ID, mFromId);
         }
-        if (null != msg_type) {
-            json.addProperty(MSG_TYPE, msg_type.getValue());
+        if (null != mTargetAppKey) {
+            json.addProperty(TARGET_APP_KEY, mTargetAppKey);
         }
-        if (null != msg_body) {
-            json.add(MSG_BODY, msg_body.toJSON());
+        if (null != mFromName) {
+            json.addProperty(FROM_NAME, mFromName);
+        }
+        if (null != mTargetName) {
+            json.addProperty(TARGET_NAME, mTargetName);
+        }
+        if (mNoOffline) {
+            json.addProperty(NO_OFFLINE, mNoOffline);
+        }
+        if (mNoNotification) {
+            json.addProperty(NO_NOTIFICATION, mNoNotification);
+        }
+        if (null != mMsgType) {
+            json.addProperty(MSG_TYPE, mMsgType.getValue());
+        }
+        if (null != mMsgBody) {
+            json.add(MSG_BODY, mMsgBody.toJSON());
         }
 
-        if (null != notification) {
-            json.add(NOTIFICATION, notification.toJSON());
+        if (null != mNotification) {
+            json.add(NOTIFICATION, mNotification.toJSON());
         }
 
         return json;
@@ -94,65 +123,98 @@ public class MessagePayload implements IModel {
     }
 
     public static class Builder {
-        private Integer version;
-        private String target_type;
-        private String target_id;
-        private String from_type;
-        private String from_id;
-        private MessageType msg_type;
-        private MessageBody msg_body;
-        private Notification notification;
+        private Integer mVersion;
+        private String mTargetType;
+        private String mTargetId;
+        private String mFromType;
+        private String mFromId;
+        private String mTargetAppKey;
+        private String mFromName;
+        private String mTargetName;
+        // 默认为false，表示需要离线存储
+        private boolean mNoOffline = false;
+        // 默认为false，表示在通知栏展示
+        private boolean mNoNotification = false;
+        private MessageType mMsgType;
+        private MessageBody mMsgBody;
+        private Notification mNotification;
 
         public Builder setVersion(Integer version) {
-            this.version = version;
+            this.mVersion = version;
             return this;
         }
 
-        public Builder setTargetType(String target_type) {
-            this.target_type = target_type.trim();
+        public Builder setTargetType(String targetType) {
+            this.mTargetType = targetType.trim();
             return this;
         }
 
-        public Builder setTargetId(String target_id) {
-            this.target_id = target_id.trim();
+        public Builder setTargetId(String targetId) {
+            this.mTargetId = targetId.trim();
             return this;
         }
 
-        public Builder setFromType(String from_type) {
-            this.from_type = from_type.trim();
+        public Builder setFromType(String fromType) {
+            this.mFromType = fromType.trim();
             return this;
         }
 
-        public Builder setFromId(String from_id) {
-            this.from_id = from_id.trim();
+        public Builder setFromId(String fromId) {
+            this.mFromId = fromId.trim();
+            return this;
+        }
+        
+        public Builder setTargetAppKey(String appKey) {
+            this.mTargetAppKey = appKey;
+            return this;
+        }
+        
+        public Builder setFromName(String name) {
+            this.mFromName = name;
+            return this;
+        }
+        
+        public Builder setTargetName(String name) {
+            this.mTargetName = name;
+            return this;
+        }
+        
+        public Builder setNoOffline(boolean noOffline) {
+            this.mNoOffline = noOffline;
+            return this;
+        }
+        
+        public Builder setNoNotification(boolean noNotification) {
+            this.mNoNotification = noNotification;
             return this;
         }
 
-        public Builder setMessageType(MessageType msg_type) {
-            this.msg_type = msg_type;
+        public Builder setMessageType(MessageType msgType) {
+            this.mMsgType = msgType;
             return this;
         }
 
-        public Builder setMessageBody(MessageBody msg_body) {
-            this.msg_body = msg_body;
+        public Builder setMessageBody(MessageBody msgBody) {
+            this.mMsgBody = msgBody;
             return this;
         }
 
         public Builder setNotification(Notification notification) {
-            this.notification = notification;
+            this.mNotification = notification;
             return this;
         }
 
         public MessagePayload build() {
-            Preconditions.checkArgument(null != version, "The version must not be empty!");
-            Preconditions.checkArgument(StringUtils.isNotEmpty(target_type), "The target type must not be empty!");
-            StringUtils.checkUsername(target_id);
-            Preconditions.checkArgument(StringUtils.isNotEmpty(from_type), "The from type must not be empty!");
-            StringUtils.checkUsername(from_id);
-            Preconditions.checkArgument(msg_type != null, "The message type must not be empty!");
-            Preconditions.checkArgument(null != msg_body, "The message body must not be empty!");
+            Preconditions.checkArgument(null != mVersion, "The version must not be empty!");
+            Preconditions.checkArgument(StringUtils.isNotEmpty(mTargetType), "The target type must not be empty!");
+            StringUtils.checkUsername(mTargetId);
+            Preconditions.checkArgument(StringUtils.isNotEmpty(mFromType), "The from type must not be empty!");
+            StringUtils.checkUsername(mFromId);
+            Preconditions.checkArgument(mMsgType != null, "The message type must not be empty!");
+            Preconditions.checkArgument(null != mMsgBody, "The message body must not be empty!");
 
-            return new MessagePayload(version, target_type, target_id, from_type, from_id, msg_type, msg_body, notification);
+            return new MessagePayload(mVersion, mTargetType, mTargetId, mFromType, mFromId, mTargetAppKey, mFromName,
+                    mTargetName, mNoOffline, mNoNotification, mMsgType, mMsgBody, mNotification);
         }
     }
 }
