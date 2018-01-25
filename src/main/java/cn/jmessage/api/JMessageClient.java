@@ -566,13 +566,14 @@ public class JMessageClient {
      * Upload file, only support image file(jpg, bmp, gif, png) currently,
      * file size should not larger than 8M.
      * @param path Necessary, the native path of the file you want to upload
+     * @param fileType Current support type: image, file, voice
      * @return UploadResult
      * @throws APIConnectionException connect exception
      * @throws APIRequestException request exception
      */
-    public UploadResult uploadFile(String path)
+    public UploadResult uploadFile(String path, String fileType)
             throws APIConnectionException, APIRequestException {
-        return _resourceClient.uploadFile(path);
+        return _resourceClient.uploadFile(path, fileType);
     }
 
     // ------------------------------- Cross APP API

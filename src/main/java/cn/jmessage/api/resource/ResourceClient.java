@@ -64,13 +64,15 @@ public class ResourceClient extends BaseClient {
      * Upload file, only support image file(jpg, bmp, gif, png) currently,
      * file size should not larger than 8M.
      * @param path Necessary, the native path of the file you want to upload
+     * @param fileType should be "image" or "file" or "voice"
      * @return UploadResult
      * @throws APIConnectionException connect exception
      * @throws APIRequestException request exception
      */
-    public UploadResult uploadFile(String path)
+    public UploadResult uploadFile(String path, String fileType)
             throws APIConnectionException, APIRequestException {
         Preconditions.checkArgument(null != path, "filename is necessary");
+        Preconditions.checkArgument(fileType.equals("image") || fileType.equals("file") || fileType.equals("voice"), "Illegal file type!");
         File file = new File(path);
         if (file.exists() && file.isFile()) {
             long fileSize = file.length();
@@ -83,7 +85,7 @@ public class ResourceClient extends BaseClient {
                 final String boundaryPrefix = "--";
                 // 定义数据分隔线
                 String BOUNDARY = "========7d4a6d158c9";
-                URL url = new URL(_baseUrl + resourcePath + "?type=image");
+                URL url = new URL(_baseUrl + resourcePath + "?type=" + fileType);
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("POST");
                 conn.setDoOutput(true);
@@ -98,7 +100,7 @@ public class ResourceClient extends BaseClient {
                 sb.append(boundaryPrefix);
                 sb.append(BOUNDARY);
                 sb.append(newLine);
-                sb.append("Content-Disposition: form-data;name=\"image\";filename=\"" + path + "\"" + newLine);
+                sb.append("Content-Disposition: form-data;name=\"" + fileType + "\";filename=\"" + path + "\"" + newLine);
                 sb.append("Content-Type:application/octet-stream");
                 // 参数头设置完以后需要两个换行，然后才是参数内容
                 sb.append(newLine);
@@ -167,9 +169,5 @@ public class ResourceClient extends BaseClient {
         }
         return null;
     }
-
-
-
-
 
 }

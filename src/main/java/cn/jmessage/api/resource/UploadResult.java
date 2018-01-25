@@ -11,6 +11,8 @@ public class UploadResult extends BaseResult {
     @Expose Integer height;
     @Expose String format;
     @Expose Integer fsize;
+    @Expose String hash;
+    @Expose String fname;
 
     public String getMediaId() {
         return media_id;
@@ -32,7 +34,15 @@ public class UploadResult extends BaseResult {
         return format;
     }
 
-    public Integer getFsize() {
+    public Integer getFileSize() {
         return fsize;
+    }
+
+    public String getHash() {
+        return hash;
+    }
+
+    public String getFileName() {
+        return fname;
     }
 }

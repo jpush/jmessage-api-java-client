@@ -42,10 +42,10 @@ public class ResourceClientTest extends BaseTest {
     @Test
     public void testUploadFile() {
         try {
-            UploadResult result = resourceClient.uploadFile("/users/caiyg/Desktop/discourse.png");
+            UploadResult result = resourceClient.uploadFile("/users/caiyg/Desktop/discourse.png", "image");
             if (null != result) {
                 assertTrue(result.isResultOK());
-                LOG.info("media_id: " + result.getMediaId());
+                LOG.info("media_id: " + result.getMediaId() + " file name: " + result.getFileName());
             }
         } catch (APIConnectionException e) {
             LOG.error("Connection error. Should retry later. ", e);
@@ -55,4 +55,6 @@ public class ResourceClientTest extends BaseTest {
             LOG.info("Error Message: " + e.getMessage());
         }
     }
+
+
 }
