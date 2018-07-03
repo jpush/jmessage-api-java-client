@@ -1,6 +1,5 @@
 package cn.jmessage.api.group;
 
-import cn.jmessage.api.common.model.cross.CrossGroupPayload;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
