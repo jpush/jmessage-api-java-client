@@ -420,6 +420,11 @@ public class JMessageClient {
         _groupClient.updateGroupInfo(gid, groupName, groupDesc, avatar);
     }
 
+    public void changeGroupAdmin(long gid, String appKey, String username)
+            throws APIConnectionException, APIRequestException {
+        _groupClient.changeGroupAdmin(gid,appKey,username);
+    }
+
     // ------------------------------- Message API
 
     /**
