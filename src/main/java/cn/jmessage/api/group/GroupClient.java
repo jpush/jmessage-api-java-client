@@ -155,4 +155,26 @@ public class GroupClient extends BaseClient {
         return _httpClient.sendPut(_baseUrl + groupPath + "/" + gid, json.toString());
     }
 
+    public ResponseWrapper changeGroupAdmin(long gid, String appKey, String username)
+            throws APIConnectionException, APIRequestException {
+        Preconditions.checkArgument(gid > 0, "gid should more than 0.");
+
+        if (StringUtils.isTrimedEmpty(appKey) && StringUtils.isTrimedEmpty(username)) {
+            Preconditions.checkArgument(false, "appKey and username should not be null at the same time.");
+        }
+
+        JsonObject json = new JsonObject();
+        if (StringUtils.isNotEmpty(appKey)){
+            appKey=appKey.trim();
+            json.addProperty("appKey",appKey);
+        }
+
+        if (StringUtils.isNotEmpty(username)){
+            username=username.trim();
+            json.addProperty("username",username);
+        }
+
+        return _httpClient.sendPut(_baseUrl + groupPath + "/owner/" + gid,json.toString());
+    }
+
 }

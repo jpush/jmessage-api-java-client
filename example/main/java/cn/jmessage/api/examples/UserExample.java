@@ -26,12 +26,14 @@ public class UserExample {
 
     protected static final Logger LOG = LoggerFactory.getLogger(UserExample.class);
 
-    private static final String appkey = "242780bfdd7315dc1989fe2b";
-    private static final String masterSecret = "2f5ced2bef64167950e63d13";
+    private static final String appkey = "7b4b94cca0d185d611e53cca";
+    private static final String masterSecret = "860803cf613ed54aa3b941a8";
     private static final long test_gid = 10004809;
     
     public static void main(String[] args) {
-//        testRegisterUsers();
+        testRegisterUsers();
+//        testGetUserInfo();
+//        testUpdateUserInfo();
     }
 
 
@@ -39,21 +41,22 @@ public class UserExample {
     public static void testRegisterUsers() {
         JMessageClient client = new JMessageClient(appkey, masterSecret);
         String authCode = ServiceHelper.getBasicAuthorization(appkey, masterSecret);
-        ApacheHttpClient httpClient = new ApacheHttpClient(authCode, null, ClientConfig.getInstance());
+//        ApacheHttpClient httpClient = new ApacheHttpClient(authCode, null, ClientConfig.getInstance());
         // 用 ApacheHttpClient 代替默认的 NativeHttpClient
-        client.setHttpClient(httpClient);
+//        client.setHttpClient(httpClient);
         try {
 
             List<RegisterInfo> users = new ArrayList<RegisterInfo>();
 
             RegisterInfo user = RegisterInfo.newBuilder()
-                    .setUsername("test_user")
-                    .setPassword("test_pass")
+                    .setUsername("test_user1")
+                    .setPassword("test_pass1")
                     .build();
 
             RegisterInfo user1 = RegisterInfo.newBuilder()
-                    .setUsername("test_user1")
-                    .setPassword("test_pass1")
+                    .setUsername("test_user2")
+                    .setPassword("test_pass2")
+                    .addExtra("test", "ttt")
                     .build();
 
             users.add(user);
