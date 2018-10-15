@@ -19,8 +19,8 @@ public class MessageExample {
 
     protected static final Logger LOG = LoggerFactory.getLogger(MessageExample.class);
 
-    private static final String appkey = "242780bfdd7315dc1989fe2b";
-    private static final String masterSecret = "2f5ced2bef64167950e63d13";
+    private static final String appkey = "7b4b94cca0d185d611e53cca";
+    private static final String masterSecret = "860803cf613ed54aa3b941a8";
 
     public static void main(String[] args) {
         testGetMessageList();
@@ -106,7 +106,7 @@ public class MessageExample {
     public static void testGetMessageList() {
         JMessageClient client = new JMessageClient(appkey, masterSecret);
         try {
-            MessageListResult result = client.getMessageList(10, "2016-09-08 10:10:10", "2016-09-15 10:10:10");
+            MessageListResult result = client.getMessageList(10, "2018-06-08 10:10:10", "2018-06-15 10:10:10");
             String cursor = result.getCursor();
             if (null != cursor && StringUtils.isNotEmpty(cursor)) {
                 MessageResult[] messages = result.getMessages();
