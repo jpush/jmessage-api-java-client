@@ -25,12 +25,12 @@
 <dependency>
     <groupId>cn.jpush.api</groupId>
     <artifactId>jmessage-client</artifactId>
-    <version>1.1.7</version>
+    <version>1.1.8</version>
 </dependency>
 <dependency>
     <groupId>cn.jpush.api</groupId>
     <artifactId>jiguang-common</artifactId>
-    <version>1.1.0</version>
+    <version>1.1.3</version>
 </dependency>
 <dependency>
 	<groupId>com.google.code.gson</groupId>
