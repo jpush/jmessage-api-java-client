@@ -1,8 +1,13 @@
 package cn.jmessage.api.common.model;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
 
 import cn.jiguang.common.ServiceHelper;
 import cn.jiguang.common.utils.Preconditions;
@@ -17,6 +22,7 @@ public class UserPayload implements IModel {
     public static final String REGION = "region";
     public static final String ADDRESS = "address";
     public static final String AVATAR = "avatar";
+    private static final String EXTRAS = "extras";
 
     private static Gson _gson = new Gson();
 
@@ -27,9 +33,17 @@ public class UserPayload implements IModel {
     private String region;
     private String address;
     private String avatar;
+    private final Map<String, String> extras;
+    private final Map<String, Number> numberExtras;
+    private final Map<String, Boolean> booleanExtras;
+    private final Map<String, JsonObject> jsonExtras;
 
     private UserPayload(String nickname, String birthday, String signature, int gender, String region,
-                        String address, String avatar) {
+                        String address, String avatar, 
+                		Map<String, String> extras, 
+                		Map<String, Number> numberExtras,
+                		Map<String, Boolean> booleanExtras,
+                		Map<String, JsonObject> jsonExtras) {
         this.nickname = nickname;
         this.birthday = birthday;
         this.signature = signature;
@@ -37,6 +51,10 @@ public class UserPayload implements IModel {
         this.region = region;
         this.address = address;
         this.avatar = avatar;
+        this.extras = extras;
+        this.numberExtras = numberExtras;
+        this.booleanExtras = booleanExtras;
+        this.jsonExtras = jsonExtras;
     }
 
     public static Builder newBuilder() {
@@ -74,6 +92,40 @@ public class UserPayload implements IModel {
         if (null != avatar) {
             json.addProperty(AVATAR, avatar);
         }
+        
+        JsonObject extrasObject = null;
+        if (null != extras || null != numberExtras || null != booleanExtras) {
+            extrasObject = new JsonObject();
+        }
+        
+        if (null != extras) {
+            for (String key : extras.keySet()) {
+                if (extras.get(key) != null) {
+                    extrasObject.add(key, new JsonPrimitive(extras.get(key)));
+                } else {
+                    extrasObject.add(key, JsonNull.INSTANCE);
+                }
+            }
+        }
+        if (null != numberExtras) {
+            for (String key : numberExtras.keySet()) {
+                extrasObject.add(key, new JsonPrimitive(numberExtras.get(key)));
+            }
+        }
+        if (null != booleanExtras) {
+            for (String key : booleanExtras.keySet()) {
+                extrasObject.add(key, new JsonPrimitive(booleanExtras.get(key)));
+            }
+        }
+        if (null != jsonExtras) {
+            for (String key : jsonExtras.keySet()) {
+                extrasObject.add(key, jsonExtras.get(key));
+            }
+        }
+
+        if (null != extras || null != numberExtras || null != booleanExtras) {
+            json.add(EXTRAS, extrasObject);
+        }
 
         return json;
     }
@@ -92,6 +144,10 @@ public class UserPayload implements IModel {
         private String region;
         private String address;
         private String avatar;
+        private Map<String, String> extrasBuilder;
+        private Map<String, Number> numberExtrasBuilder;
+        private Map<String, Boolean> booleanExtrasBuilder;
+        protected Map<String, JsonObject> jsonExtrasBuilder;
 
         public Builder setNickname(String nickname) {
             this.nickname = nickname;
@@ -127,6 +183,53 @@ public class UserPayload implements IModel {
             this.avatar = avatar;
             return this;
         }
+        
+        public Builder addExtra(String key, String value) {
+            Preconditions.checkArgument(! (null == key || null == value), "Key/Value should not be null.");
+            if (null == extrasBuilder) {
+                extrasBuilder = new HashMap<String, String>();
+            }
+            extrasBuilder.put(key, value);
+            return this;
+        }
+        
+        public Builder addExtras(Map<String, String> extras) {
+            Preconditions.checkArgument(! (null == extras), "extras should not be null.");
+            if (null == extrasBuilder) {
+                extrasBuilder = new HashMap<String, String>();
+            }
+            for (String key : extras.keySet()) {
+                extrasBuilder.put(key, extras.get(key));
+            }
+            return this;
+        }
+        
+        public Builder addExtra(String key, Number value) {
+            Preconditions.checkArgument(! (null == key || null == value), "Key/Value should not be null.");
+            if (null == numberExtrasBuilder) {
+                numberExtrasBuilder = new HashMap<String, Number>();
+            }
+            numberExtrasBuilder.put(key, value);
+            return this;
+        }
+        
+        public Builder addExtra(String key, Boolean value) {
+            Preconditions.checkArgument(! (null == key || null == value), "Key/Value should not be null.");
+            if (null == booleanExtrasBuilder) {
+                booleanExtrasBuilder = new HashMap<String, Boolean>();
+            }
+            booleanExtrasBuilder.put(key, value);
+            return this;
+        }
+        
+        public Builder addExtra(String key, JsonObject value) {
+        	Preconditions.checkArgument(! (null == key || null == value), "Key/Value should not be null.");
+            if (null == jsonExtrasBuilder) {
+            	jsonExtrasBuilder = new HashMap<String, JsonObject>();
+            }
+            jsonExtrasBuilder.put(key, value);
+            return this;
+        }
 
         public UserPayload build() {
 
@@ -160,7 +263,8 @@ public class UserPayload implements IModel {
                         "The length of address must not more than 250 bytes." );
             }
 
-            return new UserPayload(nickname, birthday, signature, gender, region, address, avatar);
+            return new UserPayload(nickname, birthday, signature, gender, region, address, avatar, 
+            		extrasBuilder, numberExtrasBuilder, booleanExtrasBuilder,jsonExtrasBuilder);
         }
 
     }
