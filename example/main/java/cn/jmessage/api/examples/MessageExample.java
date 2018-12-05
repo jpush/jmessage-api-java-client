@@ -83,6 +83,7 @@ public class MessageExample {
                 .setFromType("admin")
                 .setFromId("junit_admin")
                 .setMessageType(MessageType.IMAGE)
+                .setNoNotification(false)
                 .setMessageBody(messageBody)
                 .build();
 
