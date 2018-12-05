@@ -16,7 +16,7 @@ public class MessageResult extends BaseResult {
     @Expose MessageBodyResult msg_body;
     @Expose Long create_time;
     @Expose Integer version;
-    @Expose Integer msgid;
+    @Expose Long msgid;
     @Expose Integer msg_level;
     @Expose Long msg_ctime;
     @Expose Boolean no_offline;
@@ -66,7 +66,7 @@ public class MessageResult extends BaseResult {
         return version;
     }
 
-    public Integer getMsgId() {
+    public Long getMsgId() {
         return msgid;
     }
 
