@@ -14,8 +14,12 @@ public class UserStateListResult extends BaseResult {
     public String getUsername() {
         return this.username;
     }
+    
+    public List<Device> getDevices(){
+    	return devices;
+    }
 
-    private class Device {
+    public class Device {
         @Expose boolean login;
         @Expose boolean online;
         @Expose String platform;
