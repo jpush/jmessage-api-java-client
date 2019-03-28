@@ -5,6 +5,7 @@ import cn.jiguang.common.resp.APIRequestException;
 import cn.jmessage.api.BaseTest;
 import cn.jmessage.api.SlowTests;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.slf4j.Logger;
@@ -39,6 +40,7 @@ public class ResourceClientTest extends BaseTest {
         }
     }
 
+    @Ignore
     @Test
     public void testUploadFile() {
         try {
