@@ -1,8 +1,11 @@
 package cn.jmessage.api.user;
 
+import com.google.gson.JsonObject;
 import com.google.gson.annotations.Expose;
 
 import cn.jiguang.common.resp.BaseResult;
+
+import java.util.Map;
 
 public class UserInfoResult extends BaseResult {
 
@@ -17,6 +20,7 @@ public class UserInfoResult extends BaseResult {
     @Expose String ctime;
     @Expose String mtime;
     @Expose String appkey;
+    @Expose Map<String, JsonObject> extras;
 
     public String getUsername() {
         return username;
@@ -61,4 +65,6 @@ public class UserInfoResult extends BaseResult {
     public String getAppkey() {
         return appkey;
     }
+
+    public Map<String, JsonObject> getExtras() { return extras; }
 }
