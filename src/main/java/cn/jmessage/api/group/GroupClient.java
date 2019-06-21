@@ -1,20 +1,19 @@
 package cn.jmessage.api.group;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.google.gson.JsonObject;
-
-import cn.jiguang.common.utils.Preconditions;
 import cn.jiguang.common.connection.HttpProxy;
 import cn.jiguang.common.resp.APIConnectionException;
 import cn.jiguang.common.resp.APIRequestException;
 import cn.jiguang.common.resp.ResponseWrapper;
+import cn.jiguang.common.utils.Preconditions;
 import cn.jmessage.api.common.BaseClient;
 import cn.jmessage.api.common.JMessageConfig;
-import cn.jmessage.api.common.model.group.GroupPayload;
 import cn.jmessage.api.common.model.Members;
+import cn.jmessage.api.common.model.group.GroupPayload;
 import cn.jmessage.api.utils.StringUtils;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 public class GroupClient extends BaseClient {
@@ -175,6 +174,13 @@ public class GroupClient extends BaseClient {
         }
 
         return _httpClient.sendPut(_baseUrl + groupPath + "/owner/" + gid,json.toString());
+    }
+
+    public ResponseWrapper setGroupMemberSilence(long gid, boolean status, String[] usernames)
+        throws APIConnectionException, APIRequestException {
+        Preconditions.checkArgument(gid > 0, "gid should more than 0.");
+        Preconditions.checkArgument(usernames != null && usernames.length > 0, "username array is invalid");
+        return _httpClient.sendPut(_baseUrl + groupPath + "/messages/" + gid + "/silence?status=" + (status ? "true" : "false"), new Gson().toJson(usernames));
     }
 
 }

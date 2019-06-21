@@ -1,20 +1,21 @@
 package cn.jmessage.api.message;
 
+import cn.jiguang.common.connection.HttpProxy;
+import cn.jiguang.common.resp.APIConnectionException;
+import cn.jiguang.common.resp.APIRequestException;
+import cn.jiguang.common.resp.ResponseWrapper;
+import cn.jiguang.common.utils.Preconditions;
+import cn.jmessage.api.chatroom.ChatRoomHistoryResult;
+import cn.jmessage.api.common.BaseClient;
+import cn.jmessage.api.common.JMessageConfig;
+import cn.jmessage.api.common.model.message.MessagePayload;
+import cn.jmessage.api.utils.StringUtils;
+
 import java.net.URLEncoder;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
-import cn.jiguang.common.utils.Preconditions;
-import cn.jiguang.common.connection.HttpProxy;
-import cn.jiguang.common.resp.APIConnectionException;
-import cn.jiguang.common.resp.APIRequestException;
-import cn.jiguang.common.resp.ResponseWrapper;
-import cn.jmessage.api.common.BaseClient;
-import cn.jmessage.api.common.JMessageConfig;
-import cn.jmessage.api.common.model.message.MessagePayload;
-import cn.jmessage.api.utils.StringUtils;
 
 
 public class MessageClient extends BaseClient {
@@ -25,6 +26,7 @@ public class MessageClient extends BaseClient {
     private String v2_messagePath;
     private String reportBaseUrl;
     private String v2_userPath;
+    private String v2_chatroomPath;
 
 
     public MessageClient(String appKey, String masterSecret) {
@@ -37,6 +39,7 @@ public class MessageClient extends BaseClient {
         this.reportBaseUrl = (String) config.get(JMessageConfig.API_REPORT_HOST_NAME);
         this.v2_userPath = (String) config.get(JMessageConfig.V2_USER_PATH);
         this.v2_messagePath = (String) config.get(JMessageConfig.V2_MESSAGE_PATH);
+        this.v2_chatroomPath = (String) config.get(JMessageConfig.V2_CHATROOM_PATH);
     }
 
     public SendMessageResult sendMessage(MessagePayload payload)
@@ -210,6 +213,62 @@ public class MessageClient extends BaseClient {
             throws APIConnectionException, APIRequestException {
         StringUtils.checkUsername(username);
         return _httpClient.sendPost(_baseUrl + messagePath + "/" + username + "/" + messageId + "/retract", null);
+    }
+
+    /**
+     * get chatroom history message
+     * @param chatroomid
+     * @param count must greater than zero and less than 1000
+     * @param beginTime format yyyy-MM-dd HH:mm:ss
+     * @param endTime format yyyy-MM-dd HH:mm:ss
+     * @return
+     */
+    public ChatRoomHistoryResult getChatRoomHistory(Long chatroomid, int count, String beginTime, String endTime)
+        throws APIConnectionException, APIRequestException {
+        Preconditions.checkArgument(count > 0 && count <= 1000, "count is invalid");
+        String beginEncoded = null;
+        String endEncoded = null;
+        if (null != beginTime && StringUtils.isNotEmpty(beginTime) && null != endTime
+            && StringUtils.isNotEmpty(endTime)) {
+            DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            try {
+                Date beginDate = format.parse(beginTime);
+                Date endDate = format.parse(endTime);
+                if (endDate.getTime() - beginDate.getTime() < 0) {
+                    throw new IllegalArgumentException("end time must lager than begin time");
+                } else if (endDate.getTime() - beginDate.getTime() > 7 * 24 * 60 * 60 * 1000) {
+                    throw new IllegalArgumentException("end time lager than begin time over 7 days");
+                }
+            } catch (ParseException e) {
+                throw new IllegalArgumentException("parse time exception");
+            }
+
+            try {
+                beginEncoded = URLEncoder.encode(beginTime, "utf-8");
+                endEncoded = URLEncoder.encode(endTime, "utf-8");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            throw new IllegalArgumentException("begin time or end time is null or empty");
+        }
+        String requestUrl = reportBaseUrl + v2_chatroomPath + "/" + chatroomid + "/" + "messages" + "?count=" + count + "&begin_time=" + beginEncoded + "&end_time=" + endEncoded;
+        ResponseWrapper response = _httpClient.sendGet(requestUrl);
+        return ChatRoomHistoryResult.fromResponse(response, ChatRoomHistoryResult.class);
+    }
+
+    /**
+     * get chatroom history message
+     * @param chatroomid
+     * @param cursor must greater than zero and less than 1000
+     * @return
+     */
+    public ChatRoomHistoryResult getChatRoomHistory(Long chatroomid, String cursor)
+        throws APIConnectionException, APIRequestException {
+        Preconditions.checkArgument(cursor != null && cursor.length() > 0, "count is invalid");
+        String requestUrl = reportBaseUrl + v2_chatroomPath + "/" + chatroomid + "/" + "messages" + "?cursor=" + cursor;
+        ResponseWrapper response = _httpClient.sendGet(requestUrl);
+        return ChatRoomHistoryResult.fromResponse(response, ChatRoomHistoryResult.class);
     }
 
 }
