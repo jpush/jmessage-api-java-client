@@ -62,6 +62,23 @@ public class MessageBody implements IModel {
         this.hash = hash;
     }
 
+    private MessageBody(String mediaId, Long crc32, Integer width, Integer height, String format, Integer fsize,
+                        Integer duration, String hash, Map<String, String> extra,
+                        Map<String, Number> numberExtra,
+                        Map<String, Boolean> booleanExtra) {
+        this.media_id = mediaId;
+        this.media_crc32 = crc32;
+        this.width = width;
+        this.height = height;
+        this.format = format;
+        this.fsize = fsize;
+        this.duration = duration;
+        this.hash = hash;
+        this.extras = extra;
+        this.numberExtras = numberExtra;
+        this.booleanExtras = booleanExtra;
+    }
+
     public static Builder newBuilder() {
         return new Builder();
     }
@@ -247,7 +264,7 @@ public class MessageBody implements IModel {
 
         public MessageBody build() {
             if (null != media_id) {
-                return new MessageBody(media_id, media_crc32, width, height, format, fsize, duration, hash);
+                return new MessageBody(media_id, media_crc32, width, height, format, fsize, duration, hash, extrasBuilder, numberExtrasBuilder, booleanExtrasBuilder);
             }
             return new MessageBody(text, extrasBuilder, numberExtrasBuilder, booleanExtrasBuilder);
         }
