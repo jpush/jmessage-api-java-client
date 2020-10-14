@@ -8,8 +8,6 @@
 
 对应的 REST API 文档：<https://docs.jiguang.cn/jmessage/server/rest_api_im/>
 
-本开发包 Javadoc：[API Docs](http://jpush.github.io/jmessage-api-java-client/apidocs/)
-
 版本更新：[Release页面](https://github.com/jpush/jmessage-api-java-client/releases)。下载更新请到这里。
 
 > 非常欢迎各位开发者提交代码，贡献一份力量，review过有效的代码将会合入本项目。
